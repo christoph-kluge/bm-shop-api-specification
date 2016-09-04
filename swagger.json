@@ -1,6 +1,6 @@
 {
   "swagger" : "2.0",
-  "host" : "api.bringmeister.de",
+  "host" : "api.bm.dev",
   "basePath" : "/api",
   "consumes" : [ "application/json" ],
   "produces" : [ "application/json" ],
