@@ -8,7 +8,7 @@ shop functionality
 This API uses Custom Header for its authentication.
 
 The parameters that are needed to be sent for this type of authentication are as follows:
-+ `Authorization`
++ `Authorization: Bearer ey12312.asdasdqw.asdasdsa`
 
 # Group user address management
 
@@ -21,7 +21,7 @@ fetch all addresses for the customer
 
     + Headers 
 
-            Authorization: Bearer 
+            Authorization: Bearer <token>
 
 + Response 200 (application/json)
 
@@ -33,6 +33,11 @@ fetch all addresses for the customer
 create a new address for the customer
 
 + Request (application/json)
+
+    + Headers 
+
+            Authorization: Bearer <token>
+    
     + Attributes (Address)
 
 + Response 200 (application/json)
@@ -45,11 +50,16 @@ create a new address for the customer
 ## Addresses By Id [/addresses/{id}]
 
 + Parameters
-    + id (, required)
+    + id (required, integer, `12312411`) ... AddressId which you want to adjust
 
 
 ### AddressesById [GET]
-fetch a customer address
+
++ Request (application/json)
+
+    + Headers 
+
+            Authorization: Bearer <token>
 
 + Response 200 (application/json)
 
@@ -57,17 +67,23 @@ fetch a customer address
 
     + Attributes (AddressRead)
 
-### AddressesById [POST]
-update a customer address
+### AddressesById [PUT]
 
-+ Response 200 (application/json)
++ Request (application/json)
 
-    customer address updated
+    + Headers 
 
-    + Attributes (AddressRead)
+            Authorization: Bearer <token>
+
++ Response 204 (application/json)
 
 ### AddressesById [DELETE]
-delete a customer address
+
++ Request (application/json)
+
+    + Headers 
+
+            Authorization: Bearer <token>
 
 + Response 204 (application/json)
 
@@ -77,19 +93,11 @@ delete a customer address
 
 ### Capacities [GET]
 fetch all available capacities
+
 + Parameters
-    + zipCode (, optional)
-
-        ZipCode where you want to fetch the capacity for
-
-    + startDate (, optional)
-
-        start date for the matrix
-
-    + endDate (, optional)
-
-        end date for the matrix
-
+    + zipCode (required, string, `12312`) ... zipcode where you want to fetch the capacity for
+    + startDate (required, datetime, ``) ... start date for the matrix
+    + endDate (required, datetime, ``) ... end date for the matrix
 
 + Response 200 (application/json)
 
@@ -149,51 +157,23 @@ get full category tree
     + Attributes (CategoryCollection)
 
 
-## Products [/products{?q,catId,limit,offset,sort,direction,additives,allergetics,characteristics}]
+## Products [/products{?q,catId,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
 
-### Products [GET]
-search for products
+### Product Search [GET]
+
 + Parameters
-    + q (, optional)
-
-        search term
-
-    + catId (, optional)
-
-        categoryId from initial filter result
-
-    + limit (, optional)
-
-        limit resultset to amount of elements
-
-    + offset (, optional)
-
-        offset from where to start
-
-    + sort (, optional)
-
-        sort mechanismn
-
-    + direction (, optional)
-
-        sort direction
-
-    + additives (, optional)
-
-        array of additives filterIds
-
-    + allergetics (, optional)
-
-        array of allergetic filterIds
-
-    + characteristics (, optional)
-
-        array of characteristics filterIds
+    + q (optional, string, `Toma`) ... search term
+    + catId (optional, integer, `2`) ... categoryId to filter for
+    + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
+    + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
+    + sort (optional, string, `price`) ... sort mechanismn (one of: price, popularity)
+    + sortDir (optional, string, `desc`) ... sort direction (one of: asc, desc)
+    + additives (optional, array[integer], `10,12`) ... array of additives filterIds
+    + allergetics (optional, array[integer], `10,12`) ... array of allergetic filterIds
+    + characteristics (optional, array[integer], `10,12`) ... array of characteristics filterIds
 
 
 + Response 200 (application/json)
-
-    return products and filters
 
     + Attributes (ProductSearch)
 
@@ -201,9 +181,7 @@ search for products
 ## Products By Id [/products/{id}]
 
 + Parameters
-    + id (, required)
-
-        productId, sku?
+    + id (required, string, `1230012`) ... productId, sku?
 
 
 ### ProductsById [GET]
@@ -211,70 +189,80 @@ get product details
 
 + Response 200 (application/json)
 
-    return product
-
     + Attributes (Product)
-
-
 
 # Group cart management
 
-## Carts [/carts]
+## Carts [/user/cart]
 
 ### Carts [GET]
-get current cart
 
 + Response 200 (application/json)
 
-    collection of items and totals
-
     + Attributes (Cart)
 
-
-## Carts Products By ProductId [/carts/products/{productId}]
+## Cart handling for products [/user/cart/products/{productId}]
 
 + Parameters
-    + productId (, required)
-
-        productId from search
+    + productId (required, string, `1231231`) ... productId
 
 
 ### CartsProductsByProductId [PUT]
-insert or update an item in cart
 
 + Request (application/json)
+
+    + Headers 
+
+            Authorization: Bearer <token>
+            
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
 
-        item got updated (quantity or comment)
+        item got updated
+
+        + Attributes (CartTotals)
+        
++ Response 201 (application/json)
+
+        item got added to cart
 
         + Attributes (CartTotals)
 
 + Response 409 
 
-        conflict (item is not in cart anymore)
+        conflict (max quantity reached)
 
 + Response 422 
 
         validation error (quantity or comment)
 
 ### CartsProductsByProductId [DELETE]
-remove item from cart
+
++ Request
+
+    + Headers 
+
+            Authorization: Bearer <token>
 
 + Response 204 (application/json)
 
++ Response 409 
 
-## Carts Coupons By Code [/carts/coupons/{code}]
+        conflict (unable to remove from cart)
+
+## Cart handling for coupon codes [/user/cart/coupons/{code}]
 
 + Parameters
-    + code (string, required)
-
-        the code of the coupon to remove
-
+    + code (required, string, `ZEIT13`)
 
 ### CartsCouponsByCode [PUT]
-apply coupon code to cart
+
++ Request
+
+    + Headers 
+
+            Authorization: Bearer <token>
 
 + Response 200 (application/json)
 
@@ -286,13 +274,15 @@ apply coupon code to cart
 
         coupon code is invalid (expired, not applicable, ..)
 
-
-
 ### CartsCouponsByCode [DELETE]
-remove coupon code from cart
+
++ Request
+
+    + Headers 
+
+            Authorization: Bearer <token>
 
 + Response 204 (application/json)
-
 
 
 # Group content management
@@ -300,27 +290,30 @@ remove coupon code from cart
 ## Content Blocks By Id [/content-blocks/{id}]
 
 + Parameters
-    + id (, required)
-
-        identifier of the content block
+    + id (required, string, `some-nice-identifier-mobile`) ... identifier of the content block
 
 
 ### ContentBlocksById [GET]
-fetch a content block
 
 + Response 200 (application/json)
 
-    fetch content block
+        fetch content block
 
-    + Attributes (ContentBlock)
+        + Attributes (ContentBlock)
+    
++ Response 404
+
+        not found
+    
++ Response 410
+
+        gone (article is inactive)
 
 
 ## Content Pages By Id [/content-pages/{id}]
 
 + Parameters
-    + id (, required)
-
-        identifier of the content page
+    + id (required, string, `some-page-identifier`) ... identifier of the content page
 
 
 ### ContentPagesById [GET]
@@ -349,9 +342,7 @@ fetch favorites from last orders
 ## Favorites By ProductId [/favorites/{productId}]
 
 + Parameters
-    + productId (, required)
-
-        product
+    + productId (required, string, `2131241`) ... productId of the product to remove from favs
 
 
 ### FavoritesByProductId [DELETE]
