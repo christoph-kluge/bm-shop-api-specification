@@ -1,0 +1,1919 @@
+{
+  "swagger" : "2.0",
+  "host" : "api.bringmeister.dev",
+  "basePath" : "/api",
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "info" : {
+    "version" : "0.1",
+    "title" : "BM_Shop",
+    "description" : "shop functionality"
+  },
+  "securityDefinitions" : {
+    "jwt" : {
+      "type" : "apiKey",
+      "name" : "Authorization",
+      "in" : "header"
+    }
+  },
+  "paths" : {
+    "/addresses" : {
+      "x-summary" : "Address stuff",
+      "x-description" : "some ultra description which \nhas some multiline stuff in place\n",
+      "get" : {
+        "summary" : "fetch all addresses for the customer",
+        "tags" : [ "user address management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch all available addresses",
+            "schema" : {
+              "$ref" : "#/definitions/AddressCollection"
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "create a new address for the customer",
+        "tags" : [ "user address management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Address"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "new address got created"
+          }
+        }
+      }
+    },
+    "/addresses/{id}" : {
+      "get" : {
+        "summary" : "fetch a customer address",
+        "tags" : [ "user address management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1001231"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch all available addresses",
+            "schema" : {
+              "$ref" : "#/definitions/AddressRead"
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "update a customer address",
+        "tags" : [ "user address management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1001231"
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "customer address updated",
+            "schema" : {
+              "$ref" : "#/definitions/AddressRead"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "delete a customer address",
+        "tags" : [ "user address management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1001231"
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "customer address deleted"
+          }
+        }
+      }
+    },
+    "/capacities" : {
+      "get" : {
+        "summary" : "fetch all available capacities",
+        "tags" : [ "capacity management / timeslotmatrix" ],
+        "parameters" : [ {
+          "name" : "zipCode",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "ZipCode where you want to fetch the capacity for",
+          "x-example" : "13627"
+        }, {
+          "name" : "startDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "start date for the matrix",
+          "x-example" : "2016-08-11"
+        }, {
+          "name" : "endDate",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "end date for the matrix",
+          "x-example" : "2016-08-18"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch all available capacities",
+            "schema" : {
+              "$ref" : "#/definitions/CapacityCollection"
+            }
+          }
+        }
+      }
+    },
+    "/capacities/{id}" : {
+      "post" : {
+        "summary" : "reserve a specific capacity slot",
+        "tags" : [ "capacity management / timeslotmatrix" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "respective slotId from GET /capacities",
+          "x-example" : "0d47f84a-5efb-45a0-b088-e86a37bfb50b"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "reserve a specific capacity slot",
+            "schema" : {
+              "$ref" : "#/definitions/CapacityReservation"
+            }
+          }
+        }
+      }
+    },
+    "/capacity-reservations/{id}" : {
+      "get" : {
+        "summary" : "fetch current status of the reserved capacity",
+        "tags" : [ "capacity management / timeslotmatrix" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "reservationId which you get after POST /capacities/{slotId}",
+          "x-example" : "0d47f84a-5efb-45a0-b088-e86a37bfb50b"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch current status of the reserved capacity",
+            "schema" : {
+              "$ref" : "#/definitions/CapacityReservation"
+            }
+          }
+        }
+      }
+    },
+    "/categories" : {
+      "get" : {
+        "summary" : "get full category tree",
+        "tags" : [ "search" ],
+        "responses" : {
+          "200" : {
+            "description" : "collection of categories",
+            "schema" : {
+              "$ref" : "#/definitions/CategoryCollection"
+            }
+          }
+        }
+      }
+    },
+    "/carts" : {
+      "get" : {
+        "summary" : "get current cart",
+        "tags" : [ "cart management" ],
+        "responses" : {
+          "200" : {
+            "description" : "collection of items and totals",
+            "schema" : {
+              "$ref" : "#/definitions/Cart"
+            }
+          }
+        }
+      }
+    },
+    "/carts/products/{productId}" : {
+      "put" : {
+        "summary" : "insert or update an item in cart",
+        "tags" : [ "cart management" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "productId from search",
+          "x-example" : "1000123"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CartProductUpdate"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "item added to cart"
+          },
+          "204" : {
+            "description" : "item got updated (quantity or comment)"
+          },
+          "409" : {
+            "description" : "conflict (item is not in cart anymore)"
+          },
+          "422" : {
+            "description" : "validation error (quantity or comment)"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "remove item from cart",
+        "tags" : [ "cart management" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "productId from search",
+          "x-example" : "1000123"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "item inside cart got removed"
+          }
+        }
+      }
+    },
+    "/carts/coupons/{code}" : {
+      "put" : {
+        "summary" : "apply coupon code to cart",
+        "tags" : [ "cart management" ],
+        "parameters" : [ {
+          "name" : "code",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "the code of the coupon to remove",
+          "x-example" : "ZEIT13"
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "coupon code got applied to cart"
+          },
+          "409" : {
+            "description" : "coupon code is invalid (expired, not applicable, ..)"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "remove coupon code from cart",
+        "tags" : [ "cart management" ],
+        "parameters" : [ {
+          "name" : "code",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "the code of the coupon to remove",
+          "x-example" : "ZEIT13"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "coupon code got removed from cart"
+          }
+        }
+      }
+    },
+    "/content-blocks/{id}" : {
+      "get" : {
+        "summary" : "fetch a content block",
+        "tags" : [ "content management" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "identifier of the content block",
+          "x-example" : "main_teaser_image_4"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch content block",
+            "schema" : {
+              "$ref" : "#/definitions/ContentBlock"
+            }
+          }
+        }
+      }
+    },
+    "/content-pages/{id}" : {
+      "get" : {
+        "summary" : "fetch a content page",
+        "tags" : [ "content management" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "identifier of the content page",
+          "x-example" : "imprint"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch content page",
+            "schema" : {
+              "$ref" : "#/definitions/ContentPage"
+            }
+          }
+        }
+      }
+    },
+    "/favorites" : {
+      "get" : {
+        "summary" : "fetch favorites from last orders",
+        "tags" : [ "user favorites" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "fetch my favorites",
+            "schema" : {
+              "$ref" : "#/definitions/Favorites"
+            }
+          }
+        }
+      }
+    },
+    "/favorites/{productId}" : {
+      "delete" : {
+        "summary" : "remove item from favorites",
+        "tags" : [ "user favorites" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "product",
+          "x-example" : "5012312"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "remove item from favorites"
+          }
+        }
+      }
+    },
+    "/logout" : {
+      "post" : {
+        "summary" : "user logout",
+        "tags" : [ "user auth management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Client should remove token from storage"
+          }
+        }
+      }
+    },
+    "/account" : {
+      "get" : {
+        "summary" : "get account details",
+        "tags" : [ "user auth management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "return user informations",
+            "schema" : {
+              "$ref" : "#/definitions/UserAccount"
+            }
+          }
+        }
+      }
+    },
+    "/login" : {
+      "post" : {
+        "summary" : "user login",
+        "tags" : [ "user auth management" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserCredentials"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a collection of shop orders",
+            "schema" : {
+              "$ref" : "#/definitions/UserToken"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized to request this endpoint"
+          },
+          "404" : {
+            "description" : "No customer found with the id"
+          }
+        }
+      }
+    },
+    "/register" : {
+      "post" : {
+        "summary" : "register a user account",
+        "tags" : [ "user auth management" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserCredentialsRegister"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a collection of shop orders",
+            "schema" : {
+              "$ref" : "#/definitions/UserToken"
+            }
+          },
+          "409" : {
+            "description" : "User email already existent"
+          }
+        }
+      }
+    },
+    "/password" : {
+      "post" : {
+        "summary" : "update password as logged in user",
+        "tags" : [ "user auth management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserPassword"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Password successfully updated"
+          }
+        }
+      }
+    },
+    "/password/{email}" : {
+      "post" : {
+        "summary" : "update password from reset password flow",
+        "tags" : [ "user auth management" ],
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "email address of the customer-account"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserPasswordReset"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "password successfully updated and automatically logged in",
+            "schema" : {
+              "$ref" : "#/definitions/UserToken"
+            }
+          },
+          "409" : {
+            "description" : "could not update password (reset-key from email required)"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "trigger reset password for a specific email",
+        "tags" : [ "user auth management" ],
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "email address of the customer-account"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Password reset triggered"
+          }
+        }
+      }
+    },
+    "/products" : {
+      "get" : {
+        "summary" : "search for products",
+        "tags" : [ "search" ],
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "search term",
+          "x-example" : "Tomat"
+        }, {
+          "name" : "catId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "categoryId from initial filter result",
+          "x-example" : 1
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "description" : "limit resultset to amount of elements",
+          "x-example" : 10
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "description" : "offset from where to start",
+          "x-example" : 0
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "sort mechanismn",
+          "x-example" : "price|popularity"
+        }, {
+          "name" : "direction",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "description" : "sort direction",
+          "x-example" : "asc|desc"
+        }, {
+          "name" : "additives",
+          "in" : "query",
+          "required" : false,
+          "type" : "array",
+          "description" : "array of additives filterIds",
+          "items" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "allergetics",
+          "in" : "query",
+          "required" : false,
+          "type" : "array",
+          "description" : "array of allergetic filterIds",
+          "items" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "characteristics",
+          "in" : "query",
+          "required" : false,
+          "type" : "array",
+          "description" : "array of characteristics filterIds",
+          "items" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "return products and filters",
+            "schema" : {
+              "$ref" : "#/definitions/ProductSearch"
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}" : {
+      "get" : {
+        "summary" : "get product details",
+        "tags" : [ "search" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "productId, sku?"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "return product",
+            "schema" : {
+              "$ref" : "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
+    "/orders" : {
+      "get" : {
+        "summary" : "get list of user orders",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a collection of shop orders",
+            "schema" : {
+              "$ref" : "#/definitions/UserOrderCollection"
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "create a new order",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserOrderCreate"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Order created",
+            "schema" : {
+              "$ref" : "#/definitions/UserOrder"
+            }
+          },
+          "409" : {
+            "description" : "Order persistance failed"
+          },
+          "422" : {
+            "description" : "Order validation failed"
+          }
+        }
+      }
+    },
+    "/payments" : {
+      "get" : {
+        "summary" : "get active payment methods",
+        "tags" : [ "user order management" ],
+        "responses" : {
+          "200" : {
+            "description" : "Get list of available payment methods",
+            "schema" : {
+              "$ref" : "#/definitions/PaymentCollection"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}" : {
+      "get" : {
+        "summary" : "get details of an order",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "customers specific orderId",
+          "x-example" : 4062580132
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return full order dataset",
+            "schema" : {
+              "$ref" : "#/definitions/UserOrder"
+            }
+          },
+          "404" : {
+            "description" : "Order not found"
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/products" : {
+      "get" : {
+        "summary" : "get all products within a order",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "customers specific orderId",
+          "x-example" : 4062580132
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return product collection for the order",
+            "schema" : {
+              "$ref" : "#/definitions/UserOrderProductCollection"
+            }
+          },
+          "404" : {
+            "description" : "Order not found"
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/cancel" : {
+      "post" : {
+        "summary" : "cancel a specific order",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "customers specific orderId",
+          "x-example" : 4062580132
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UserOrderCancelation"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "cancel of this order is initiated"
+          },
+          "409" : {
+            "description" : "could not cancel the order"
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/reorder" : {
+      "post" : {
+        "summary" : "cancels internally the order, prefills the cart with the products and keeps the timeslot",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "customers specific orderId",
+          "x-example" : 4062580132
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "accepted, order cancelled and cart is prefilled"
+          },
+          "409" : {
+            "description" : "could not reorder the order"
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/cart" : {
+      "post" : {
+        "summary" : "replace the current shopping cart with the items from the order",
+        "tags" : [ "user order management" ],
+        "security" : [ {
+          "jwt" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string",
+          "description" : "customers specific orderId",
+          "x-example" : 4062580132
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "accepted, cart is prefilled with the items"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Address" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "example" : "shipping|billing"
+        },
+        "gender" : {
+          "type" : "string",
+          "example" : "male|female|company"
+        },
+        "company" : {
+          "type" : "string",
+          "example" : "Bringmeister GmbH"
+        },
+        "department" : {
+          "type" : "string",
+          "example" : "Development"
+        },
+        "firstname" : {
+          "type" : "string",
+          "example" : "Boris"
+        },
+        "lastname" : {
+          "type" : "string",
+          "example" : "Bringmeister"
+        },
+        "street" : {
+          "type" : "string",
+          "example" : "Beusselstraße"
+        },
+        "housenumber" : {
+          "type" : "string",
+          "example" : "44n-q"
+        },
+        "zipcode" : {
+          "type" : "string",
+          "example" : "10553"
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "boris@bringmeister.de"
+        },
+        "hint" : {
+          "type" : "string",
+          "example" : "z.B. c/o Schmidt, Gebäude 23, Vorderhaus, Apartement 123, Bitte klingeln, etc."
+        },
+        "elevator" : {
+          "type" : "boolean",
+          "example" : false
+        },
+        "floor" : {
+          "type" : "number",
+          "example" : 1
+        },
+        "phonenumber" : {
+          "type" : "string",
+          "example" : "+49 30 639 636 77"
+        }
+      }
+    },
+    "AddressRead" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Address"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : 5012312
+          }
+        }
+      } ]
+    },
+    "AddressCollection" : {
+      "type" : "object",
+      "properties" : {
+        "addresses" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AddressRead"
+          }
+        }
+      }
+    },
+    "CapacitySlotMeta" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "6"
+        },
+        "startTime" : {
+          "type" : "string",
+          "example" : "06:00:00+02:00"
+        },
+        "endTime" : {
+          "type" : "string",
+          "example" : "06:00:00+02:00"
+        }
+      }
+    },
+    "CapacityCollection" : {
+      "type" : "object",
+      "properties" : {
+        "zipCode" : {
+          "type" : "string",
+          "example" : 13627
+        },
+        "startDate" : {
+          "type" : "string",
+          "example" : "2016-08-11"
+        },
+        "endDate" : {
+          "type" : "string",
+          "example" : "2016-08-18"
+        },
+        "slots" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CapacitySlotMeta"
+          }
+        },
+        "days" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CapacityDayCollection"
+          }
+        }
+      }
+    },
+    "CapacityDayCollection" : {
+      "type" : "object",
+      "properties" : {
+        "date" : {
+          "type" : "string",
+          "example" : "2016-08-11"
+        },
+        "slots" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CapacityDaySlot"
+          }
+        }
+      }
+    },
+    "CapacityDaySlot" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "0d47f84a-5efb-45a0-b088-e86a37bfb50b"
+        },
+        "slot" : {
+          "type" : "number",
+          "example" : 6
+        },
+        "status" : {
+          "type" : "string",
+          "example" : "available|outdated|full"
+        },
+        "price" : {
+          "type" : "number",
+          "example" : 4.0
+        }
+      }
+    },
+    "CapacityReservation" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "0d47f84a-5efb-45a0-b088-e86a37bfb50b"
+        },
+        "startDateTime" : {
+          "type" : "string",
+          "example" : "2016-08-15T07:00:00+0200"
+        },
+        "endDateTime" : {
+          "type" : "string",
+          "example" : "2016-08-15T09:00:00+0200"
+        },
+        "expiryDateTime" : {
+          "type" : "string",
+          "example" : "2016-08-11T16:13:26+0200"
+        },
+        "price" : {
+          "type" : "number",
+          "example" : 6.0
+        }
+      }
+    },
+    "Cart" : {
+      "type" : "object",
+      "properties" : {
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Product"
+          }
+        },
+        "vouchers" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/CartVouchers"
+          }
+        },
+        "totals" : {
+          "$ref" : "#/definitions/CartTotals"
+        }
+      }
+    },
+    "CartProductUpdate" : {
+      "type" : "object",
+      "required" : [ "quantity", "unit" ],
+      "properties" : {
+        "quantity" : {
+          "type" : "number",
+          "example" : 200
+        },
+        "unit" : {
+          "type" : "number",
+          "example" : "g"
+        },
+        "comment" : {
+          "type" : "string",
+          "example" : "Please use fresh meat.."
+        }
+      }
+    },
+    "Category" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "number",
+          "example" : 1
+        },
+        "level" : {
+          "type" : "number",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Obst & Gemüße"
+        },
+        "children" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SubCategory"
+          }
+        }
+      }
+    },
+    "SubCategory" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "number",
+          "example" : 2
+        },
+        "level" : {
+          "type" : "number",
+          "example" : 2
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Äpfel"
+        },
+        "children" : {
+          "type" : "string",
+          "example" : ""
+        }
+      }
+    },
+    "CategoryCollection" : {
+      "type" : "object",
+      "properties" : {
+        "categories" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Category"
+          }
+        }
+      }
+    },
+    "Voucher" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "example" : "SYSTEM|CART"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Gutschein"
+        },
+        "code" : {
+          "type" : "string",
+          "example" : "ZEIT13"
+        }
+      }
+    },
+    "CartVouchers" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/Voucher"
+      }
+    },
+    "CartTotals" : {
+      "type" : "object",
+      "properties" : {
+        "subtotal" : {
+          "type" : "number",
+          "example" : 93.81
+        },
+        "deposit" : {
+          "type" : "number",
+          "example" : 18.6
+        },
+        "delivery" : {
+          "type" : "number",
+          "example" : 6.0
+        },
+        "beverages" : {
+          "type" : "number",
+          "example" : 1.5
+        },
+        "grandtotal" : {
+          "type" : "number",
+          "example" : 112.41
+        }
+      }
+    },
+    "ContentBlock" : {
+      "type" : "object",
+      "properties" : {
+        "title" : {
+          "type" : "string",
+          "example" : "BER - Homepage - Main Teaser Stelle 4"
+        },
+        "content" : {
+          "type" : "string",
+          "example" : "<div style='width: 10..."
+        }
+      }
+    },
+    "ContentPage" : {
+      "type" : "object",
+      "properties" : {
+        "title" : {
+          "type" : "string",
+          "example" : "Impressum"
+        },
+        "headline" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "content" : {
+          "type" : "string",
+          "example" : "Some <b>markup</b> based content"
+        }
+      }
+    },
+    "Favorites" : {
+      "type" : "object",
+      "properties" : {
+        "categories" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/FavoriteCategory"
+          }
+        }
+      }
+    },
+    "FavoriteCategory" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "number",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Obst und Gemüse"
+        },
+        "total" : {
+          "type" : "number",
+          "example" : 3
+        },
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Product"
+          }
+        }
+      }
+    },
+    "Payment" : {
+      "type" : "object",
+      "properties" : {
+        "method" : {
+          "type" : "string",
+          "example" : "paypaly|ratepay|..."
+        }
+      }
+    },
+    "PaymentCollection" : {
+      "type" : "object",
+      "properties" : {
+        "payments" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Payment"
+          }
+        }
+      }
+    },
+    "ProductAttribute" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "example" : 17
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "AttributeName"
+        }
+      }
+    },
+    "ProductImageList" : {
+      "type" : "object",
+      "properties" : {
+        "43" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/1ist/43.png"
+        },
+        "90" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/1ist/90.png"
+        },
+        "117" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/1ist/117.png"
+        },
+        "120" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/1ist/120.png"
+        }
+      }
+    },
+    "ProductImageDetail" : {
+      "type" : "object",
+      "properties" : {
+        "58" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/detail/1/58.png"
+        },
+        "90" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/detail/1/90.png"
+        },
+        "268" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/detail/1/268.png"
+        },
+        "495" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/detail/1/495.png"
+        },
+        "1795" : {
+          "type" : "string",
+          "example" : "http://cdn.bringmister.de/images/detail/1/1795.png"
+        }
+      }
+    },
+    "ProductImages" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "$ref" : "#/definitions/ProductImageList"
+        },
+        "detail" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ProductImageDetail"
+          }
+        }
+      }
+    },
+    "ProductPacking" : {
+      "type" : "object",
+      "properties" : {
+        "_exampleFormula1" : {
+          "type" : "string",
+          "example" : "IF EMPTY(quantity AND outer) THEN :baseQuantity :unit :packagingInnerType"
+        },
+        "_exampleFormula2" : {
+          "type" : "string",
+          "example" : "IF EMPTY(outer) THEN :quantity x :baseQuantity:unit :packagingInnerType"
+        },
+        "_exampleFormula3" : {
+          "type" : "string",
+          "example" : "IF NOT EMPTY(outer) AND outer IN (Pack, Packung) THEN :quantity x :baseQuantity:unit :packagingInnerType / :packagingOuterType"
+        },
+        "_exampleFormula4" : {
+          "type" : "string",
+          "example" : "IF NOT EMPTY(outer) THEN :quantity x :baseQuantity:unit :packagingInnerType im :packagingOuterType"
+        },
+        "quantity" : {
+          "type" : "string",
+          "example" : 1.0
+        },
+        "baseQuantity" : {
+          "type" : "number",
+          "example" : 5.5
+        },
+        "unit" : {
+          "type" : "string",
+          "example" : "kg"
+        },
+        "circa" : {
+          "type" : "boolean",
+          "example" : false
+        },
+        "innerPackingType" : {
+          "type" : "string",
+          "example" : "Stück"
+        },
+        "outerPackingType" : {
+          "type" : "string",
+          "example" : "Kasten"
+        }
+      }
+    },
+    "ProductUnit" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "number",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Stück"
+        },
+        "default" : {
+          "type" : "boolean",
+          "example" : false
+        }
+      }
+    },
+    "ProductUnits" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/ProductUnit"
+      }
+    },
+    "ProductPrice" : {
+      "type" : "object",
+      "properties" : {
+        "_exampleFormula" : {
+          "type" : "string",
+          "example" : ":price (:basePrice€ / :basePriceCalcValue :basePriceCalcUnit) - OFFER: :specialPrice (-:specialPriceDiscount) - plus :deposit deposit"
+        },
+        "_exampleValues" : {
+          "type" : "string",
+          "example" : "7.99 € (4.00€ / 100 ml) - OFFER: 6.99 (-11%) - plus 3.30€ deposit"
+        },
+        "price" : {
+          "type" : "number",
+          "example" : "7.99 (4€ / 100ml)"
+        },
+        "specialPrice" : {
+          "type" : "number",
+          "example" : 6.99
+        },
+        "specialPriceDiscount" : {
+          "type" : "number",
+          "example" : 11.0
+        },
+        "basePrice" : {
+          "type" : "number",
+          "example" : 4.0
+        },
+        "basePriceCalcValue" : {
+          "type" : "number",
+          "example" : 100
+        },
+        "basePriceCalcUnit" : {
+          "type" : "string",
+          "example" : "ml"
+        },
+        "deposit" : {
+          "type" : "number",
+          "example" : 3.3
+        }
+      }
+    },
+    "Product" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "56615"
+        },
+        "sku" : {
+          "type" : "string",
+          "example" : "7197441"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Monopole Champagne Blue Top Brut"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "manufacturer" : {
+          "type" : "string"
+        },
+        "brand" : {
+          "type" : "string"
+        },
+        "available" : {
+          "type" : "boolean",
+          "example" : true
+        },
+        "images" : {
+          "$ref" : "#/definitions/ProductImages"
+        },
+        "units" : {
+          "$ref" : "#/definitions/ProductUnits"
+        },
+        "prices" : {
+          "$ref" : "#/definitions/ProductPrice"
+        },
+        "packing" : {
+          "$ref" : "#/definitions/ProductPacking"
+        },
+        "nutrition" : {
+          "$ref" : "#/definitions/ProductNutrition"
+        },
+        "additional" : {
+          "$ref" : "#/definitions/ProductAdditional"
+        },
+        "attributes" : {
+          "type" : "object",
+          "properties" : {
+            "characteristics" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductAttribute"
+              }
+            },
+            "additives" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductAttribute"
+              }
+            },
+            "allergetics" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductAttribute"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ProductAdditional" : {
+      "type" : "object",
+      "properties" : {
+        "legalText" : {
+          "type" : "string"
+        },
+        "tradingClass" : {
+          "type" : "string"
+        },
+        "ingredients" : {
+          "type" : "string"
+        },
+        "additives" : {
+          "type" : "string"
+        },
+        "allergenics" : {
+          "type" : "string"
+        },
+        "additional" : {
+          "type" : "string"
+        },
+        "warehousing" : {
+          "type" : "string"
+        },
+        "antioxidants" : {
+          "type" : "string"
+        },
+        "characteristic" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ProductNutrition" : {
+      "type" : "object",
+      "properties" : {
+        "reference_value" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "calories" : {
+          "type" : "string",
+          "example" : "100 kcal"
+        },
+        "cabohydrates" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "fat" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "fatSaturated" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "fatUnsaturated" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "fiber" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "proteins" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "sodium" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "sugar" : {
+          "type" : "string",
+          "example" : "100g"
+        },
+        "alcohol" : {
+          "type" : "string",
+          "example" : "37.5 promil"
+        }
+      }
+    },
+    "ProductSearchFilter" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/ProductAttribute"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 9
+          }
+        }
+      } ]
+    },
+    "ProductSearchFilterCategory" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/ProductSearchFilter"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "level" : {
+            "type" : "number",
+            "example" : 1
+          }
+        }
+      } ]
+    },
+    "ProductSearch" : {
+      "type" : "object",
+      "properties" : {
+        "totalElements" : {
+          "type" : "number",
+          "example" : 1251
+        },
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Product"
+          }
+        },
+        "categories" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ProductSearchFilterCategory"
+          }
+        },
+        "filters" : {
+          "type" : "object",
+          "properties" : {
+            "characteristics" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductSearchFilter"
+              }
+            },
+            "allergetics" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductSearchFilter"
+              }
+            },
+            "additives" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ProductSearchFilter"
+              }
+            }
+          }
+        }
+      }
+    },
+    "UserOrderCollection" : {
+      "type" : "object",
+      "properties" : {
+        "orders" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/UserOrderShort"
+          }
+        }
+      }
+    },
+    "UserOrderCancelation" : {
+      "type" : "object",
+      "properties" : {
+        "reason" : {
+          "type" : "string",
+          "example" : "Because of this and that.."
+        }
+      }
+    },
+    "UserOrderShort" : {
+      "type" : "object",
+      "properties" : {
+        "orderId" : {
+          "type" : "string",
+          "example" : "4062580132"
+        },
+        "createdAt" : {
+          "type" : "string",
+          "example" : "2016-08-04T15:17:23+0200"
+        },
+        "customerId" : {
+          "type" : "string",
+          "example" : "12452341"
+        },
+        "status" : {
+          "type" : "string",
+          "example" : "processing"
+        },
+        "products" : {
+          "type" : "number",
+          "example" : 7
+        },
+        "payment" : {
+          "type" : "string",
+          "example" : "paypal"
+        },
+        "totals" : {
+          "$ref" : "#/definitions/CartTotals"
+        },
+        "delivery" : {
+          "$ref" : "#/definitions/CapacityReservation"
+        }
+      }
+    },
+    "UserOrder" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/UserOrderShort"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "billing" : {
+            "$ref" : "#/definitions/Address"
+          },
+          "shipping" : {
+            "$ref" : "#/definitions/Address"
+          }
+        }
+      } ]
+    },
+    "UserOrderCreate" : {
+      "type" : "object",
+      "properties" : {
+        "cartId" : {
+          "type" : "number",
+          "example" : "10012312 (quoteId)"
+        },
+        "shippingAddressId" : {
+          "type" : "number",
+          "example" : "10012312 (customerAddressId)"
+        },
+        "billingAddressId" : {
+          "type" : "number",
+          "example" : "10012312 (customerAddressId)"
+        },
+        "reservationId" : {
+          "type" : "string",
+          "example" : "29037b06-bd50-4aa0-a406-b696f778e222 (capacity-reservation-id)"
+        },
+        "payment" : {
+          "type" : "object",
+          "properties" : {
+            "method" : {
+              "type" : "string",
+              "example" : "paypal"
+            },
+            "default" : {
+              "type" : "boolean",
+              "example" : true
+            },
+            "options" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "UserOrderProductCollection" : {
+      "type" : "object",
+      "properties" : {
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Product"
+          }
+        }
+      }
+    },
+    "UserToken" : {
+      "type" : "object",
+      "properties" : {
+        "token" : {
+          "type" : "string",
+          "example" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ\"\n"
+        }
+      }
+    },
+    "UserPassword" : {
+      "type" : "object",
+      "properties" : {
+        "current" : {
+          "type" : "string",
+          "example" : "old-unsecret-password"
+        },
+        "password" : {
+          "type" : "string",
+          "example" : "new-secret-password"
+        }
+      }
+    },
+    "UserPasswordReset" : {
+      "type" : "object",
+      "properties" : {
+        "token" : {
+          "type" : "string",
+          "example" : "token-from-email"
+        },
+        "password" : {
+          "type" : "string",
+          "example" : "new-secret-password"
+        }
+      }
+    },
+    "UserCredentials" : {
+      "type" : "object",
+      "properties" : {
+        "email" : {
+          "type" : "string",
+          "example" : "john.doe@c.net"
+        },
+        "password" : {
+          "type" : "string",
+          "example" : "john-does-secure-password"
+        }
+      }
+    },
+    "UserAccount" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : 12345
+        },
+        "firstname" : {
+          "type" : "string",
+          "example" : "John"
+        },
+        "lastname" : {
+          "type" : "string",
+          "example" : "Doe"
+        },
+        "newsletter" : {
+          "type" : "boolean",
+          "example" : false
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "john.doe@email.de"
+        },
+        "shipping" : {
+          "$ref" : "#/definitions/Address"
+        }
+      }
+    },
+    "UserCredentialsRegister" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/UserCredentials"
+      }, {
+        "type" : "object",
+        "required" : [ "gender", "firstname", "lastname", "email", "birthdate" ],
+        "properties" : {
+          "gender" : {
+            "type" : "string",
+            "example" : "male|female|company"
+          },
+          "firstname" : {
+            "type" : "string",
+            "example" : "Boris"
+          },
+          "lastname" : {
+            "type" : "string",
+            "example" : "Bringmeister"
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "boris@bringmeister.de"
+          },
+          "birthdate" : {
+            "type" : "string",
+            "example" : "1989-04-05"
+          },
+          "newsletter" : {
+            "type" : "boolean",
+            "example" : false
+          },
+          "company" : {
+            "type" : "string",
+            "example" : "Bringmeister GmbH"
+          },
+          "department" : {
+            "type" : "string",
+            "example" : "Development"
+          }
+        }
+      } ]
+    }
+  }
+}
