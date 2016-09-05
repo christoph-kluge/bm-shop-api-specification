@@ -167,7 +167,7 @@ The parameters that are needed to be sent are as follows:
 + Parameters
     + q (optional, string, `Toma`) ... search term
     + catId (optional, integer, `2`) ... categoryId to filter for
-    + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... categoryId to filter for
+    + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... browserUrl, can be category or product - see type in response
     + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
     + sort (optional, string, `price`) ... sort mechanismn (one of: price, popularity)
@@ -208,6 +208,10 @@ The parameters that are needed to be sent are as follows:
 
 ### Retrieve cart info [GET]
 
++ Request (application/json)
+    + Headers 
+        Authorization: Bearer {token}
+
 + Response 200 (application/json)
     + Attributes (Cart)
 
@@ -216,13 +220,11 @@ The parameters that are needed to be sent are as follows:
 + Parameters
     + productId: 1231231 (required, string) ... productId
 
-
 ### Add product [PUT]
 
 + Request (application/json)
     + Headers 
         Authorization: Bearer {token}
-            
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
@@ -235,7 +237,7 @@ The parameters that are needed to be sent are as follows:
 
 + Response 409 (application/json) 
     + Headers
-        X-Description: Conflict (e.g. max quantity reached)
+        X-Description: Conflict (e.g. max possible quantity reached)
 
 + Response 422 (application/json)
     + Headers
@@ -441,6 +443,12 @@ The parameters that are needed to be sent are as follows:
 
 + Response 201 (application/json)
     + Attributes (AddressRead)
+    
++ Response 409 (application/json)
+    + Attributes (AddressRead)
+    
++ Response 422 (application/json)
+    + Attributes (AddressRead)
 
 ### Retrieve specific address [GET /user/addresses/{id}]
 
@@ -589,28 +597,31 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `id` (optional, string) 
-+ `type` (optional, string) 
-+ `gender` (optional, string) 
-+ `company` (optional, string) 
-+ `department` (optional, string) 
-+ `firstname` (optional, string) 
-+ `lastname` (optional, string) 
-+ `street` (optional, string) 
-+ `housenumber` (optional, string) 
-+ `zipcode` (optional, string) 
-+ `email` (optional, string) 
-+ `hint` (optional, string) 
-+ `elevator` (boolean, optional) 
-+ `floor` (required, number) 
-+ `phonenumber` (optional, string) 
++ `addressId`: 1001241 (required, string) 
++ `default`: true (required, boolean)
++ `name`: My custom address name (required, string)
++ `type`: billing, shipping (required, enum[string]) 
++ `gender`: male|female|company (required, enum[string]) 
++ `company`: My Company GmbH (required, string) 
++ `department`: IT Department (required, string) 
++ `firstname`: John (required, string) 
++ `lastname`: Doe (required, string) 
++ `street`: Friedrichstraße (required, string) 
++ `housenumber`: 2010 (required, string) 
++ `zipcode`: 10551 (required, string) 
++ `email`: john.doe@example.com (required, string) 
++ `hint`: 1st Floor, Last Door (required, string) 
++ `elevator`: true (required, boolean) 
++ `floor`: 1 (required, number) 
++ `phonenumber`: 00493012345678 (required, string) 
 
 
 ## AddressCollection (object)
 
 
 ### Properties
-+ `addresses` (array[AddressRead], optional) 
++ `shipping` (required, array[AddressRead]) 
++ `billing` (required, array[AddressRead]) 
 
 
 ## CapacitySlotMeta (object)
@@ -801,11 +812,13 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `subtotal` (required, number) 
-+ `deposit` (required, number) 
-+ `delivery` (required, number) 
-+ `beverages` (required, number) 
-+ `grandtotal` (required, number) 
++ `minimumOrderValue`: 35.00 (required, number) ... mindest bestellwert
++ `subtotal`: 10.00 (required, number) ... subtotal without vouchers and deductions
++ `customerCreditBalance`: 1.50 (required, number) ... kunden guthaben
++ `deposit`: 3.50 (required, number) ... pfand
++ `delivery`: 4.00 (required, number) ... delivery costs
++ `beverages`: 1.00 (required, number) ... getränke lieferzuschlag
++ `grandtotal`: 17.50 (required, number) ... total including all additional costs 
 
 
 ## CartProductUpdate (object)
@@ -907,7 +920,8 @@ The parameters that are needed to be sent are as follows:
 ## ProductSearch (object)
 
 ### Properties
-+ `totalElements` (required, number) 
++ `totalElements` (required, number)
++ `type`: category, product (required, enum[string])
 + `products` (required, array[Product]) 
 + `categories` (required, array[ProductSearchFilterCategory]) 
 + `filters` (required, Filters) 
