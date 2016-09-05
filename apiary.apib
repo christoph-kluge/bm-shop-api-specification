@@ -2,16 +2,29 @@ FORMAT: 1A
 HOST: http://api.example.com/api
 
 # Mobile Webshop
+
 This is a api documentation for a mobile webshop functionality. 
 This should cover mainly all operations which are currently available on the current client-server rendered shop.
 
 
 ## Authentication
+
 This API uses JWT as a authentication layer. 
 The parameters that are needed to be sent are as follows:
 
 + `Authorization: Bearer {token}`
 + `Authorization: Bearer header.payload.signature`
+
+
+## Customized content per application
+
+In order to return customized content in the future i.e. desktop-web, mobile-web, mobile-native we should consider to identify yourself:
+
++ `X-Client-Application: mobile-web`
++ `X-Client-Application: desktop-web`
+
+Default fallback will be desktop-web if nothing is provided
+
 
 
 
@@ -162,10 +175,11 @@ The parameters that are needed to be sent are as follows:
 
 ## Products [/products]
 
-### Search through catalog [GET /products{?q,catId,browserUrl,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
+### Search through catalog [GET /products{?q,catId,campaign,browserUrl,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
 
 + Parameters
     + q (optional, string, `Toma`) ... search term
+    + campaign (optional, string, `zuckertuete`) ... campaign (i.e. from sliders)
     + catId (optional, integer, `2`) ... categoryId to filter for
     + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... browserUrl, can be category or product - see type in response
     + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
@@ -715,7 +729,7 @@ The parameters that are needed to be sent are as follows:
 
 ### Properties
 + `id` (required, number) 
-+ `name` (optional, string) 
++ `name` (required, string) 
 + `default` (boolean, optional) 
 
 
@@ -948,6 +962,8 @@ The parameters that are needed to be sent are as follows:
 + `createdAt` (required, string) 
 + `customerId` (required, string) 
 + `status` (required, string) 
++ `canChange` (required, boolean)
++ `canCancel` (required, boolean)
 + `payment` (required, string) 
 + `totals` (required, CartTotals) 
 + `reservation` (required, CapacityReservation) 
@@ -962,6 +978,8 @@ The parameters that are needed to be sent are as follows:
 + `createdAt` (required, string) 
 + `customerId` (required, string) 
 + `status` (required, string) 
++ `canChange` (required, boolean)
++ `canCancel` (required, boolean)
 + `payment` (required, string) 
 + `totals` (required, CartTotals) 
 + `reservation` (required, CapacityReservation) 
