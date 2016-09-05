@@ -28,8 +28,7 @@ The parameters that are needed to be sent are as follows:
     + Attributes (UserRegistration)
 
 + Response 200 (application/json)
-
-        + Attributes (UserToken)
+    + Attributes (UserToken)
 
 + Response 409 (application/json)
 
@@ -42,7 +41,6 @@ The parameters that are needed to be sent are as follows:
     + Attributes (UserAuthentication)
 
 + Response 200 (application/json)
-    
     + Attributes (UserToken)
 
 + Response 401
@@ -54,7 +52,6 @@ The parameters that are needed to be sent are as follows:
     + Attributes (UserGuestAuthentication)
 
 + Response 200 (application/json)
-    
     + Attributes (UserToken)
 
 + Response 401
@@ -64,11 +61,9 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-    
-            Authentication: Bearer {token}
+        Authentication: Bearer {token}
 
 + Response 200 (application/json)
-    
     + Attributes (UserToken)
 
 + Response 401
@@ -78,8 +73,7 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-    
-            Authentication: Bearer {token}
+        Authentication: Bearer {token}
 
 + Response 204 (application/json)
 
@@ -103,8 +97,7 @@ The parameters that are needed to be sent are as follows:
     + Attributes (UserPasswordReset)
 
 + Response 200 (application/json)
-
-        + Attributes (UserToken)
+    + Attributes (UserToken)
 
 + Response 409
 
@@ -126,7 +119,6 @@ The parameters that are needed to be sent are as follows:
     + id: `some-nice-identifier-mobile` (required, string) ... blockIdentifier
 
 + Response 200 (application/json)
-
     + Attributes (ContentBlock)
     
 + Response 404 (application/json)
@@ -140,7 +132,6 @@ The parameters that are needed to be sent are as follows:
     + id: `some-page-identifier` (required, string) ... pageIdentifier
 
 + Response 200 (application/json)
-
     + Attributes (ContentPage)
     
 + Response 404 (application/json)
@@ -167,7 +158,6 @@ The parameters that are needed to be sent are as follows:
 ### List categories [GET]
 
 + Response 200 (application/json)
-
     + Attributes (CategoryCollection)
 
 
@@ -188,7 +178,6 @@ The parameters that are needed to be sent are as follows:
     + characteristics (optional, array[integer], `10,12`) ... array of characteristics filterIds
 
 + Response 200 (application/json)
-
     + Attributes (ProductSearch)
 
 ### Retrieve product info [GET /products/{productId}]
@@ -197,21 +186,7 @@ The parameters that are needed to be sent are as follows:
     + productId: `1230012` (required, string)
 
 + Response 200 (application/json)
-
     + Attributes (Product)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -235,7 +210,6 @@ The parameters that are needed to be sent are as follows:
 ### Retrieve cart info [GET]
 
 + Response 200 (application/json)
-
     + Attributes (Cart)
 
 ## Products [/cart/products/{productId}]
@@ -248,46 +222,36 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
             
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
-
-        item got updated
-
-        + Attributes (CartTotals)
+    + Attributes (CartTotals)
         
 + Response 201 (application/json)
-
-        item got added to cart
-
-        + Attributes (CartTotals)
+    + Attributes (CartTotals)
 
 + Response 409 (application/json) 
-
-        conflict (max quantity reached)
+    + Headers
+        X-Description: Conflict (e.g. max quantity reached)
 
 + Response 422 (application/json)
-
-        validation error (quantity or comment)
+    + Headers
+        X-Description: Validation error (e.g. quantity or comment)
 
 ### Remove product [DELETE]
 
 + Request
-    + Headers 
-
-            Authorization: Bearer {token}
+    + Headers
+        Authorization: Bearer {token}
 
 + Response 204
 
 + Response 409 (application/json)
+    + Headers
+        X-Description: conflict (unable to remove from cart)
 
-        conflict (unable to remove from cart)
-        
-        
-        
 
 ## Coupons / Vouchers [/cart/coupons/{code}]
 
@@ -298,25 +262,23 @@ The parameters that are needed to be sent are as follows:
 
 + Request
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Response 200 (application/json)
-
-        + Attributes (CartTotals)
+    + Attributes (CartTotals)
         
 + Response 201 (application/json)
-
-        + Attributes (CartTotals)
+    + Attributes (CartTotals)
 
 + Response 409
+    + Headers
+        X-Description: conflict (voucher could not be applied, unknown, expired, ...)
 
 ### Remove coupon [DELETE]
 
 + Request
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Response 204 (application/json)
 
@@ -341,8 +303,7 @@ The parameters that are needed to be sent are as follows:
 
 + Request
     + Headers
-        
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Parameters
     + zipCode (required, string, `12312`) ... zipcode where you want to fetch the capacity for
@@ -350,21 +311,18 @@ The parameters that are needed to be sent are as follows:
     + endDate (required, datetime, ``) ... end date for the matrix
 
 + Response 200 (application/json)
-
     + Attributes (CapacityCollection)
 
 ### Reserve a capacity slot [POST /capacities/{capacityId}]
 
 + Request
     + Headers
-        
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Parameters
     + capacityId (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... capacityId
 
 + Response 200 (application/json)
-
     + Attributes (CapacityReservation)
 
 
@@ -373,11 +331,9 @@ The parameters that are needed to be sent are as follows:
 + Parameters
     + id (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... reservation identifier
 
-
 ### Retrieve reservation info [GET]
 
 + Response 200 (application/json)
-
     + Attributes (CapacityReservation)
 
 
@@ -409,7 +365,6 @@ The parameters that are needed to be sent are as follows:
 ### Retrieve payment methods [GET /user/payments]
 
 + Response 200 (application/json)
-
     + Attributes (PaymentCollection)
 
 ### Create a new order [POST /user/orders]
@@ -418,7 +373,6 @@ The parameters that are needed to be sent are as follows:
     + Attributes (UserOrderCreate)
 
 + Response 201 (application/json)
-
     + Attributes (UserOrder)
 
 + Response 409 
@@ -452,7 +406,6 @@ The parameters that are needed to be sent are as follows:
 ### Retrieve account [GET /user]
 
 + Response 200 (application/json)
-
     + Attributes (UserAccount)
     
 ### Update account [PUT /user]
@@ -471,8 +424,7 @@ The parameters that are needed to be sent are as follows:
 
 + Request
     + Headers
-    
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Response 200 (application/json)
     + Attributes (AddressCollection)
@@ -482,13 +434,11 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
     
     + Attributes (Address)
 
 + Response 201 (application/json)
-
     + Attributes (AddressRead)
 
 ### Retrieve specific address [GET /user/addresses/{id}]
@@ -498,11 +448,9 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Response 200 (application/json)
-
     + Attributes (AddressRead)
 
 ### Update specific address [PUT /user/addresses/{id}]
@@ -512,8 +460,7 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Response 204 (application/json)
 
@@ -524,8 +471,7 @@ The parameters that are needed to be sent are as follows:
 
 + Request (application/json)
     + Headers 
-
-            Authorization: Bearer {token}
+        Authorization: Bearer {token}
 
 + Response 204 (application/json)
 
@@ -540,7 +486,6 @@ The parameters that are needed to be sent are as follows:
 ### List Favorites [GET /user/favorites]
 
 + Response 200 (application/json)
-
     + Attributes (Favorites)
 
 
@@ -560,7 +505,6 @@ The parameters that are needed to be sent are as follows:
 ### List user orders [GET /user/orders]
 
 + Response 200 (application/json)
-
     + Attributes (UserOrderCollection)
 
 ### Retrieve order info [GET /user/orders/{orderId}]
@@ -569,12 +513,9 @@ The parameters that are needed to be sent are as follows:
     + orderId: 1019558370 (required, string) ... orderId
 
 + Response 200 (application/json)
-
-        + Attributes (UserOrder)
+    + Attributes (UserOrder)
 
 + Response 404 
-
-        Order not found
         
 ### Cancel order [POST /user/orders/{orderId}/cancel]
 
@@ -595,12 +536,9 @@ The parameters that are needed to be sent are as follows:
     + orderId: 1019558370 (required, string)
 
 + Response 202 (application/json)
+    + Attributes (CartTotals)
 
-        + Attributes (CartTotals)
-
-+ Response 409 
-
-        could not reorder the order
++ Response 409
 
 
 ### Add order items to shopping cart [POST /user/orders/{orderId}/cart]
@@ -609,8 +547,7 @@ The parameters that are needed to be sent are as follows:
     + orderId: 1019558370 (required, integer)
 
 + Response 200 (application/json)
-
-        + Attributes (CartTotals)
+    + Attributes (CartTotals)
         
         
         
@@ -1097,7 +1034,7 @@ The parameters that are needed to be sent are as follows:
 + `gender`: male, female, company (required, enum[string]) 
 + `firstname`: John (required, string) 
 + `lastname`: Doe (required, string) 
-+ `birthdate`: 1989-01-01 (required, string) 
++ `birthdate`: `1989-01-01` (required, string) 
 + `newsletter`: false (boolean, required) 
 + `company`: Bringmeister GmbH (optional, string) 
 + `department`: IT-Department (optional, string)
