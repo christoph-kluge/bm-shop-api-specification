@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://api.bm.dev/api
+HOST: http://api.example.com/api
 
 # BM_Shop
 This is a api documentation for our shop functionality. 
@@ -49,7 +49,7 @@ The parameters that are needed to be sent are as follows:
 ### Authenticate as guest [POST /login/guest]
 
 + Request (application/json)
-    + Attributes (UserGuestAuthentication)
+    + Attributes (UserAuthenticationGuest)
 
 + Response 200 (application/json)
     + Attributes (UserToken)
@@ -85,7 +85,7 @@ The parameters that are needed to be sent are as follows:
 ## Reset password [/passwords/{email}]
 
 + Parameters
-    + email: `john.doe@bringmeister.de` (required, string) ... email address of the customer-account
+    + email: `john.doe@example.com` (required, string) ... email address of the customer-account
 
 ### Trigger reset password [DELETE]
 
@@ -570,20 +570,20 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `type`: billing (optional, string) 
-+ `gender`: male|female|company (optional, string) 
-+ `company`: Bringmeister (optional, string) 
-+ `department`: IT-Department (optional, string) 
-+ `firstname`: John (optional, string) 
-+ `lastname`: Doe (optional, string) 
-+ `street`: Beusselstraße (optional, string) 
-+ `housenumber`: 44n-q (optional, string) 
-+ `zipcode`: 10799 (optional, string) 
-+ `email`: john.doe@bringmeister.de (optional, string) 
-+ `hint`: 1st Floor, 2nd Elevator (optional, string) 
-+ `elevator`: true (boolean, optional) 
++ `type`: billing, shipping (required, enum[string]) 
++ `gender`: male|female|company (required, enum[string]) 
++ `company`: My Company GmbH (required, string) 
++ `department`: IT Department (required, string) 
++ `firstname`: John (required, string) 
++ `lastname`: Doe (required, string) 
++ `street`: Friedrichstraße (required, string) 
++ `housenumber`: 2010 (required, string) 
++ `zipcode`: 10551 (required, string) 
++ `email`: john.doe@example.com (required, string) 
++ `hint`: 1st Floor, Last Door (required, string) 
++ `elevator`: true (required, boolean) 
 + `floor`: 1 (required, number) 
-+ `phonenumber`: 00491736458189 (optional, string) 
++ `phonenumber`: 00493012345678 (required, string) 
 
 
 ## AddressRead (object)
@@ -1012,11 +1012,11 @@ The parameters that are needed to be sent are as follows:
 ## UserAuthentication (object)
 
 ### Properties
-+ email: `john.doe@bringmeister.de` (required, string) 
++ email: `john.doe@example.com` (required, string) 
 + password: `my-secret-password` (required, string) 
 
 
-## UserGuestAuthentication (object)
+## UserAuthenticationGuest (object)
 
 ### Properties
 + zipCode: `80333` (required, number) 
@@ -1029,19 +1029,19 @@ The parameters that are needed to be sent are as follows:
 + `firstname`: John (required, string) 
 + `lastname`: Doe (required, string) 
 + `newsletter`: false (required, boolean) 
-+ `email`: john.doe@bm.de (required, string) 
++ `email`: john.doe@example.com (required, string) 
 + `shipping` (required, Address) 
 
 
 ## UserRegistration (object)
 
 ### Properties
-+ `email`: john.doe@bm.de (required, string) 
++ `email`: john.doe@example.com (required, string) 
 + `password`: `my-secret-password` (required, string) 
 + `gender`: male, female, company (required, enum[string]) 
 + `firstname`: John (required, string) 
 + `lastname`: Doe (required, string) 
 + `birthdate`: `1989-01-01` (required, string) 
-+ `newsletter`: false (boolean, required) 
-+ `company`: Bringmeister GmbH (optional, string) 
-+ `department`: IT-Department (optional, string)
++ `newsletter`: false (required, boolean) 
++ `company`: My Company GmbH (required, string) 
++ `department`: IT Department (required, string)
