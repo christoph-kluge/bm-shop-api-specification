@@ -227,6 +227,8 @@ The parameters that are needed to be sent are as follows:
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
+    + Headers 
+        Authorization: Bearer {token}
     + Attributes (CartTotals)
         
 + Response 201 (application/json)
@@ -580,7 +582,7 @@ The parameters that are needed to be sent are as follows:
 + `email`: john.doe@bringmeister.de (optional, string) 
 + `hint`: 1st Floor, 2nd Elevator (optional, string) 
 + `elevator`: true (boolean, optional) 
-+ `floor`: 1 (number, optional) 
++ `floor`: 1 (required, number) 
 + `phonenumber`: 00491736458189 (optional, string) 
 
 
@@ -601,7 +603,7 @@ The parameters that are needed to be sent are as follows:
 + `email` (optional, string) 
 + `hint` (optional, string) 
 + `elevator` (boolean, optional) 
-+ `floor` (number, optional) 
++ `floor` (required, number) 
 + `phonenumber` (optional, string) 
 
 
@@ -645,9 +647,9 @@ The parameters that are needed to be sent are as follows:
 
 ### Properties
 + `id` (optional, string) 
-+ `slot` (number, optional) 
++ `slot` (required, number) 
 + `status` (optional, string) 
-+ `price` (number, optional) 
++ `price` (required, number) 
 
 
 ## CapacityReservation (object)
@@ -658,7 +660,7 @@ The parameters that are needed to be sent are as follows:
 + `startDateTime` (optional, string) 
 + `endDateTime` (optional, string) 
 + `expiryDateTime` (optional, string) 
-+ `price` (number, optional) 
++ `price` (required, number) 
 
 
 ## Cart (object)
@@ -702,7 +704,7 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `id` (number, optional) 
++ `id` (required, number) 
 + `name` (optional, string) 
 + `default` (boolean, optional) 
 
@@ -713,13 +715,13 @@ The parameters that are needed to be sent are as follows:
 ### Properties
 + `_exampleFormula` (optional, string) 
 + `_exampleValues` (optional, string) 
-+ `price` (number, optional) 
-+ `specialPrice` (number, optional) 
-+ `specialPriceDiscount` (number, optional) 
-+ `basePrice` (number, optional) 
-+ `basePriceCalcValue` (number, optional) 
++ `price` (required, number) 
++ `specialPrice` (required, number) 
++ `specialPriceDiscount` (required, number) 
++ `basePrice` (required, number) 
++ `basePriceCalcValue` (required, number) 
 + `basePriceCalcUnit` (optional, string) 
-+ `deposit` (number, optional) 
++ `deposit` (required, number) 
 
 
 ## ProductPacking (object)
@@ -731,7 +733,7 @@ The parameters that are needed to be sent are as follows:
 + `_exampleFormula3` (optional, string) 
 + `_exampleFormula4` (optional, string) 
 + `quantity` (optional, string) 
-+ `baseQuantity` (number, optional) 
++ `baseQuantity` (required, number) 
 + `unit` (optional, string) 
 + `circa` (boolean, optional) 
 + `innerPackingType` (optional, string) 
@@ -783,7 +785,7 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `id` (number, optional) 
++ `id` (required, number) 
 + `name` (optional, string) 
 
 
@@ -800,19 +802,19 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `subtotal` (number, optional) 
-+ `deposit` (number, optional) 
-+ `delivery` (number, optional) 
-+ `beverages` (number, optional) 
-+ `grandtotal` (number, optional) 
++ `subtotal` (required, number) 
++ `deposit` (required, number) 
++ `delivery` (required, number) 
++ `beverages` (required, number) 
++ `grandtotal` (required, number) 
 
 
 ## CartProductUpdate (object)
 
 
 ### Properties
-+ `quantity` (number, required) 
-+ `unit` (number, required) 
++ `quantity`: 200 (required, number) 
++ `unitId`: 17 (required, number) 
 + `comment` (optional, string) 
 
 
@@ -820,110 +822,110 @@ The parameters that are needed to be sent are as follows:
 
 
 ### Properties
-+ `id` (number, optional) 
-+ `level` (number, optional) 
-+ `name` (optional, string) 
-+ `children` (array[SubCategory], optional) 
++ `id` (required, number) 
++ `level` (required, number) 
++ `name` (required, string) 
++ `children` (required, array[SubCategory]) 
 
 
 ## SubCategory (object)
 
 
 ### Properties
-+ `id` (number, optional) 
-+ `level` (number, optional) 
-+ `name` (optional, string) 
-+ `children` (optional, string) 
++ `id` (required, number) 
++ `level` (required, number) 
++ `name` (required, string) 
++ `children` (optional, array[SubCategory]) 
 
 
 ## CategoryCollection (object)
 
 
 ### Properties
-+ `categories` (array[Category], optional) 
++ `categories` (required, array[Category]) 
 
 
 ## ContentBlock (object)
 
 
 ### Properties
-+ `title` (optional, string) 
-+ `content` (optional, string) 
++ `title` (required, string) 
++ `content` (required, string) 
 
 
 ## ContentPage (object)
 
 
 ### Properties
-+ `title` (optional, string) 
-+ `headline` (optional, string) 
-+ `content` (optional, string) 
++ `title` (required, string) 
++ `headline` (required, string) 
++ `content` (required, string) 
 
 
 ## Favorites (object)
 
 
 ### Properties
-+ `categories` (array[FavoriteCategory], optional) 
++ `categories` (required, array[FavoriteCategory]) 
 
 
 ## FavoriteCategory (object)
 
 
 ### Properties
-+ `id` (number, optional) 
-+ `name` (optional, string) 
-+ `total` (number, optional) 
-+ `products` (array[Product], optional) 
++ `id` (required, number) 
++ `name` (required, string) 
++ `total` (required, number) 
++ `products` (required, array[Product]) 
 
 
 ## Payment (object)
 
 ### Properties
-+ `method` (optional, string) 
++ `method` (required, string) 
 
 
 ## PaymentCollection (object)
 
 ### Properties
-+ `payments` (array[Payment], optional) 
++ `payments` (required, array[Payment]) 
 
 
 ## ProductSearchFilter (object)
 
 ### Properties
-+ `id` (number, optional) 
-+ `name` (optional, string) 
-+ `total` (number, optional) 
++ `id` (required, number) 
++ `name` (required, string) 
++ `total` (required, number) 
 
 
 ## ProductSearchFilterCategory (object)
 
 ### Properties
-+ `level` (number, optional) 
++ `level` (required, number) 
 
 
 ## ProductSearch (object)
 
 ### Properties
-+ `totalElements` (number, optional) 
-+ `products` (array[Product], optional) 
-+ `categories` (array[ProductSearchFilterCategory], optional) 
-+ `filters` (Filters, optional) 
++ `totalElements` (required, number) 
++ `products` (required, array[Product]) 
++ `categories` (required, array[ProductSearchFilterCategory]) 
++ `filters` (required, Filters) 
 
 
 ## Filters (object)
 
 ### Properties
-+ `characteristics` (array[ProductSearchFilter], optional) 
-+ `allergetics` (array[ProductSearchFilter], optional) 
-+ `additives` (array[ProductSearchFilter], optional) 
++ `characteristics` (required, array[ProductSearchFilter]) 
++ `allergetics` (required, array[ProductSearchFilter]) 
++ `additives` (required, array[ProductSearchFilter]) 
 
 
 ## UserOrderCollection (object)
 
 ### Properties
-+ `orders` (array[UserOrderShort], optional) 
++ `orders` (required, array[UserOrderShort]) 
 
 
 ## UserOrderShort (object)
@@ -935,47 +937,48 @@ The parameters that are needed to be sent are as follows:
 + `status` (required, string) 
 + `payment` (required, string) 
 + `totals` (required, CartTotals) 
-+ `delivery` (required, CapacityReservation) 
++ `reservation` (required, CapacityReservation) 
 + `productsCount` (required, number) 
 + `products` (required, array[Product]) 
-
-
-## UserOrderCancelation (object)
-
-### Properties
-+ `reason` (optional, string) 
 
 
 ## UserOrder (object)
 
 ### Properties
-+ `orderId` (optional, string) 
-+ `createdAt` (optional, string) 
-+ `customerId` (optional, string) 
-+ `status` (optional, string) 
-+ `products` (number, optional) 
-+ `payment` (optional, string) 
-+ `totals` (CartTotals, optional) 
-+ `delivery` (CapacityReservation, optional) 
-+ `billing` (Address, optional) 
-+ `shipping` (Address, optional) 
++ `orderId` (required, string) 
++ `createdAt` (required, string) 
++ `customerId` (required, string) 
++ `status` (required, string) 
++ `payment` (required, string) 
++ `totals` (required, CartTotals) 
++ `reservation` (required, CapacityReservation) 
++ `productsCount` (required, number) 
++ `products` (required, array[Product]) 
++ `billing` (required, Address) 
++ `shipping` (required, Address) 
+
+
+## UserOrderCancelation (object)
+
+### Properties
++ `reason` (required, string) 
 
 
 ## UserOrderCreate (object)
 
 ### Properties
-+ `shippingAddressId` (number, optional) 
-+ `billingAddressId` (number, optional) 
++ `shippingAddressId` (required, string) 
++ `billingAddressId` (required, string) 
 + `reservationId` (optional, string) 
-+ `payment` (Payment39, optional) 
++ `payment` (required, Payment39) 
 
 
 ## Payment39 (object)
 
 ### Properties
-+ `method`: paypal (optional, string) 
-+ `default`: true (boolean, optional) 
-+ `options` (object, optional) 
++ `method`: paypal (required, string) 
++ `default`: true (required, boolean) 
++ `options` (required, object) 
 
 
 ## UserOrderProductCollection (object)
@@ -988,6 +991,10 @@ The parameters that are needed to be sent are as follows:
 ### Properties
 + `token`: TestToken (required, string) 
 
+## UserTokenGuest (object)
+
+### Properties
++ `token`: TestToken (required, string) 
 
 ## UserPassword (object)
 
@@ -1018,12 +1025,12 @@ The parameters that are needed to be sent are as follows:
 ## UserAccount (object)
 
 ### Properties
-+ `id`: 123123 (optional, string) 
-+ `firstname`: John (optional, string) 
-+ `lastname`: Doe (optional, string) 
-+ `newsletter`: false (boolean, optional) 
-+ `email`: john.doe@bm.de (optional, string) 
-+ `shipping` (Address, optional) 
++ `id`: 123123 (required, string) 
++ `firstname`: John (required, string) 
++ `lastname`: Doe (required, string) 
++ `newsletter`: false (required, boolean) 
++ `email`: john.doe@bm.de (required, string) 
++ `shipping` (required, Address) 
 
 
 ## UserRegistration (object)
