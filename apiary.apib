@@ -20,6 +20,20 @@ The parameters that are needed to be sent are as follows:
 
 # Group Authentication
 
+## Account creation
+
+### Create account [POST /user]
+
++ Request (application/json)
+    + Attributes (UserRegistration)
+
++ Response 200 (application/json)
+
+        + Attributes (UserToken)
+
++ Response 409 (application/json)
+
+
 ## Token handling [/login]
 
 ### Authenticate as user [POST]
@@ -60,7 +74,7 @@ The parameters that are needed to be sent are as follows:
 + Response 401
 
         
-### Remove Token / Logout [DELETE /login]
+### Delete Token / Force Logout [DELETE /login]
 
 + Request (application/json)
     + Headers 
@@ -70,18 +84,6 @@ The parameters that are needed to be sent are as follows:
 + Response 204 (application/json)
 
 + Response 400 (application/json)
-
-+ Response 409 (application/json)
-
-
-### Create account [POST /user]
-
-+ Request (application/json)
-    + Attributes (UserRegistration)
-
-+ Response 200 (application/json)
-
-        + Attributes (UserToken)
 
 + Response 409 (application/json)
 
@@ -114,9 +116,9 @@ The parameters that are needed to be sent are as follows:
 
 
 
-# Group Content management
+# Group Content
 
-## Content
+## Retrieve content by types [/content]
 
 ### Retrieve block [GET /content-blocks/{id}]
 
