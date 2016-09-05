@@ -16,66 +16,162 @@ The parameters that are needed to be sent are as follows:
 
 
 
-# Group Capacity management
 
-## Capacities [/capacities{?zipCode,startDate,endDate}]
 
-### Retrieve available capacities [GET /capacities{?zipCode,startDate,endDate}]
+# Group Authentication
 
-+ Request
-    + Headers
+## Token handling [/login]
+
+### Authenticate as user [POST]
+
++ Request (application/json)
+    + Attributes (UserAuthentication)
+
++ Response 200 (application/json)
+    
+    + Attributes (UserToken)
+
++ Response 401
+
+
+### Authenticate as guest [POST /login/guest]
+
++ Request (application/json)
+    + Attributes (UserGuestAuthentication)
+
++ Response 200 (application/json)
+    
+    + Attributes (UserToken)
+
++ Response 401
+
+
+### Regenerate token [POST /login/regenerate]
+
++ Request (application/json)
+    + Headers 
+    
+            Authentication: Bearer {token}
+
++ Response 200 (application/json)
+    
+    + Attributes (UserToken)
+
++ Response 401
+
         
-        Authorization: Bearer {token}
+### Remove Token / Logout [DELETE /login]
 
-+ Parameters
-    + zipCode (required, string, `12312`) ... zipcode where you want to fetch the capacity for
-    + startDate (required, datetime, ``) ... start date for the matrix
-    + endDate (required, datetime, ``) ... end date for the matrix
++ Request (application/json)
+    + Headers 
+    
+            Authentication: Bearer {token}
 
-+ Response 200 (application/json)
++ Response 204 (application/json)
 
-    + Attributes (CapacityCollection)
++ Response 400 (application/json)
 
-### Reserve a capacity slot [POST /capacities/{capacityId}]
++ Response 409 (application/json)
 
-+ Request
-    + Headers
-        
-        Authorization: Bearer {token}
 
-+ Parameters
-    + capacityId (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... capacityId
+### Create account [POST /user]
+
++ Request (application/json)
+    + Attributes (UserRegistration)
 
 + Response 200 (application/json)
 
-    + Attributes (CapacityReservation)
+        + Attributes (UserToken)
+
++ Response 409 (application/json)
 
 
-## Slot reservations [/capacity-reservations/{id}]
+## Reset password [/passwords/{email}]
 
 + Parameters
-    + id (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... reservation identifier
+    + email: `john.doe@bringmeister.de` (required, string) ... email address of the customer-account
 
+### Trigger reset password [DELETE]
 
-### Retrieve reserved slot infromation [GET]
++ Response 204 (application/json)
+
+### Update password [POST]
+
++ Request (application/json)
+    + Attributes (UserPasswordReset)
 
 + Response 200 (application/json)
 
-    + Attributes (CapacityReservation)
+        + Attributes (UserToken)
 
-# Group Catalog Search / Product Details
++ Response 409
+
+
+
+
+
+
+
+
+
+# Group Content management
+
+## Content
+
+### Retrieve block [GET /content-blocks/{id}]
+
++ Parameters
+    + id: `some-nice-identifier-mobile` (required, string) ... blockIdentifier
+
++ Response 200 (application/json)
+
+    + Attributes (ContentBlock)
+    
++ Response 404 (application/json)
+    
++ Response 410 (application/json)
+
+
+### Retrieve page [GET /content-pages/{id}]
+
++ Parameters
+    + id: `some-page-identifier` (required, string) ... pageIdentifier
+
++ Response 200 (application/json)
+
+    + Attributes (ContentPage)
+    
++ Response 404 (application/json)
+    
++ Response 410 (application/json)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Group Catalog / Product Search
 
 ## Categories [/categories]
 
-### Retrieve category tree [GET]
+### List categories [GET]
 
 + Response 200 (application/json)
 
     + Attributes (CategoryCollection)
 
-## Products [/products{?q,catId,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
 
-### Product search [GET /products{?q,catId,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
+## Products [/products]
+
+### Search through catalog [GET /products{?q,catId,browserUrl,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
 
 + Parameters
     + q (optional, string, `Toma`) ... search term
@@ -93,7 +189,7 @@ The parameters that are needed to be sent are as follows:
 
     + Attributes (ProductSearch)
 
-### Product details [GET /products/{productId}]
+### Retrieve product info [GET /products/{productId}]
 
 + Parameters
     + productId: `1230012` (required, string)
@@ -102,17 +198,45 @@ The parameters that are needed to be sent are as follows:
 
     + Attributes (Product)
 
-# Group cart management
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Group Shopping Cart
 
 ## Cart [/cart]
 
-### Carts [GET]
+### Retrieve cart info [GET]
 
 + Response 200 (application/json)
 
     + Attributes (Cart)
 
-## Cart handling for products [/cart/products/{productId}]
+## Products [/cart/products/{productId}]
 
 + Parameters
     + productId: 1231231 (required, string) ... productId
@@ -159,8 +283,11 @@ The parameters that are needed to be sent are as follows:
 + Response 409 (application/json)
 
         conflict (unable to remove from cart)
+        
+        
+        
 
-## Cart handling for coupon codes [/cart/coupons/{code}]
+## Coupons / Vouchers [/cart/coupons/{code}]
 
 + Parameters
     + code: `ZEIT13` (required, string)
@@ -180,9 +307,7 @@ The parameters that are needed to be sent are as follows:
 
         + Attributes (CartTotals)
 
-+ Response 409 
-
-        coupon code is invalid (expired, not applicable, ..)
++ Response 409
 
 ### Remove coupon [DELETE]
 
@@ -194,241 +319,252 @@ The parameters that are needed to be sent are as follows:
 + Response 204 (application/json)
 
 
-# Group content management
 
-## Blocks (partial content) [/content-blocks/{id}]
+
+
+
+
+
+
+
+
+
+
+
+# Group Capacity management
+
+## Capacities [/capacities{?zipCode,startDate,endDate}]
+
+### Retrieve capacity slots [GET /capacities{?zipCode,startDate,endDate}]
+
++ Request
+    + Headers
+        
+            Authorization: Bearer {token}
 
 + Parameters
-    + id (required, string, `some-nice-identifier-mobile`) ... identifier of the content block
-
-
-### Retrieve content [GET]
+    + zipCode (required, string, `12312`) ... zipcode where you want to fetch the capacity for
+    + startDate (required, datetime, ``) ... start date for the matrix
+    + endDate (required, datetime, ``) ... end date for the matrix
 
 + Response 200 (application/json)
 
-        + Attributes (ContentBlock)
-    
-+ Response 404 (application/json)
-    
-+ Response 410 (application/json)
+    + Attributes (CapacityCollection)
 
+### Reserve a capacity slot [POST /capacities/{capacityId}]
 
-## Pages (full content like imprint page) [/content-pages/{id}]
++ Request
+    + Headers
+        
+            Authorization: Bearer {token}
 
 + Parameters
-    + id (required, string, `some-page-identifier`) ... identifier of the content page
-
-
-### Retrieve content [GET]
+    + capacityId (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... capacityId
 
 + Response 200 (application/json)
 
-    + Attributes (ContentPage)
+    + Attributes (CapacityReservation)
+
+
+## Reservations [/capacity-reservations/{id}]
+
++ Parameters
+    + id (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... reservation identifier
+
+
+### Retrieve reservation info [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (CapacityReservation)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Group Checkout
+
+## Checkout methods
+
+### Retrieve payment methods [GET /user/payments]
+
++ Response 200 (application/json)
+
+    + Attributes (PaymentCollection)
+
+### Create a new order [POST /user/orders]
+
++ Request (application/json)
+    + Attributes (UserOrderCreate)
+
++ Response 201 (application/json)
+
+    + Attributes (UserOrder)
+
++ Response 409 
+
++ Response 422 
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Group User account
+
+## Account handling [/user]
+
+### Retrieve account [GET /user]
+
++ Response 200 (application/json)
+
+    + Attributes (UserAccount)
     
-+ Response 404 (application/json)
+### Update account [PUT /user]
+
++ Response 204 (application/json)
+
++ Response 409 (application/json)
+
+
+
+
+
+## Address handling [/user/addresses]
+
+### List addresses [GET /user/addresses]
+
++ Request
+    + Headers
     
-+ Response 410 (application/json)
+            Authorization: Bearer {token}
 
-# Group user favorites
++ Response 200 (application/json)
+    + Attributes (AddressCollection)
+    
 
-## Favorites [/user/favorites]
+### Create new address [POST /user/addresses]
 
-### Favorites [GET]
-fetch favorites from last orders
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+    
+    + Attributes (Address)
+
++ Response 201 (application/json)
+
+    + Attributes (AddressRead)
+
+### Retrieve specific address [GET /user/addresses/{id}]
+
++ Parameters
+    + id (required, integer, `309430`) ... AddressId which you want to work with
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+
++ Response 200 (application/json)
+
+    + Attributes (AddressRead)
+
+### Update specific address [PUT /user/addresses/{id}]
+
++ Parameters
+    + id (required, integer, `309430`) ... AddressId which you want to work with
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+
++ Response 204 (application/json)
+
+### Delete specific address [DELETE /user/addresses/{id}]
+
++ Parameters
+    + id (required, integer, `309430`) ... AddressId which you want to work with
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+
++ Response 204 (application/json)
+
+
+
+
+
+
+
+## Favorites handling [/user/favorites]
+
+### List Favorites [GET /user/favorites]
 
 + Response 200 (application/json)
 
     + Attributes (Favorites)
 
 
-## Favorites By ProductId [/user/favorites/{productId}]
+### Delete favorite [DELETE /user/favorites/{productId}]
 
 + Parameters
     + productId: `2131241` (required, string) ... productId of the product to remove from favs
 
-
-### Remove from favorites [DELETE]
-
 + Response 204 (application/json)
 
 
-# Group user auth management
 
-## Account [/user]
 
-### Get account details [GET]
 
-+ Response 200 (application/json)
-
-    + Attributes (UserAccount)
-
-## Credentials [/login]
-
-### Authenticate as user [POST]
-
-+ Request (application/json)
-    + Attributes (UserAuthentication)
-
-+ Response 200 (application/json)
+## Order handling [/user/orders]
     
-    + Attributes (UserToken)
-
-+ Response 401
-
-
-### Authenticate as guest [POST /login/guest]
-
-+ Request (application/json)
-    + Attributes (UserGuestAuthentication)
+### List user orders [GET /user/orders]
 
 + Response 200 (application/json)
-
-    Some description
-    
-    + Body
-    
-    + Attributes (UserToken)
-
-+ Response 401
-
-
-### Regenerate token [POST /login/regenerate]
-
-+ Request (application/json)
-    + Headers 
-    
-        Authentication: Bearer header.content.signature
-
-+ Response 200 (application/json)
-
-    Some description
-    
-    + Body
-    
-    + Attributes (UserToken)
-
-+ Response 401
-
-        
-### Logout [DELETE /login]
-
-+ Request (application/json)
-
-    + Attributes (UserAuthentication)
-
-+ Response 204 (application/json)
-
-+ Response 400 (application/json)
-
-## Register [/register]
-
-### Register [POST]
-register a user account
-
-+ Request (application/json)
-    + Attributes (UserRegistration)
-
-+ Response 200 (application/json)
-
-        + Attributes (UserToken)
-
-+ Response 409 
-
-        User email already existent
-
-## Password [/user/password]
-
-### Password [POST]
-update password as logged in user
-
-+ Request (application/json)
-
-    + Attributes (UserPassword)
-
-+ Response 200 (application/json)
-
-
-## Password By Email [/passwords/{email}]
-
-+ Parameters
-    + email: `john.doe@bringmeister.de` (required, string) ... email address of the customer-account
-
-
-### PasswordByEmail [POST]
-update password from reset password flow
-
-+ Request (application/json)
-    + Attributes (UserPasswordReset)
-
-+ Response 200 (application/json)
-
-        + Attributes (UserToken)
-
-+ Response 409
-
-
-
-### PasswordByEmail [DELETE]
-trigger reset password for a specific email
-
-+ Response 204 (application/json)
-
-
-# Group user order management
-
-## Orders [/user/orders]
-
-### Orders [GET]
-get list of user orders
-
-+ Response 200 (application/json)
-
-    Return a collection of shop orders
 
     + Attributes (UserOrderCollection)
 
-### Orders [POST]
-create a new order
-
-+ Request (application/json)
-    + Attributes (UserOrderCreate)
-
-+ Response 200 (application/json)
-
-        Order created
-
-        + Attributes (UserOrder)
-
-+ Response 409 
-
-        Order persistance failed
-
-+ Response 422 
-
-        Order validation failed
-
-
-
-
-## Payments [/user/payments]
-
-### Payments [GET]
-get active payment methods
-
-+ Response 200 (application/json)
-
-    + Attributes (PaymentCollection)
-
-
-## Orders By OrderId [/user/orders/{orderId}]
-customers specific orderId
+### Retrieve order info [GET /user/orders/{orderId}]
 
 + Parameters
     + orderId: 1019558370 (required, string) ... orderId
-
-
-### OrdersByOrderId [GET]
-get details of an order
 
 + Response 200 (application/json)
 
@@ -437,33 +573,11 @@ get details of an order
 + Response 404 
 
         Order not found
-
-## Orders Products By OrderId [/user/orders/{orderId}/products]
-customers specific orderId
-
-+ Parameters
-    + orderId: 1019558370 (required, string)
-
-
-### OrdersProductsByOrderId [GET]
-get all products within a order
-
-+ Response 200 (application/json)
-
-        + Attributes (UserOrderProductCollection)
-
-+ Response 404
-
-
-## Orders Cancel By OrderId [/user/orders/{orderId}/cancel]
-customers specific orderId
+        
+### Cancel order [POST /user/orders/{orderId}/cancel]
 
 + Parameters
     + orderId: 1019558370 (required, string) ... orderId to cancel
-
-
-### OrdersCancelByOrderId [POST]
-cancel a specific order
 
 + Request (application/json)
     + Attributes (UserOrderCancelation)
@@ -473,108 +587,40 @@ cancel a specific order
 + Response 409
 
 
-## Orders Reorder By OrderId [/user/orders/{orderId}/reorder]
+### Update order [POST /user/orders/{orderId}/reorder]
 
 + Parameters
-    + orderId: 1019558370 (required, string) ... orderId to reorder
-
-
-### OrdersReorderByOrderId [POST]
-cancels internally the order, prefills the cart with the products and keeps the timeslot
+    + orderId: 1019558370 (required, string)
 
 + Response 202 (application/json)
 
-        accepted, order cancelled and cart is prefilled
-
-        + Attributes (Dynamic)
+        + Attributes (CartTotals)
 
 + Response 409 
 
         could not reorder the order
 
 
-
-
-## Orders Cart By OrderId [/user/orders/{orderId}/cart]
+### Add order items to shopping cart [POST /user/orders/{orderId}/cart]
 
 + Parameters
-    + orderId (required, integer) ... orderId to put into cart
-
-
-### OrdersCartByOrderId [POST]
-replace the current shopping cart with the items from the order
+    + orderId: 1019558370 (required, integer)
 
 + Response 200 (application/json)
 
         + Attributes (CartTotals)
-
-# Group user address management
-
-## Addresses [/user/addresses]
-
-### Addresses [GET]
-fetch all addresses for the customer
-
-+ Request
-    + Headers
-    
-            Authorization: Bearer {token}
-
-+ Response 200 (application/json)
-    + Attributes (AddressCollection)
-
-### Addresses [POST]
-create a new address for the customer
-
-+ Request (application/json)
-    + Headers 
-
-            Authorization: Bearer {token}
-    
-    + Attributes (Address)
-
-+ Response 200 (application/json)
-
-    new address got created
-
-    + Attributes (AddressRead)
+        
+        
+        
+        
 
 
-## Addresses By Id [/user/addresses/{id}]
-
-+ Parameters
-    + id (required, integer, `309430`) ... AddressId which you want to work with
 
 
-### AddressesById [GET]
-fetch all available addresses
 
-+ Request (application/json)
-    + Headers 
 
-            Authorization: Bearer {token}
 
-+ Response 200 (application/json)
 
-    + Attributes (AddressRead)
-
-### AddressesById [PUT]
-
-+ Request (application/json)
-    + Headers 
-
-            Authorization: Bearer {token}
-
-+ Response 204 (application/json)
-
-### AddressesById [DELETE]
-
-+ Request (application/json)
-    + Headers 
-
-            Authorization: Bearer {token}
-
-+ Response 204 (application/json)
 
 
 # Data Structures
