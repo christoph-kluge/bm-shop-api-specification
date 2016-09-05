@@ -94,12 +94,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 409 (application/json)
 
 
-## Reset password
+## Reset password [/passwords]
 
-### Trigger reset password [DELETE /passwords/{email}]
+### Trigger reset password [DELETE /passwords/reset]
 
-+ Parameters
-    + email: `john.doe@example.com` (required, string) ... email address of the customer-account
++ Request (application/json)
+    + Attributes (UserPasswordResetRequest)
 
 + Response 204 (application/json)
 
@@ -108,10 +108,8 @@ Default fallback will be desktop-web if nothing is provided
 + Request (application/json)
     + Attributes (UserPasswordReset)
 
-+ Response 200 (application/json)
++ Response 202 (application/json)
     + Attributes (UserToken)
-
-+ Response 409
 
 
 
@@ -341,7 +339,7 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Body
-
+    
         {
             "days": [
                 "2016-09-05",
@@ -1030,6 +1028,9 @@ Default fallback will be desktop-web if nothing is provided
 ## UserPassword (object)
 + `password`: `my-new-password` (required, string)
 
+## UserPasswordResetRequest (object)
++ `email`: `john.doe@example.net` (required, string)
+
 ## UserPasswordReset (object)
 + `_example_incoming_url`: `/#/customer/account/resetpassword/?id=:id&token=:token`
 + `id`: `id-param-from-url` (required, string)
@@ -1051,7 +1052,7 @@ Default fallback will be desktop-web if nothing is provided
 + `email`: john.doe@example.com (required, string)
 + `shipping` (required, Address)
 
-UserAccountUpdate (object)
+## UserAccountUpdate (object)
 + `newsletter`: true (required, boolean)
 
 ## UserRegistration (object)
