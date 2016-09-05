@@ -340,7 +340,35 @@ Default fallback will be desktop-web if nothing is provided
     + endDate (required, datetime, ``) ... end date for the matrix
 
 + Response 200 (application/json)
-    + Attributes (CapacityCollection)
+    + Body
+
+        {
+            "days": [
+                "2016-09-05",
+                "2016-09-06",
+                "2016-09-07"
+            ],
+            "capacities": [{
+                "startTime": "06:00:00+2000",
+                "endTime": "08:00:00+2000",
+                "slots": [{
+                    "day": "2016-09-05",
+                    "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                    "status": "outdated",
+                    "price": 4
+                }, {
+                    "day": "2016-09-06",
+                    "slotId": "bb420fce-66f7-4ea3-81f7-9ad8a4d4a142",
+                    "status": "full",
+                    "price": 3
+                }, {
+                    "day": "2016-09-07",
+                    "slotId": "54275b11-5430-41fa-b5ce-8b2b5485eecb",
+                    "status": "available",
+                    "price": 2
+                }]
+            }]
+        }
 
 ### Reserve a capacity slot [POST /capacities/{capacityId}]
 
