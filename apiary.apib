@@ -3,13 +3,13 @@ HOST: http://api.example.com/api
 
 # Mobile Webshop
 
-This is a api documentation for a mobile webshop functionality. 
+This is a api documentation for a mobile webshop functionality.
 This should cover mainly all operations which are currently available on the current client-server rendered shop.
 
 
 ## Authentication
 
-This API uses JWT as a authentication layer. 
+This API uses JWT as a authentication layer.
 The parameters that are needed to be sent are as follows:
 
 + `Authorization: Bearer {token}`
@@ -72,7 +72,7 @@ Default fallback will be desktop-web if nothing is provided
 ### Regenerate token [POST /login/regenerate]
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authentication: Bearer {token}
 
 + Response 200 (application/json)
@@ -80,11 +80,11 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 401
 
-        
+
 ### Delete Token / Force Logout [DELETE /login]
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authentication: Bearer {token}
 
 + Response 204 (application/json)
@@ -94,16 +94,16 @@ Default fallback will be desktop-web if nothing is provided
 + Response 409 (application/json)
 
 
-## Reset password [/passwords/{email}]
+## Reset password
+
+### Trigger reset password [DELETE /passwords/{email}]
 
 + Parameters
     + email: `john.doe@example.com` (required, string) ... email address of the customer-account
 
-### Trigger reset password [DELETE]
-
 + Response 204 (application/json)
 
-### Update password [POST]
+### Update password [POST /passwords]
 
 + Request (application/json)
     + Attributes (UserPasswordReset)
@@ -125,6 +125,18 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Retrieve content by types [/content]
 
+### Retrieve block [GET /content-sliders/{id}]
+
++ Parameters
+    + id: `homepage` (required, string) ... sliderIdentifier
+
++ Response 200 (application/json)
+    + Attributes (ContentSliderCollection)
+
++ Response 404 (application/json)
+
++ Response 410 (application/json)
+
 ### Retrieve block [GET /content-blocks/{id}]
 
 + Parameters
@@ -132,9 +144,9 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (ContentBlock)
-    
+
 + Response 404 (application/json)
-    
+
 + Response 410 (application/json)
 
 
@@ -145,9 +157,9 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (ContentPage)
-    
+
 + Response 404 (application/json)
-    
+
 + Response 410 (application/json)
 
 
@@ -223,7 +235,7 @@ Default fallback will be desktop-web if nothing is provided
 ### Retrieve cart info [GET]
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
 
 + Response 200 (application/json)
@@ -237,19 +249,19 @@ Default fallback will be desktop-web if nothing is provided
 ### Add product [PUT]
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
     + Attributes (CartTotals)
-        
+
 + Response 201 (application/json)
     + Attributes (CartTotals)
 
-+ Response 409 (application/json) 
++ Response 409 (application/json)
     + Headers
         X-Description: Conflict (e.g. max possible quantity reached)
 
@@ -278,12 +290,12 @@ Default fallback will be desktop-web if nothing is provided
 ### Add coupon [PUT]
 
 + Request
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
 
 + Response 200 (application/json)
     + Attributes (CartTotals)
-        
+
 + Response 201 (application/json)
     + Attributes (CartTotals)
 
@@ -294,7 +306,7 @@ Default fallback will be desktop-web if nothing is provided
 ### Remove coupon [DELETE]
 
 + Request
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
 
 + Response 204 (application/json)
@@ -392,11 +404,11 @@ Default fallback will be desktop-web if nothing is provided
 + Response 201 (application/json)
     + Attributes (UserOrder)
 
-+ Response 409 
++ Response 409
 
-+ Response 422 
-        
-        
++ Response 422
+
+
 
 
 
@@ -424,8 +436,13 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (UserAccount)
-    
+
 ### Update account [PUT /user]
+
++ Request
+    + Headers
+        Authorization: Bearer {token}
+    + Attributes (UserAccountUpdate)
 
 + Response 204 (application/json)
 
@@ -445,22 +462,22 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (AddressCollection)
-    
+
 
 ### Create new address [POST /user/addresses]
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
-    
+
     + Attributes (Address)
 
 + Response 201 (application/json)
     + Attributes (AddressRead)
-    
+
 + Response 409 (application/json)
     + Attributes (AddressRead)
-    
+
 + Response 422 (application/json)
     + Attributes (AddressRead)
 
@@ -470,7 +487,7 @@ Default fallback will be desktop-web if nothing is provided
     + id (required, integer, `309430`) ... AddressId which you want to work with
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
 
 + Response 200 (application/json)
@@ -482,7 +499,7 @@ Default fallback will be desktop-web if nothing is provided
     + id (required, integer, `309430`) ... AddressId which you want to work with
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
 
 + Response 204 (application/json)
@@ -493,7 +510,7 @@ Default fallback will be desktop-web if nothing is provided
     + id (required, integer, `309430`) ... AddressId which you want to work with
 
 + Request (application/json)
-    + Headers 
+    + Headers
         Authorization: Bearer {token}
 
 + Response 204 (application/json)
@@ -524,7 +541,7 @@ Default fallback will be desktop-web if nothing is provided
 
 
 ## Order handling [/user/orders]
-    
+
 ### List user orders [GET /user/orders]
 
 + Response 200 (application/json)
@@ -538,8 +555,8 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (UserOrder)
 
-+ Response 404 
-        
++ Response 404
+
 ### Cancel order [POST /user/orders/{orderId}/cancel]
 
 + Parameters
@@ -571,10 +588,10 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (CartTotals)
-        
-        
-        
-        
+
+
+
+
 
 
 
@@ -591,235 +608,235 @@ Default fallback will be desktop-web if nothing is provided
 
 
 ### Properties
-+ `type`: billing, shipping (required, enum[string]) 
-+ `gender`: male|female|company (required, enum[string]) 
-+ `company`: My Company GmbH (required, string) 
-+ `department`: IT Department (required, string) 
-+ `firstname`: John (required, string) 
-+ `lastname`: Doe (required, string) 
-+ `street`: Friedrichstraße (required, string) 
-+ `housenumber`: 2010 (required, string) 
-+ `zipcode`: 10551 (required, string) 
-+ `email`: john.doe@example.com (required, string) 
-+ `hint`: 1st Floor, Last Door (required, string) 
-+ `elevator`: true (required, boolean) 
-+ `floor`: 1 (required, number) 
-+ `phonenumber`: 00493012345678 (required, string) 
++ `type`: billing, shipping (required, enum[string])
++ `gender`: male|female|company (required, enum[string])
++ `company`: My Company GmbH (required, string)
++ `department`: IT Department (required, string)
++ `firstname`: John (required, string)
++ `lastname`: Doe (required, string)
++ `street`: Friedrichstraße (required, string)
++ `housenumber`: 2010 (required, string)
++ `zipcode`: 10551 (required, string)
++ `email`: john.doe@example.com (required, string)
++ `hint`: 1st Floor, Last Door (required, string)
++ `elevator`: true (required, boolean)
++ `floor`: 1 (required, number)
++ `phonenumber`: 00493012345678 (required, string)
 
 
 ## AddressRead (object)
 
 
 ### Properties
-+ `addressId`: 1001241 (required, string) 
++ `addressId`: 1001241 (required, string)
 + `default`: true (required, boolean)
 + `name`: My custom address name (required, string)
-+ `type`: billing, shipping (required, enum[string]) 
-+ `gender`: male|female|company (required, enum[string]) 
-+ `company`: My Company GmbH (required, string) 
-+ `department`: IT Department (required, string) 
-+ `firstname`: John (required, string) 
-+ `lastname`: Doe (required, string) 
-+ `street`: Friedrichstraße (required, string) 
-+ `housenumber`: 2010 (required, string) 
-+ `zipcode`: 10551 (required, string) 
-+ `email`: john.doe@example.com (required, string) 
-+ `hint`: 1st Floor, Last Door (required, string) 
-+ `elevator`: true (required, boolean) 
-+ `floor`: 1 (required, number) 
-+ `phonenumber`: 00493012345678 (required, string) 
++ `type`: billing, shipping (required, enum[string])
++ `gender`: male|female|company (required, enum[string])
++ `company`: My Company GmbH (required, string)
++ `department`: IT Department (required, string)
++ `firstname`: John (required, string)
++ `lastname`: Doe (required, string)
++ `street`: Friedrichstraße (required, string)
++ `housenumber`: 2010 (required, string)
++ `zipcode`: 10551 (required, string)
++ `email`: john.doe@example.com (required, string)
++ `hint`: 1st Floor, Last Door (required, string)
++ `elevator`: true (required, boolean)
++ `floor`: 1 (required, number)
++ `phonenumber`: 00493012345678 (required, string)
 
 
 ## AddressCollection (object)
 
 
 ### Properties
-+ `shipping` (required, array[AddressRead]) 
-+ `billing` (required, array[AddressRead]) 
++ `shipping` (required, array[AddressRead])
++ `billing` (required, array[AddressRead])
 
 
 ## CapacitySlotMeta (object)
 
 
 ### Properties
-+ `id` (optional, string) 
-+ `startTime` (optional, string) 
-+ `endTime` (optional, string) 
++ `id` (optional, string)
++ `startTime` (optional, string)
++ `endTime` (optional, string)
 
 
 ## CapacityCollection (object)
 
 
 ### Properties
-+ `zipCode` (optional, string) 
-+ `startDate` (optional, string) 
-+ `endDate` (optional, string) 
-+ `slots` (array[CapacitySlotMeta], optional) 
-+ `days` (array[CapacityDayCollection], optional) 
++ `zipCode` (optional, string)
++ `startDate` (optional, string)
++ `endDate` (optional, string)
++ `slots` (array[CapacitySlotMeta], optional)
++ `days` (array[CapacityDayCollection], optional)
 
 
 ## CapacityDayCollection (object)
 
 
 ### Properties
-+ `date` (optional, string) 
-+ `slots` (array[CapacityDaySlot], optional) 
++ `date` (optional, string)
++ `slots` (array[CapacityDaySlot], optional)
 
 
 ## CapacityDaySlot (object)
 
 
 ### Properties
-+ `id` (optional, string) 
-+ `slot` (required, number) 
-+ `status` (optional, string) 
-+ `price` (required, number) 
++ `id` (optional, string)
++ `slot` (required, number)
++ `status` (optional, string)
++ `price` (required, number)
 
 
 ## CapacityReservation (object)
 
 
 ### Properties
-+ `id` (optional, string) 
-+ `startDateTime` (optional, string) 
-+ `endDateTime` (optional, string) 
-+ `expiryDateTime` (optional, string) 
-+ `price` (required, number) 
++ `id` (optional, string)
++ `startDateTime` (optional, string)
++ `endDateTime` (optional, string)
++ `expiryDateTime` (optional, string)
++ `price` (required, number)
 
 
 ## Cart (object)
 
 
 ### Properties
-+ `products` (array[Product], optional) 
-+ `vouchers` (array[Voucher], optional) 
-+ `totals` (CartTotals, optional) 
++ `products` (array[Product], optional)
++ `vouchers` (array[Voucher], optional)
++ `totals` (CartTotals, optional)
 
 
 ## Product (object)
 
 
 ### Properties
-+ `id` (optional, string) 
-+ `sku` (optional, string) 
-+ `name` (optional, string) 
-+ `description` (optional, string) 
-+ `manufacturer` (optional, string) 
-+ `brand` (optional, string) 
-+ `available` (boolean, optional) 
-+ `images` (ProductImages, optional) 
-+ `units` (array[ProductUnit], optional) 
-+ `prices` (ProductPrice, optional) 
-+ `packing` (ProductPacking, optional) 
-+ `nutrition` (ProductNutrition, optional) 
-+ `additional` (ProductAdditional, optional) 
-+ `attributes` (Attributes, optional) 
++ `id` (optional, string)
++ `sku` (optional, string)
++ `name` (optional, string)
++ `description` (optional, string)
++ `manufacturer` (optional, string)
++ `brand` (optional, string)
++ `available` (boolean, optional)
++ `images` (ProductImages, optional)
++ `units` (array[ProductUnit], optional)
++ `prices` (ProductPrice, optional)
++ `packing` (ProductPacking, optional)
++ `nutrition` (ProductNutrition, optional)
++ `additional` (ProductAdditional, optional)
++ `attributes` (Attributes, optional)
 
 
 ## ProductImages (object)
 
 
 ### Properties
-+ `list` (object, optional) 
-+ `detail` (array[object], optional) 
++ `list` (object, optional)
++ `detail` (array[object], optional)
 
 
 ## ProductUnit (object)
 
 
 ### Properties
-+ `id` (required, number) 
-+ `name` (required, string) 
-+ `default` (boolean, optional) 
++ `id` (required, number)
++ `name` (required, string)
++ `default` (boolean, optional)
 
 
 ## ProductPrice (object)
 
 
 ### Properties
-+ `_exampleFormula` (optional, string) 
-+ `_exampleValues` (optional, string) 
-+ `price` (required, number) 
-+ `specialPrice` (required, number) 
-+ `specialPriceDiscount` (required, number) 
-+ `basePrice` (required, number) 
-+ `basePriceCalcValue` (required, number) 
-+ `basePriceCalcUnit` (optional, string) 
-+ `deposit` (required, number) 
++ `_exampleFormula` (optional, string)
++ `_exampleValues` (optional, string)
++ `price` (required, number)
++ `specialPrice` (required, number)
++ `specialPriceDiscount` (required, number)
++ `basePrice` (required, number)
++ `basePriceCalcValue` (required, number)
++ `basePriceCalcUnit` (optional, string)
++ `deposit` (required, number)
 
 
 ## ProductPacking (object)
 
 
 ### Properties
-+ `_exampleFormula1` (optional, string) 
-+ `_exampleFormula2` (optional, string) 
-+ `_exampleFormula3` (optional, string) 
-+ `_exampleFormula4` (optional, string) 
-+ `quantity` (optional, string) 
-+ `baseQuantity` (required, number) 
-+ `unit` (optional, string) 
-+ `circa` (boolean, optional) 
-+ `innerPackingType` (optional, string) 
-+ `outerPackingType` (optional, string) 
++ `_exampleFormula1` (optional, string)
++ `_exampleFormula2` (optional, string)
++ `_exampleFormula3` (optional, string)
++ `_exampleFormula4` (optional, string)
++ `quantity` (optional, string)
++ `baseQuantity` (required, number)
++ `unit` (optional, string)
++ `circa` (boolean, optional)
++ `innerPackingType` (optional, string)
++ `outerPackingType` (optional, string)
 
 
 ## ProductNutrition (object)
 
 
 ### Properties
-+ `reference_value` (optional, string) 
-+ `calories` (optional, string) 
-+ `cabohydrates` (optional, string) 
-+ `fat` (optional, string) 
-+ `fatSaturated` (optional, string) 
-+ `fatUnsaturated` (optional, string) 
-+ `fiber` (optional, string) 
-+ `proteins` (optional, string) 
-+ `sodium` (optional, string) 
-+ `sugar` (optional, string) 
-+ `alcohol` (optional, string) 
++ `reference_value` (optional, string)
++ `calories` (optional, string)
++ `cabohydrates` (optional, string)
++ `fat` (optional, string)
++ `fatSaturated` (optional, string)
++ `fatUnsaturated` (optional, string)
++ `fiber` (optional, string)
++ `proteins` (optional, string)
++ `sodium` (optional, string)
++ `sugar` (optional, string)
++ `alcohol` (optional, string)
 
 
 ## ProductAdditional (object)
 
 
 ### Properties
-+ `legalText` (optional, string) 
-+ `tradingClass` (optional, string) 
-+ `ingredients` (optional, string) 
-+ `additives` (optional, string) 
-+ `allergenics` (optional, string) 
-+ `additional` (optional, string) 
-+ `warehousing` (optional, string) 
-+ `antioxidants` (optional, string) 
-+ `characteristic` (optional, string) 
++ `legalText` (optional, string)
++ `tradingClass` (optional, string)
++ `ingredients` (optional, string)
++ `additives` (optional, string)
++ `allergenics` (optional, string)
++ `additional` (optional, string)
++ `warehousing` (optional, string)
++ `antioxidants` (optional, string)
++ `characteristic` (optional, string)
 
 
 ## Attributes (object)
 
 
 ### Properties
-+ `characteristics` (array[ProductAttribute], optional) 
-+ `additives` (array[ProductAttribute], optional) 
-+ `allergetics` (array[ProductAttribute], optional) 
++ `characteristics` (array[ProductAttribute], optional)
++ `additives` (array[ProductAttribute], optional)
++ `allergetics` (array[ProductAttribute], optional)
 
 
 ## ProductAttribute (object)
 
 
 ### Properties
-+ `id` (required, number) 
-+ `name` (optional, string) 
++ `id` (required, number)
++ `name` (optional, string)
 
 
 ## Voucher (object)
 
 
 ### Properties
-+ `type` (optional, string) 
-+ `name` (optional, string) 
-+ `code` (optional, string) 
++ `type` (optional, string)
++ `name` (optional, string)
++ `code` (optional, string)
 
 
 ## CartTotals (object)
@@ -832,247 +849,190 @@ Default fallback will be desktop-web if nothing is provided
 + `deposit`: 3.50 (required, number) ... pfand
 + `delivery`: 4.00 (required, number) ... delivery costs
 + `beverages`: 1.00 (required, number) ... getränke lieferzuschlag
-+ `grandtotal`: 17.50 (required, number) ... total including all additional costs 
++ `grandtotal`: 17.50 (required, number) ... total including all additional costs
 
 
 ## CartProductUpdate (object)
 
 
 ### Properties
-+ `quantity`: 200 (required, number) 
-+ `unitId`: 17 (required, number) 
-+ `comment` (optional, string) 
++ `quantity`: 200 (required, number)
++ `unitId`: 17 (required, number)
++ `comment` (optional, string)
 
 
 ## Category (object)
 
 
 ### Properties
-+ `id` (required, number) 
-+ `level` (required, number) 
-+ `name` (required, string) 
-+ `children` (required, array[SubCategory]) 
++ `id` (required, number)
++ `level` (required, number)
++ `name` (required, string)
++ `children` (required, array[SubCategory])
 
 
 ## SubCategory (object)
 
 
 ### Properties
-+ `id` (required, number) 
-+ `level` (required, number) 
-+ `name` (required, string) 
-+ `children` (optional, array[SubCategory]) 
++ `id` (required, number)
++ `level` (required, number)
++ `name` (required, string)
++ `children` (optional, array[SubCategory])
 
 
 ## CategoryCollection (object)
 
-
 ### Properties
-+ `categories` (required, array[Category]) 
-
++ `categories` (required, array[Category])
 
 ## ContentBlock (object)
-
-
-### Properties
-+ `title` (required, string) 
-+ `content` (required, string) 
-
++ `identifier`: `surcharge_info` (required, string)
++ `title`: `Beverage Delivery Charge` (required, string)
++ `content`: `Ab der 4. Getr&auml;nkekiste berechnen wir 0.50 &euro; Zuschlag pro Kiste. Wir behalten uns vor, bei Bestellmengen von mehr als 8 Kisten, diese zu reduzieren.` (required, string)
 
 ## ContentPage (object)
++ `identifier`: `privacy-policy-cookie-restriction-mode` (required, string)
++ `title`: `Datenschutzerklärung` (required, string)
++ `headline`: `Datenschutzerklärung` (required, string)
++ `content`: `<p>Verantwortlich f&uuml;r den Inhalt und Vertragspartner f&uuml;r alle Bestellungen...` (required, string)
 
+## ContentSliderCollection (object)
++ sliders (required, array[ContentSlider])
 
-### Properties
-+ `title` (required, string) 
-+ `headline` (required, string) 
-+ `content` (required, string) 
-
+## ContentSlider (object)
++ imageUrl: `http://static.exmaple.com/image.png` (required, string)
++ campaign: zuckertuete (required, string)
 
 ## Favorites (object)
-
-
-### Properties
-+ `categories` (required, array[FavoriteCategory]) 
-
++ `categories` (required, array[FavoriteCategory])
 
 ## FavoriteCategory (object)
-
-
-### Properties
-+ `id` (required, number) 
-+ `name` (required, string) 
-+ `total` (required, number) 
-+ `products` (required, array[Product]) 
-
++ `id` (required, number)
++ `name` (required, string)
++ `total` (required, number)
++ `products` (required, array[Product])
 
 ## Payment (object)
-
-### Properties
-+ `method` (required, string) 
-
++ `method` (required, string)
 
 ## PaymentCollection (object)
-
-### Properties
-+ `payments` (required, array[Payment]) 
-
++ `payments` (required, array[Payment])
 
 ## ProductSearchFilter (object)
-
-### Properties
-+ `id` (required, number) 
-+ `name` (required, string) 
-+ `total` (required, number) 
-
++ `id` (required, number)
++ `name` (required, string)
++ `total` (required, number)
 
 ## ProductSearchFilterCategory (object)
-
-### Properties
-+ `level` (required, number) 
-
++ `level` (required, number)
 
 ## ProductSearch (object)
-
-### Properties
 + `totalElements` (required, number)
 + `type`: category, product (required, enum[string])
-+ `products` (required, array[Product]) 
-+ `categories` (required, array[ProductSearchFilterCategory]) 
-+ `filters` (required, Filters) 
-
++ `products` (required, array[Product])
++ `categories` (required, array[ProductSearchFilterCategory])
++ `filters` (required, Filters)
 
 ## Filters (object)
-
-### Properties
-+ `characteristics` (required, array[ProductSearchFilter]) 
-+ `allergetics` (required, array[ProductSearchFilter]) 
-+ `additives` (required, array[ProductSearchFilter]) 
-
++ `characteristics` (required, array[ProductSearchFilter])
++ `allergetics` (required, array[ProductSearchFilter])
++ `additives` (required, array[ProductSearchFilter])
 
 ## UserOrderCollection (object)
-
-### Properties
-+ `orders` (required, array[UserOrderShort]) 
++ `orders` (required, array[UserOrderShort])
 
 
 ## UserOrderShort (object)
-
-### Properties
-+ `orderId` (required, string) 
-+ `createdAt` (required, string) 
-+ `customerId` (required, string) 
-+ `status` (required, string) 
++ `orderId` (required, string)
++ `createdAt` (required, string)
++ `customerId` (required, string)
++ `status` (required, string)
 + `canChange` (required, boolean)
 + `canCancel` (required, boolean)
-+ `payment` (required, string) 
-+ `totals` (required, CartTotals) 
-+ `reservation` (required, CapacityReservation) 
-+ `productsCount` (required, number) 
-+ `products` (required, array[Product]) 
++ `payment` (required, string)
++ `totals` (required, CartTotals)
++ `reservation` (required, CapacityReservation)
++ `productsCount` (required, number)
++ `products` (required, array[Product])
 
 
 ## UserOrder (object)
-
-### Properties
-+ `orderId` (required, string) 
-+ `createdAt` (required, string) 
-+ `customerId` (required, string) 
-+ `status` (required, string) 
++ `orderId` (required, string)
++ `createdAt` (required, string)
++ `customerId` (required, string)
++ `status` (required, string)
 + `canChange` (required, boolean)
 + `canCancel` (required, boolean)
-+ `payment` (required, string) 
-+ `totals` (required, CartTotals) 
-+ `reservation` (required, CapacityReservation) 
-+ `productsCount` (required, number) 
-+ `products` (required, array[Product]) 
-+ `billing` (required, Address) 
-+ `shipping` (required, Address) 
++ `payment` (required, string)
++ `totals` (required, CartTotals)
++ `reservation` (required, CapacityReservation)
++ `productsCount` (required, number)
++ `products` (required, array[Product])
++ `billing` (required, Address)
++ `shipping` (required, Address)
 
 
 ## UserOrderCancelation (object)
-
-### Properties
-+ `reason` (required, string) 
++ `reason` (required, string)
 
 
 ## UserOrderCreate (object)
-
-### Properties
-+ `shippingAddressId` (required, string) 
-+ `billingAddressId` (required, string) 
-+ `reservationId` (optional, string) 
-+ `payment` (required, Payment39) 
++ `shippingAddressId` (required, string)
++ `billingAddressId` (required, string)
++ `reservationId` (optional, string)
++ `payment` (required, Payment39)
 
 
 ## Payment39 (object)
-
-### Properties
-+ `method`: paypal (required, string) 
-+ `default`: true (required, boolean) 
-+ `options` (required, object) 
++ `method`: paypal (required, string)
++ `default`: true (required, boolean)
++ `options` (required, object)
 
 
 ## UserOrderProductCollection (object)
-
-### Properties
-+ `products` (required, array[Product]) 
++ `products` (required, array[Product])
 
 ## UserToken (object)
-
-### Properties
-+ `token`: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNDhhNjcyNC03YzE4LTQ5YzgtYTU2My03MzYxMjQ4NDFhYWEiLCJzdWIiOiIxMDAwMCIsImlhdCI6MTIzMTIzMTI0LCJleHAiOjEyMzEyMzEyNCwicm9sZSI6InVzZXIifQ.jBWr633JVC1c7rH3x4NgsGaCfKr3SVJfz8q5kXRV1II` (required, string) 
++ `token`: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNDhhNjcyNC03YzE4LTQ5YzgtYTU2My03MzYxMjQ4NDFhYWEiLCJzdWIiOiIxMDAwMCIsImlhdCI6MTIzMTIzMTI0LCJleHAiOjEyMzEyMzEyNCwicm9sZSI6InVzZXIifQ.jBWr633JVC1c7rH3x4NgsGaCfKr3SVJfz8q5kXRV1II` (required, string)
 
 ## UserTokenGuest (object)
-
-### Properties
-+ `token`: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Mzg0MzAiLCJpYXQiOjEyMzEyMzEyNCwiZXhwIjoxMjMxMjMxMjQsInJvbGUiOiJndWVzdCJ9.k2VGkZl9JSD69s0es6hay9dx_Dhu6cthkVDrnkdsJW8` (required, string) 
++ `token`: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Mzg0MzAiLCJpYXQiOjEyMzEyMzEyNCwiZXhwIjoxMjMxMjMxMjQsInJvbGUiOiJndWVzdCJ9.k2VGkZl9JSD69s0es6hay9dx_Dhu6cthkVDrnkdsJW8` (required, string)
 
 ## UserPassword (object)
-
-### Properties
-+ `password`: `my-new-password` (required, string) 
-
++ `password`: `my-new-password` (required, string)
 
 ## UserPasswordReset (object)
-
-### Properties
-+ `token`: sometoken (required, string) 
++ `_example_incoming_url`: `/#/customer/account/resetpassword/?id=:id&token=:token`
++ `id`: `id-param-from-url` (required, string)
++ `token`: `token-param-from-url` (required, string)
 + `password`: `my-new-password` (required, string) 
 
-
 ## UserAuthentication (object)
-
-### Properties
-+ email: `john.doe@example.com` (required, string) 
-+ password: `my-secret-password` (required, string) 
-
++ email: `john.doe@example.com` (required, string)
++ password: `my-secret-password` (required, string)
 
 ## UserAuthenticationGuest (object)
-
-### Properties
-+ zipCode: `80333` (required, number) 
-
++ zipCode: `80333` (required, number)
 
 ## UserAccount (object)
++ `id`: 123123 (required, string)
++ `firstname`: John (required, string)
++ `lastname`: Doe (required, string)
++ `newsletter`: false (required, boolean)
++ `email`: john.doe@example.com (required, string)
++ `shipping` (required, Address)
 
-### Properties
-+ `id`: 123123 (required, string) 
-+ `firstname`: John (required, string) 
-+ `lastname`: Doe (required, string) 
-+ `newsletter`: false (required, boolean) 
-+ `email`: john.doe@example.com (required, string) 
-+ `shipping` (required, Address) 
-
+UserAccountUpdate (object)
++ `newsletter`: true (required, boolean)
 
 ## UserRegistration (object)
-
-### Properties
-+ `email`: john.doe@example.com (required, string) 
-+ `password`: `my-secret-password` (required, string) 
-+ `gender`: male, female, company (required, enum[string]) 
-+ `firstname`: John (required, string) 
-+ `lastname`: Doe (required, string) 
-+ `birthdate`: `1989-01-01` (required, string) 
-+ `newsletter`: false (required, boolean) 
-+ `company`: My Company GmbH (required, string) 
++ `email`: john.doe@example.com (required, string)
++ `password`: `my-secret-password` (required, string)
++ `gender`: male, female, company (required, enum[string])
++ `firstname`: John (required, string)
++ `lastname`: Doe (required, string)
++ `birthdate`: `1989-01-01` (required, string)
++ `newsletter`: false (required, boolean)
++ `company`: My Company GmbH (required, string)
 + `department`: IT Department (required, string)
