@@ -51,9 +51,9 @@ The parameters that are needed to be sent are as follows:
     + Attributes (UserAuthenticationGuest)
 
 + Response 200 (application/json)
-    + Attributes (UserToken)
+    + Attributes (UserTokenGuest)
 
-+ Response 401
++ Response 409
 
 
 ### Regenerate token [POST /login/regenerate]
@@ -988,12 +988,12 @@ The parameters that are needed to be sent are as follows:
 ## UserToken (object)
 
 ### Properties
-+ `token`: TestToken (required, string) 
++ `token`: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNDhhNjcyNC03YzE4LTQ5YzgtYTU2My03MzYxMjQ4NDFhYWEiLCJzdWIiOiIxMDAwMCIsImlhdCI6MTIzMTIzMTI0LCJleHAiOjEyMzEyMzEyNCwicm9sZSI6InVzZXIifQ.jBWr633JVC1c7rH3x4NgsGaCfKr3SVJfz8q5kXRV1II` (required, string) 
 
 ## UserTokenGuest (object)
 
 ### Properties
-+ `token`: TestToken (required, string) 
++ `token`: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Mzg0MzAiLCJpYXQiOjEyMzEyMzEyNCwiZXhwIjoxMjMxMjMxMjQsInJvbGUiOiJndWVzdCJ9.k2VGkZl9JSD69s0es6hay9dx_Dhu6cthkVDrnkdsJW8` (required, string) 
 
 ## UserPassword (object)
 
