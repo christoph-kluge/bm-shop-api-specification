@@ -2,97 +2,30 @@ FORMAT: 1A
 HOST: http://api.bm.dev/api
 
 # BM_Shop
-shop functionality
+This is a api documentation for our shop functionality. 
+This should cover mainly all operations which are currently available on the current client-server rendered shop.
+
 
 ## Authentication
-This API uses Custom Header for its authentication.
+This API uses JWT as a authentication layer. 
 
-The parameters that are needed to be sent for this type of authentication are as follows:
-+ `Authorization: Bearer ey12312.asdasdqw.asdasdsa`
+The parameters that are needed to be sent are as follows:
 
-# Group user address management
-
-## Addresses [/addresses]
-
-### Addresses [GET]
-fetch all addresses for the customer
-
-+ Request
-
-    + Headers 
-
-            Authorization: Bearer <token>
-
-+ Response 200 (application/json)
-
-    fetch all available addresses
-
-    + Attributes (AddressCollection)
-
-### Addresses [POST]
-create a new address for the customer
-
-+ Request (application/json)
-
-    + Headers 
-
-            Authorization: Bearer <token>
-    
-    + Attributes (Address)
-
-+ Response 200 (application/json)
-
-    new address got created
-
-    + Attributes (AddressRead)
++ `Authorization: Bearer {token}`
++ `Authorization: Bearer header.payload.signature`
 
 
-## Addresses By Id [/addresses/{id}]
 
-+ Parameters
-    + id (required, integer, `12312411`) ... AddressId which you want to adjust
-
-
-### AddressesById [GET]
-
-+ Request (application/json)
-
-    + Headers 
-
-            Authorization: Bearer <token>
-
-+ Response 200 (application/json)
-
-    fetch all available addresses
-
-    + Attributes (AddressRead)
-
-### AddressesById [PUT]
-
-+ Request (application/json)
-
-    + Headers 
-
-            Authorization: Bearer <token>
-
-+ Response 204 (application/json)
-
-### AddressesById [DELETE]
-
-+ Request (application/json)
-
-    + Headers 
-
-            Authorization: Bearer <token>
-
-+ Response 204 (application/json)
-
-# Group capacity management / timeslotmatrix
+# Group Capacity management
 
 ## Capacities [/capacities{?zipCode,startDate,endDate}]
 
-### Capacities [GET]
-fetch all available capacities
+### Retrieve available capacities [GET /capacities{?zipCode,startDate,endDate}]
+
++ Request
+    + Headers
+        
+        Authorization: Bearer {token}
 
 + Parameters
     + zipCode (required, string, `12312`) ... zipcode where you want to fetch the capacity for
@@ -101,69 +34,53 @@ fetch all available capacities
 
 + Response 200 (application/json)
 
-    fetch all available capacities
-
     + Attributes (CapacityCollection)
 
+### Reserve a capacity slot [POST /capacities/{capacityId}]
 
-## Capacities By Id [/capacities/{id}]
++ Request
+    + Headers
+        
+        Authorization: Bearer {token}
 
 + Parameters
-    + id (, required)
-
-        respective slotId from GET /capacities
-
-
-### CapacitiesById [POST]
-reserve a specific capacity slot
+    + capacityId (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... capacityId
 
 + Response 200 (application/json)
-
-    reserve a specific capacity slot
 
     + Attributes (CapacityReservation)
 
 
-## Capacity Reservations By Id [/capacity-reservations/{id}]
+## Slot reservations [/capacity-reservations/{id}]
 
 + Parameters
-    + id (, required)
-
-        reservationId which you get after POST /capacities/{slotId}
+    + id (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... reservation identifier
 
 
-### CapacityReservationsById [GET]
-fetch current status of the reserved capacity
+### Retrieve reserved slot infromation [GET]
 
 + Response 200 (application/json)
 
-    fetch current status of the reserved capacity
-
     + Attributes (CapacityReservation)
 
-
-
-# Group search
+# Group Catalog Search / Product Details
 
 ## Categories [/categories]
 
-### Categories [GET]
-get full category tree
+### Retrieve category tree [GET]
 
 + Response 200 (application/json)
 
-    collection of categories
-
     + Attributes (CategoryCollection)
-
 
 ## Products [/products{?q,catId,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
 
-### Product Search [GET]
+### Product search [GET /products{?q,catId,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
 
 + Parameters
     + q (optional, string, `Toma`) ... search term
     + catId (optional, integer, `2`) ... categoryId to filter for
+    + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... categoryId to filter for
     + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
     + sort (optional, string, `price`) ... sort mechanismn (one of: price, popularity)
@@ -172,20 +89,14 @@ get full category tree
     + allergetics (optional, array[integer], `10,12`) ... array of allergetic filterIds
     + characteristics (optional, array[integer], `10,12`) ... array of characteristics filterIds
 
-
 + Response 200 (application/json)
 
     + Attributes (ProductSearch)
 
-
-## Products By Id [/products/{id}]
+### Product details [GET /products/{productId}]
 
 + Parameters
-    + id (required, string, `1230012`) ... productId, sku?
-
-
-### ProductsById [GET]
-get product details
+    + productId: `1230012` (required, string)
 
 + Response 200 (application/json)
 
@@ -193,7 +104,7 @@ get product details
 
 # Group cart management
 
-## Carts [/user/cart]
+## Cart [/cart]
 
 ### Carts [GET]
 
@@ -201,19 +112,18 @@ get product details
 
     + Attributes (Cart)
 
-## Cart handling for products [/user/cart/products/{productId}]
+## Cart handling for products [/cart/products/{productId}]
 
 + Parameters
-    + productId (required, string, `1231231`) ... productId
+    + productId: 1231231 (required, string) ... productId
 
 
-### CartsProductsByProductId [PUT]
+### Add product [PUT]
 
 + Request (application/json)
-
     + Headers 
 
-            Authorization: Bearer <token>
+            Authorization: Bearer {token}
             
     + Attributes (CartProductUpdate)
 
@@ -229,44 +139,44 @@ get product details
 
         + Attributes (CartTotals)
 
-+ Response 409 
++ Response 409 (application/json) 
 
         conflict (max quantity reached)
 
-+ Response 422 
++ Response 422 (application/json)
 
         validation error (quantity or comment)
 
-### CartsProductsByProductId [DELETE]
+### Remove product [DELETE]
 
 + Request
-
     + Headers 
 
-            Authorization: Bearer <token>
+            Authorization: Bearer {token}
 
-+ Response 204 (application/json)
++ Response 204
 
-+ Response 409 
++ Response 409 (application/json)
 
         conflict (unable to remove from cart)
 
-## Cart handling for coupon codes [/user/cart/coupons/{code}]
+## Cart handling for coupon codes [/cart/coupons/{code}]
 
 + Parameters
-    + code (required, string, `ZEIT13`)
+    + code: `ZEIT13` (required, string)
 
-### CartsCouponsByCode [PUT]
+### Add coupon [PUT]
 
 + Request
-
     + Headers 
 
-            Authorization: Bearer <token>
+            Authorization: Bearer {token}
 
 + Response 200 (application/json)
 
-        coupon code got applied to cart
+        + Attributes (CartTotals)
+        
++ Response 201 (application/json)
 
         + Attributes (CartTotals)
 
@@ -274,149 +184,141 @@ get product details
 
         coupon code is invalid (expired, not applicable, ..)
 
-### CartsCouponsByCode [DELETE]
+### Remove coupon [DELETE]
 
 + Request
-
     + Headers 
 
-            Authorization: Bearer <token>
+            Authorization: Bearer {token}
 
 + Response 204 (application/json)
 
 
 # Group content management
 
-## Content Blocks By Id [/content-blocks/{id}]
+## Blocks (partial content) [/content-blocks/{id}]
 
 + Parameters
     + id (required, string, `some-nice-identifier-mobile`) ... identifier of the content block
 
 
-### ContentBlocksById [GET]
+### Retrieve content [GET]
 
 + Response 200 (application/json)
 
-        fetch content block
-
         + Attributes (ContentBlock)
     
-+ Response 404
-
-        not found
++ Response 404 (application/json)
     
-+ Response 410
-
-        gone (article is inactive)
++ Response 410 (application/json)
 
 
-## Content Pages By Id [/content-pages/{id}]
+## Pages (full content like imprint page) [/content-pages/{id}]
 
 + Parameters
     + id (required, string, `some-page-identifier`) ... identifier of the content page
 
 
-### ContentPagesById [GET]
-fetch a content page
+### Retrieve content [GET]
 
 + Response 200 (application/json)
 
-    fetch content page
-
     + Attributes (ContentPage)
+    
++ Response 404 (application/json)
+    
++ Response 410 (application/json)
 
 # Group user favorites
 
-## Favorites [/favorites]
+## Favorites [/user/favorites]
 
 ### Favorites [GET]
 fetch favorites from last orders
 
 + Response 200 (application/json)
 
-    fetch my favorites
-
     + Attributes (Favorites)
 
 
-## Favorites By ProductId [/favorites/{productId}]
+## Favorites By ProductId [/user/favorites/{productId}]
 
 + Parameters
-    + productId (required, string, `2131241`) ... productId of the product to remove from favs
+    + productId: `2131241` (required, string) ... productId of the product to remove from favs
 
 
-### FavoritesByProductId [DELETE]
-remove item from favorites
+### Remove from favorites [DELETE]
 
 + Response 204 (application/json)
 
 
 # Group user auth management
 
-## Logout [/logout]
+## Account [/user]
 
-### Logout [POST]
-user logout
-
-+ Response 200 (application/json)
-
-        Client should remove token from storage
-
-
-## Account [/account]
-
-### Account [GET]
-get account details
+### Get account details [GET]
 
 + Response 200 (application/json)
-
-    return user informations
 
     + Attributes (UserAccount)
 
+## Credentials [/login]
 
-## Login [/login]
-
-### Login [POST]
-user login
+### Authenticate as user [POST]
 
 + Request (application/json)
-    + Attributes (UserCredentials)
+    + Attributes (UserAuthentication)
+
++ Response 200 (application/json)
+    
+    + Attributes (UserToken)
+
++ Response 401
+
+
+### Authenticate as guest [POST /login/guest]
+
++ Request (application/json)
+    + Attributes (UserGuestAuthentication)
 
 + Response 200 (application/json)
 
-        Return a collection of shop orders
+    Some description
+    
+    + Body
+    
+    + Attributes (UserToken)
 
-        + Attributes (UserToken)
++ Response 401
 
-+ Response 401 
 
-        Unauthorized to request this endpoint
+### Regenerate token [POST /login/regenerate]
 
-+ Response 404 
++ Request (application/json)
+    + Headers 
+    
+        Authentication: Bearer header.content.signature
 
-        No customer found with the id
++ Response 200 (application/json)
+
+    Some description
+    
+    + Body
+    
+    + Attributes (UserToken)
+
++ Response 401
+
         
-### Login [DELETE]
-user logout
+### Logout [DELETE /login]
 
 + Request (application/json)
 
-    + Attributes (UserCredentials)
+    + Attributes (UserAuthentication)
 
-+ Response 200 (application/json)
++ Response 204 (application/json)
 
-        Return a collection of shop orders
-
-        + Attributes (UserToken)
-
-+ Response 401 
-
-        Unauthorized to request this endpoint
-
-+ Response 404 
-
-        No customer found with the id
++ Response 400 (application/json)
 
 ## Register [/register]
 
@@ -424,11 +326,9 @@ user logout
 register a user account
 
 + Request (application/json)
-    + Attributes (UserCredentialsRegister)
+    + Attributes (UserRegistration)
 
 + Response 200 (application/json)
-
-        Return a collection of shop orders
 
         + Attributes (UserToken)
 
@@ -436,10 +336,7 @@ register a user account
 
         User email already existent
 
-
-
-
-## Password [/password]
+## Password [/user/password]
 
 ### Password [POST]
 update password as logged in user
@@ -450,15 +347,11 @@ update password as logged in user
 
 + Response 200 (application/json)
 
-    + Attributes (UserToken)
 
-
-## Password By Email [/password/{email}]
+## Password By Email [/passwords/{email}]
 
 + Parameters
-    + email (, required)
-
-        email address of the customer-account
+    + email: `john.doe@bringmeister.de` (required, string) ... email address of the customer-account
 
 
 ### PasswordByEmail [POST]
@@ -469,13 +362,9 @@ update password from reset password flow
 
 + Response 200 (application/json)
 
-        password successfully updated and automatically logged in
-
         + Attributes (UserToken)
 
-+ Response 409 
-
-        could not update password (reset-key from email required)
++ Response 409
 
 
 
@@ -487,7 +376,7 @@ trigger reset password for a specific email
 
 # Group user order management
 
-## Orders [/orders]
+## Orders [/user/orders]
 
 ### Orders [GET]
 get list of user orders
@@ -521,24 +410,21 @@ create a new order
 
 
 
-## Payments [/payments]
+## Payments [/user/payments]
 
 ### Payments [GET]
 get active payment methods
 
 + Response 200 (application/json)
 
-    Get list of available payment methods
-
     + Attributes (PaymentCollection)
 
 
-## Orders By OrderId [/orders/{orderId}]
+## Orders By OrderId [/user/orders/{orderId}]
+customers specific orderId
 
 + Parameters
-    + orderId (, required)
-
-        customers specific orderId
+    + orderId: 1019558370 (required, string) ... orderId
 
 
 ### OrdersByOrderId [GET]
@@ -546,20 +432,17 @@ get details of an order
 
 + Response 200 (application/json)
 
-        Return full order dataset
-
         + Attributes (UserOrder)
 
 + Response 404 
 
         Order not found
 
-## Orders Products By OrderId [/orders/{orderId}/products]
+## Orders Products By OrderId [/user/orders/{orderId}/products]
+customers specific orderId
 
 + Parameters
-    + orderId (, required)
-
-        customers specific orderId
+    + orderId: 1019558370 (required, string)
 
 
 ### OrdersProductsByOrderId [GET]
@@ -567,23 +450,16 @@ get all products within a order
 
 + Response 200 (application/json)
 
-        Return product collection for the order
-
         + Attributes (UserOrderProductCollection)
 
-+ Response 404 
-
-        Order not found
++ Response 404
 
 
-
-
-## Orders Cancel By OrderId [/orders/{orderId}/cancel]
+## Orders Cancel By OrderId [/user/orders/{orderId}/cancel]
+customers specific orderId
 
 + Parameters
-    + orderId (, required)
-
-        customers specific orderId
+    + orderId: 1019558370 (required, string) ... orderId to cancel
 
 
 ### OrdersCancelByOrderId [POST]
@@ -592,31 +468,21 @@ cancel a specific order
 + Request (application/json)
     + Attributes (UserOrderCancelation)
 
-+ Response 200 (application/json)
++ Response 202 (application/json)
 
-        cancel of this order is initiated
-
-        + Attributes (Dynamic)
-
-+ Response 409 
-
-        could not cancel the order
++ Response 409
 
 
-
-
-## Orders Reorder By OrderId [/orders/{orderId}/reorder]
+## Orders Reorder By OrderId [/user/orders/{orderId}/reorder]
 
 + Parameters
-    + orderId (, required)
-
-        customers specific orderId
+    + orderId: 1019558370 (required, string) ... orderId to reorder
 
 
 ### OrdersReorderByOrderId [POST]
 cancels internally the order, prefills the cart with the products and keeps the timeslot
 
-+ Response 200 (application/json)
++ Response 202 (application/json)
 
         accepted, order cancelled and cart is prefilled
 
@@ -629,12 +495,10 @@ cancels internally the order, prefills the cart with the products and keeps the 
 
 
 
-## Orders Cart By OrderId [/orders/{orderId}/cart]
+## Orders Cart By OrderId [/user/orders/{orderId}/cart]
 
 + Parameters
-    + orderId (, required)
-
-        customers specific orderId
+    + orderId (required, integer) ... orderId to put into cart
 
 
 ### OrdersCartByOrderId [POST]
@@ -642,10 +506,75 @@ replace the current shopping cart with the items from the order
 
 + Response 200 (application/json)
 
-        accepted, cart is prefilled with the items
+        + Attributes (CartTotals)
 
-        + Attributes (Dynamic)
+# Group user address management
 
+## Addresses [/user/addresses]
+
+### Addresses [GET]
+fetch all addresses for the customer
+
++ Request
+    + Headers
+    
+            Authorization: Bearer {token}
+
++ Response 200 (application/json)
+    + Attributes (AddressCollection)
+
+### Addresses [POST]
+create a new address for the customer
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+    
+    + Attributes (Address)
+
++ Response 200 (application/json)
+
+    new address got created
+
+    + Attributes (AddressRead)
+
+
+## Addresses By Id [/user/addresses/{id}]
+
++ Parameters
+    + id (required, integer, `309430`) ... AddressId which you want to work with
+
+
+### AddressesById [GET]
+fetch all available addresses
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+
++ Response 200 (application/json)
+
+    + Attributes (AddressRead)
+
+### AddressesById [PUT]
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+
++ Response 204 (application/json)
+
+### AddressesById [DELETE]
+
++ Request (application/json)
+    + Headers 
+
+            Authorization: Bearer {token}
+
++ Response 204 (application/json)
 
 
 # Data Structures
@@ -654,41 +583,41 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `type`: billing (string, optional) 
-+ `gender`: male|female|company (string, optional) 
-+ `company`: Bringmeister (string, optional) 
-+ `department`: IT-Department (string, optional) 
-+ `firstname`: John (string, optional) 
-+ `lastname`: Doe (string, optional) 
-+ `street`: Beusselstraße (string, optional) 
-+ `housenumber`: 44n-q (string, optional) 
-+ `zipcode`: 10799 (string, optional) 
-+ `email`: john.doe@bringmeister.de (string, optional) 
-+ `hint`: 1st Floor, 2nd Elevator (string, optional) 
++ `type`: billing (optional, string) 
++ `gender`: male|female|company (optional, string) 
++ `company`: Bringmeister (optional, string) 
++ `department`: IT-Department (optional, string) 
++ `firstname`: John (optional, string) 
++ `lastname`: Doe (optional, string) 
++ `street`: Beusselstraße (optional, string) 
++ `housenumber`: 44n-q (optional, string) 
++ `zipcode`: 10799 (optional, string) 
++ `email`: john.doe@bringmeister.de (optional, string) 
++ `hint`: 1st Floor, 2nd Elevator (optional, string) 
 + `elevator`: true (boolean, optional) 
 + `floor`: 1 (number, optional) 
-+ `phonenumber`: 00491736458189 (string, optional) 
++ `phonenumber`: 00491736458189 (optional, string) 
 
 
 ## AddressRead (object)
 
 
 ### Properties
-+ `id` (string, optional) 
-+ `type` (string, optional) 
-+ `gender` (string, optional) 
-+ `company` (string, optional) 
-+ `department` (string, optional) 
-+ `firstname` (string, optional) 
-+ `lastname` (string, optional) 
-+ `street` (string, optional) 
-+ `housenumber` (string, optional) 
-+ `zipcode` (string, optional) 
-+ `email` (string, optional) 
-+ `hint` (string, optional) 
++ `id` (optional, string) 
++ `type` (optional, string) 
++ `gender` (optional, string) 
++ `company` (optional, string) 
++ `department` (optional, string) 
++ `firstname` (optional, string) 
++ `lastname` (optional, string) 
++ `street` (optional, string) 
++ `housenumber` (optional, string) 
++ `zipcode` (optional, string) 
++ `email` (optional, string) 
++ `hint` (optional, string) 
 + `elevator` (boolean, optional) 
 + `floor` (number, optional) 
-+ `phonenumber` (string, optional) 
++ `phonenumber` (optional, string) 
 
 
 ## AddressCollection (object)
@@ -702,18 +631,18 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `id` (string, optional) 
-+ `startTime` (string, optional) 
-+ `endTime` (string, optional) 
++ `id` (optional, string) 
++ `startTime` (optional, string) 
++ `endTime` (optional, string) 
 
 
 ## CapacityCollection (object)
 
 
 ### Properties
-+ `zipCode` (string, optional) 
-+ `startDate` (string, optional) 
-+ `endDate` (string, optional) 
++ `zipCode` (optional, string) 
++ `startDate` (optional, string) 
++ `endDate` (optional, string) 
 + `slots` (array[CapacitySlotMeta], optional) 
 + `days` (array[CapacityDayCollection], optional) 
 
@@ -722,7 +651,7 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `date` (string, optional) 
++ `date` (optional, string) 
 + `slots` (array[CapacityDaySlot], optional) 
 
 
@@ -730,9 +659,9 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `id` (string, optional) 
++ `id` (optional, string) 
 + `slot` (number, optional) 
-+ `status` (string, optional) 
++ `status` (optional, string) 
 + `price` (number, optional) 
 
 
@@ -740,10 +669,10 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `id` (string, optional) 
-+ `startDateTime` (string, optional) 
-+ `endDateTime` (string, optional) 
-+ `expiryDateTime` (string, optional) 
++ `id` (optional, string) 
++ `startDateTime` (optional, string) 
++ `endDateTime` (optional, string) 
++ `expiryDateTime` (optional, string) 
 + `price` (number, optional) 
 
 
@@ -760,12 +689,12 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `id` (string, optional) 
-+ `sku` (string, optional) 
-+ `name` (string, optional) 
-+ `description` (string, optional) 
-+ `manufacturer` (string, optional) 
-+ `brand` (string, optional) 
++ `id` (optional, string) 
++ `sku` (optional, string) 
++ `name` (optional, string) 
++ `description` (optional, string) 
++ `manufacturer` (optional, string) 
++ `brand` (optional, string) 
 + `available` (boolean, optional) 
 + `images` (ProductImages, optional) 
 + `units` (array[ProductUnit], optional) 
@@ -789,7 +718,7 @@ replace the current shopping cart with the items from the order
 
 ### Properties
 + `id` (number, optional) 
-+ `name` (string, optional) 
++ `name` (optional, string) 
 + `default` (boolean, optional) 
 
 
@@ -797,14 +726,14 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `_exampleFormula` (string, optional) 
-+ `_exampleValues` (string, optional) 
++ `_exampleFormula` (optional, string) 
++ `_exampleValues` (optional, string) 
 + `price` (number, optional) 
 + `specialPrice` (number, optional) 
 + `specialPriceDiscount` (number, optional) 
 + `basePrice` (number, optional) 
 + `basePriceCalcValue` (number, optional) 
-+ `basePriceCalcUnit` (string, optional) 
++ `basePriceCalcUnit` (optional, string) 
 + `deposit` (number, optional) 
 
 
@@ -812,48 +741,48 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `_exampleFormula1` (string, optional) 
-+ `_exampleFormula2` (string, optional) 
-+ `_exampleFormula3` (string, optional) 
-+ `_exampleFormula4` (string, optional) 
-+ `quantity` (string, optional) 
++ `_exampleFormula1` (optional, string) 
++ `_exampleFormula2` (optional, string) 
++ `_exampleFormula3` (optional, string) 
++ `_exampleFormula4` (optional, string) 
++ `quantity` (optional, string) 
 + `baseQuantity` (number, optional) 
-+ `unit` (string, optional) 
++ `unit` (optional, string) 
 + `circa` (boolean, optional) 
-+ `innerPackingType` (string, optional) 
-+ `outerPackingType` (string, optional) 
++ `innerPackingType` (optional, string) 
++ `outerPackingType` (optional, string) 
 
 
 ## ProductNutrition (object)
 
 
 ### Properties
-+ `reference_value` (string, optional) 
-+ `calories` (string, optional) 
-+ `cabohydrates` (string, optional) 
-+ `fat` (string, optional) 
-+ `fatSaturated` (string, optional) 
-+ `fatUnsaturated` (string, optional) 
-+ `fiber` (string, optional) 
-+ `proteins` (string, optional) 
-+ `sodium` (string, optional) 
-+ `sugar` (string, optional) 
-+ `alcohol` (string, optional) 
++ `reference_value` (optional, string) 
++ `calories` (optional, string) 
++ `cabohydrates` (optional, string) 
++ `fat` (optional, string) 
++ `fatSaturated` (optional, string) 
++ `fatUnsaturated` (optional, string) 
++ `fiber` (optional, string) 
++ `proteins` (optional, string) 
++ `sodium` (optional, string) 
++ `sugar` (optional, string) 
++ `alcohol` (optional, string) 
 
 
 ## ProductAdditional (object)
 
 
 ### Properties
-+ `legalText` (string, optional) 
-+ `tradingClass` (string, optional) 
-+ `ingredients` (string, optional) 
-+ `additives` (string, optional) 
-+ `allergenics` (string, optional) 
-+ `additional` (string, optional) 
-+ `warehousing` (string, optional) 
-+ `antioxidants` (string, optional) 
-+ `characteristic` (string, optional) 
++ `legalText` (optional, string) 
++ `tradingClass` (optional, string) 
++ `ingredients` (optional, string) 
++ `additives` (optional, string) 
++ `allergenics` (optional, string) 
++ `additional` (optional, string) 
++ `warehousing` (optional, string) 
++ `antioxidants` (optional, string) 
++ `characteristic` (optional, string) 
 
 
 ## Attributes (object)
@@ -870,16 +799,16 @@ replace the current shopping cart with the items from the order
 
 ### Properties
 + `id` (number, optional) 
-+ `name` (string, optional) 
++ `name` (optional, string) 
 
 
 ## Voucher (object)
 
 
 ### Properties
-+ `type` (string, optional) 
-+ `name` (string, optional) 
-+ `code` (string, optional) 
++ `type` (optional, string) 
++ `name` (optional, string) 
++ `code` (optional, string) 
 
 
 ## CartTotals (object)
@@ -899,7 +828,7 @@ replace the current shopping cart with the items from the order
 ### Properties
 + `quantity` (number, required) 
 + `unit` (number, required) 
-+ `comment` (string, optional) 
++ `comment` (optional, string) 
 
 
 ## Category (object)
@@ -908,7 +837,7 @@ replace the current shopping cart with the items from the order
 ### Properties
 + `id` (number, optional) 
 + `level` (number, optional) 
-+ `name` (string, optional) 
++ `name` (optional, string) 
 + `children` (array[SubCategory], optional) 
 
 
@@ -918,8 +847,8 @@ replace the current shopping cart with the items from the order
 ### Properties
 + `id` (number, optional) 
 + `level` (number, optional) 
-+ `name` (string, optional) 
-+ `children` (string, optional) 
++ `name` (optional, string) 
++ `children` (optional, string) 
 
 
 ## CategoryCollection (object)
@@ -933,17 +862,17 @@ replace the current shopping cart with the items from the order
 
 
 ### Properties
-+ `title` (string, optional) 
-+ `content` (string, optional) 
++ `title` (optional, string) 
++ `content` (optional, string) 
 
 
 ## ContentPage (object)
 
 
 ### Properties
-+ `title` (string, optional) 
-+ `headline` (string, optional) 
-+ `content` (string, optional) 
++ `title` (optional, string) 
++ `headline` (optional, string) 
++ `content` (optional, string) 
 
 
 ## Favorites (object)
@@ -958,20 +887,18 @@ replace the current shopping cart with the items from the order
 
 ### Properties
 + `id` (number, optional) 
-+ `name` (string, optional) 
++ `name` (optional, string) 
 + `total` (number, optional) 
 + `products` (array[Product], optional) 
 
 
 ## Payment (object)
 
-
 ### Properties
-+ `method` (string, optional) 
++ `method` (optional, string) 
 
 
 ## PaymentCollection (object)
-
 
 ### Properties
 + `payments` (array[Payment], optional) 
@@ -979,22 +906,19 @@ replace the current shopping cart with the items from the order
 
 ## ProductSearchFilter (object)
 
-
 ### Properties
 + `id` (number, optional) 
-+ `name` (string, optional) 
++ `name` (optional, string) 
 + `total` (number, optional) 
 
 
 ## ProductSearchFilterCategory (object)
-
 
 ### Properties
 + `level` (number, optional) 
 
 
 ## ProductSearch (object)
-
 
 ### Properties
 + `totalElements` (number, optional) 
@@ -1005,7 +929,6 @@ replace the current shopping cart with the items from the order
 
 ## Filters (object)
 
-
 ### Properties
 + `characteristics` (array[ProductSearchFilter], optional) 
 + `allergetics` (array[ProductSearchFilter], optional) 
@@ -1014,42 +937,39 @@ replace the current shopping cart with the items from the order
 
 ## UserOrderCollection (object)
 
-
 ### Properties
 + `orders` (array[UserOrderShort], optional) 
 
 
 ## UserOrderShort (object)
 
-
 ### Properties
-+ `orderId` (string, optional) 
-+ `createdAt` (string, optional) 
-+ `customerId` (string, optional) 
-+ `status` (string, optional) 
-+ `products` (number, optional) 
-+ `payment` (string, optional) 
-+ `totals` (CartTotals, optional) 
-+ `delivery` (CapacityReservation, optional) 
++ `orderId` (required, string) 
++ `createdAt` (required, string) 
++ `customerId` (required, string) 
++ `status` (required, string) 
++ `payment` (required, string) 
++ `totals` (required, CartTotals) 
++ `delivery` (required, CapacityReservation) 
++ `productsCount` (required, number) 
++ `products` (required, array[Product]) 
 
 
 ## UserOrderCancelation (object)
 
-
 ### Properties
-+ `reason` (string, optional) 
++ `reason` (optional, string) 
 
 
 ## UserOrder (object)
 
-
 ### Properties
-+ `orderId` (string, optional) 
-+ `createdAt` (string, optional) 
-+ `customerId` (string, optional) 
-+ `status` (string, optional) 
++ `orderId` (optional, string) 
++ `createdAt` (optional, string) 
++ `customerId` (optional, string) 
++ `status` (optional, string) 
 + `products` (number, optional) 
-+ `payment` (string, optional) 
++ `payment` (optional, string) 
 + `totals` (CartTotals, optional) 
 + `delivery` (CapacityReservation, optional) 
 + `billing` (Address, optional) 
@@ -1058,77 +978,78 @@ replace the current shopping cart with the items from the order
 
 ## UserOrderCreate (object)
 
-
 ### Properties
-+ `cartId` (number, optional) 
 + `shippingAddressId` (number, optional) 
 + `billingAddressId` (number, optional) 
-+ `reservationId` (string, optional) 
++ `reservationId` (optional, string) 
 + `payment` (Payment39, optional) 
 
 
 ## Payment39 (object)
 
-
 ### Properties
-+ `method` (string, optional) 
-+ `default` (boolean, optional) 
++ `method`: paypal (optional, string) 
++ `default`: true (boolean, optional) 
 + `options` (object, optional) 
 
 
 ## UserOrderProductCollection (object)
 
-
 ### Properties
-+ `products` (array[Product], optional) 
++ `products` (required, array[Product]) 
 
 ## UserToken (object)
 
 ### Properties
-+ `token`: TestToken (string, optional) 
++ `token`: TestToken (required, string) 
 
 
 ## UserPassword (object)
 
 ### Properties
-+ `current` (string, optional) 
-+ `password` (string, optional) 
++ `password`: `my-new-password` (required, string) 
 
 
 ## UserPasswordReset (object)
 
 ### Properties
-+ `token` (string, optional) 
-+ `password` (string, optional) 
++ `token`: sometoken (required, string) 
++ `password`: `my-new-password` (required, string) 
 
 
-## UserCredentials (object)
+## UserAuthentication (object)
 
 ### Properties
-+ `email` (string, optional) 
-+ `password` (string, optional) 
++ email: `john.doe@bringmeister.de` (required, string) 
++ password: `my-secret-password` (required, string) 
+
+
+## UserGuestAuthentication (object)
+
+### Properties
++ zipCode: `80333` (required, number) 
 
 
 ## UserAccount (object)
 
 ### Properties
-+ `id`: 123123 (string, optional) 
-+ `firstname`: John (string, optional) 
-+ `lastname`: Doe (string, optional) 
++ `id`: 123123 (optional, string) 
++ `firstname`: John (optional, string) 
++ `lastname`: Doe (optional, string) 
 + `newsletter`: false (boolean, optional) 
-+ `email`: john.doe@bm.de (string, optional) 
++ `email`: john.doe@bm.de (optional, string) 
 + `shipping` (Address, optional) 
 
 
-## UserCredentialsRegister (object)
+## UserRegistration (object)
 
 ### Properties
-+ `email` (string, optional) 
-+ `password` (string, optional) 
-+ `gender` (string, required) 
-+ `firstname` (string, required) 
-+ `lastname` (string, required) 
-+ `birthdate` (string, required) 
-+ `newsletter` (boolean, optional) 
-+ `company` (string, optional) 
-+ `department` (string, optional)
++ `email`: john.doe@bm.de (required, string) 
++ `password`: `my-secret-password` (required, string) 
++ `gender`: male, female, company (required, enum[string]) 
++ `firstname`: John (required, string) 
++ `lastname`: Doe (required, string) 
++ `birthdate`: 1989-01-01 (required, string) 
++ `newsletter`: false (boolean, required) 
++ `company`: Bringmeister GmbH (optional, string) 
++ `department`: IT-Department (optional, string)
