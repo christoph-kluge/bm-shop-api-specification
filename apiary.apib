@@ -656,6 +656,14 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (AddressRead)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
+
 ### Update specific address [PUT /user/addresses/{id}]
 
 + Parameters
@@ -666,6 +674,14 @@ Default fallback will be desktop-web if nothing is provided
         Authorization: Bearer {token}
 
 + Response 204 (application/json)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
 
 ### Delete specific address [DELETE /user/addresses/{id}]
 
@@ -678,6 +694,13 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 204 (application/json)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
 
 
 
@@ -691,6 +714,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (Favorites)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 
 ### Delete favorite [DELETE /user/favorites/{productId}]
 
@@ -698,6 +727,14 @@ Default fallback will be desktop-web if nothing is provided
     + productId: `2131241` (required, string) ... productId of the product to remove from favs
 
 + Response 204 (application/json)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
 
 
 
@@ -710,6 +747,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (UserOrderCollection)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 ### Retrieve order info [GET /user/orders/{orderId}]
 
 + Parameters
@@ -717,6 +760,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (UserOrder)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
 
 + Response 404
 
@@ -730,6 +779,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 202 (application/json)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 + Response 409
 
 
@@ -741,6 +796,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 202 (application/json)
     + Attributes (CartTotals)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 + Response 409
 
 
@@ -751,6 +812,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (CartTotals)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
 
 
 
@@ -806,125 +873,105 @@ Default fallback will be desktop-web if nothing is provided
 + `shipping` (required, array[AddressRead])
 + `billing` (required, array[AddressRead])
 
-## CapacitySlotMeta (object)
-+ `id` (optional, string)
-+ `startTime` (optional, string)
-+ `endTime` (optional, string)
-
-## CapacityCollection (object)
-+ `zipCode` (optional, string)
-+ `startDate` (optional, string)
-+ `endDate` (optional, string)
-+ `slots` (array[CapacitySlotMeta], optional)
-+ `days` (array[CapacityDayCollection], optional)
-
-## CapacityDayCollection (object)
-+ `date` (optional, string)
-+ `slots` (array[CapacityDaySlot], optional)
-
-## CapacityDaySlot (object)
-+ `id` (optional, string)
-+ `slot` (required, number)
-+ `status` (optional, string)
-+ `price` (required, number)
-
 ## CapacityReservation (object)
-+ `id` (optional, string)
-+ `startDateTime` (optional, string)
-+ `endDateTime` (optional, string)
-+ `expiryDateTime` (optional, string)
-+ `price` (required, number)
++ `id`: `4575e652-4461-462a-98c2-a3aa451bf448` (required, string)
++ `startDateTime`: `2016-08-15T07:00:00+0200` (required, string)
++ `endDateTime`: `2016-08-15T09:00:00+0200` (required, string)
++ `expiryDateTime`: `2016-08-11T16:13:26+0200` (required, string)
++ `price`: 2.00 (required, number)
 
 ## Cart (object)
-+ `products` (array[Product], optional)
-+ `vouchers` (array[Voucher], optional)
-+ `totals` (CartTotals, optional)
++ `products` (required, array[Product])
++ `vouchers` (required, array[Voucher])
++ `totals` (required, CartTotals)
 
 ## Product (object)
-+ `id` (optional, string)
-+ `sku` (optional, string)
-+ `name` (optional, string)
-+ `description` (optional, string)
-+ `manufacturer` (optional, string)
-+ `brand` (optional, string)
-+ `available` (boolean, optional)
-+ `images` (ProductImages, optional)
-+ `units` (array[ProductUnit], optional)
-+ `prices` (ProductPrice, optional)
-+ `packing` (ProductPacking, optional)
-+ `nutrition` (ProductNutrition, optional)
-+ `additional` (ProductAdditional, optional)
-+ `attributes` (Attributes, optional)
++ `id`: 62073 (required, string)
++ `sku`: 1406271 (required, string)
++ `name`: `Veuve Clicquot Ponsardin Champagne Brut` (optional, string)
++ `description`: (required, string)
++ `manufacturer`: (required, string)
++ `brand`: (required, string)
++ `available`: true (required, boolean)
++ `images`: (required, ProductImages)
++ `units`: (required, array[ProductUnit])
++ `prices`: (required, ProductPrice)
++ `packing`: (required, ProductPacking)
++ `nutrition`: (required, ProductNutrition)
++ `additional`: (required, ProductAdditional)
++ `attributes`: (required, Attributes)
 
 ## ProductImages (object)
-+ `list` (object, optional)
-+ `detail` (array[object], optional)
++ `list` (required, object)
++ `detail` (required, array[object])
 
 ## ProductUnit (object)
-+ `id` (required, number)
-+ `name` (required, string)
-+ `default` (boolean, optional)
++ `id`: 57 (required, number)
++ `name`: `Stück` (required, string)
++ `default`: true (required, boolean)
 
 ## ProductPrice (object)
-+ `_exampleFormula` (optional, string)
-+ `_exampleValues` (optional, string)
-+ `price` (required, number)
-+ `specialPrice` (required, number)
-+ `specialPriceDiscount` (required, number)
-+ `basePrice` (required, number)
-+ `basePriceCalcValue` (required, number)
-+ `basePriceCalcUnit` (optional, string)
-+ `deposit` (required, number)
++ `_exampleFormula`: `:price (:basePrice€ / :basePriceCalcValue :basePriceCalcUnit) - OFFER: :specialPrice (-:specialPriceDiscount) - plus :deposit deposit` (required, string)
++ `_exampleValues`: `7.99 € (4.00€ / 100 ml) - OFFER: 6.99 (-11%) - plus 3.30€ deposit` (required, string)
++ `price`: 7.99 (required, number)
++ `specialPrice`: 6.99 (required, number)
++ `specialPriceDiscount`: 11 (required, number)
++ `basePrice`: 4 (required, number)
++ `basePriceCalcValue`: 100 (required, number)
++ `basePriceCalcUnit`: `ml` (required, string)
++ `deposit`: 3.30 (required, number)
 
 ## ProductPacking (object)
-+ `_exampleFormula1` (optional, string)
-+ `_exampleFormula2` (optional, string)
-+ `_exampleFormula3` (optional, string)
-+ `_exampleFormula4` (optional, string)
-+ `quantity` (optional, string)
++ `_exampleFormula1` (required, string)
++ `_exampleFormula2` (required, string)
++ `_exampleFormula3` (required, string)
++ `_exampleFormula4` (required, string)
++ `value`: (required, string)
++ `quantity` (required, string)
 + `baseQuantity` (required, number)
-+ `unit` (optional, string)
-+ `circa` (boolean, optional)
-+ `innerPackingType` (optional, string)
-+ `outerPackingType` (optional, string)
++ `unit` (required, string)
++ `circa` (required, optional)
++ `innerPackingType` (required, string)
++ `outerPackingType` (required, string)
 
 ## ProductNutrition (object)
-+ `reference_value` (optional, string)
-+ `calories` (optional, string)
-+ `cabohydrates` (optional, string)
-+ `fat` (optional, string)
-+ `fatSaturated` (optional, string)
-+ `fatUnsaturated` (optional, string)
-+ `fiber` (optional, string)
-+ `proteins` (optional, string)
-+ `sodium` (optional, string)
-+ `sugar` (optional, string)
-+ `alcohol` (optional, string)
++ `reference_value`: 100g (required, string)
++ `calories`: 100 kcal (required, string)
++ `cabohydrates`: 100g (required, string)
++ `fat`: 100g (required, string)
++ `fatSaturated`: 100g (required, string)
++ `fatUnsaturated`: 100g (required, string)
++ `fiber`: 100g (required, string)
++ `proteins`: 100g (required, string)
++ `sodium`: 100g (required, string)
++ `sugar`: 100g (required, string)
++ `alcohol`: 100g (required, string)
 
 ## ProductAdditional (object)
-+ `legalText` (optional, string)
-+ `tradingClass` (optional, string)
-+ `ingredients` (optional, string)
-+ `additives` (optional, string)
-+ `allergenics` (optional, string)
-+ `additional` (optional, string)
-+ `warehousing` (optional, string)
-+ `antioxidants` (optional, string)
-+ `characteristic` (optional, string)
++ `legalText` (required, string)
++ `tradingClass` (required, string)
++ `ingredients` (required, string)
++ `additives` (required, string)
++ `allergenics` (required, string)
++ `additional` (required, string)
++ `warehousing` (required, string)
++ `antioxidants` (required, string)
++ `characteristic` (required, string)
 
 ## Attributes (object)
-+ `characteristics` (array[ProductAttribute], optional)
-+ `additives` (array[ProductAttribute], optional)
-+ `allergetics` (array[ProductAttribute], optional)
++ `characteristics` (required, array[ProductAttribute])
++ `additives` (required, array[ProductAttribute])
++ `allergetics` (required, array[ProductAttribute])
 
 ## ProductAttribute (object)
-+ `id` (required, number)
-+ `name` (optional, string)
++ `id`: 17 (required, number)
++ `name`: AttributeName (required, string)
 
 ## Voucher (object)
-+ `type` (optional, string)
-+ `name` (optional, string)
-+ `code` (optional, string)
++ `type`: SYSTEM, USER (required, enum[string])
++ `name`: Gutschein (required, string)
++ `code`: ZEIT13 (required, string)
++ `value`: 13.00 (required, number)
 
 ## CartTotals (object)
 + `minimumOrderValue`: 35.00 (required, number) ... mindest bestellwert
