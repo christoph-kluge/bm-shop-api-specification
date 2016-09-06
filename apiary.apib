@@ -15,6 +15,17 @@ The parameters that are needed to be sent are as follows:
 + `Authorization: Bearer {token}`
 + `Authorization: Bearer header.payload.signature`
 
+## Error Messages
+
+In order to provide all possible error messages. We splitted the return into numeric keys.
+As soon as implemented you'll only receive one error-code like:
+
+```
+{
+  "error": "ERROR_MESSAGE",
+  "errors": []
+}
+```
 
 ## Customized content per application
 
@@ -42,8 +53,6 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (UserToken)
 
-+ Response 409 (application/json)
-
 
 ## Token handling [/login]
 
@@ -55,7 +64,11 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (UserToken)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
 + Response 401
+    + Attributes (ResponseTokenUnauthorized)
 
 
 ### Authenticate as guest [POST /login/guest]
@@ -66,7 +79,19 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (UserTokenGuest)
 
-+ Response 409
++ Response 400 (application/json)
+    + Body
+
+        {
+            "error1": "ZIPCODE_MISSING"
+        }
+
++ Response 409 (application/json)
+    + Body
+
+        {
+            "error": "ZIPCODE_NOT_SUPPORTED"
+        }
 
 
 ### Regenerate token [POST /login/regenerate]
@@ -77,8 +102,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (UserToken)
+  
++ Response 400 (application/json)
+  + Attributes (ResponseTokenBadRequest)
 
 + Response 401
+  + Attributes (ResponseTokenUnauthorized)
 
 
 ### Delete Token / Force Logout [DELETE /login]
@@ -90,8 +119,10 @@ Default fallback will be desktop-web if nothing is provided
 + Response 204 (application/json)
 
 + Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
 
-+ Response 409 (application/json)
++ Response 401
+    + Attributes (ResponseTokenUnauthorized)
 
 
 ## Reset password [/password]
@@ -239,6 +270,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (Cart)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401
+    + Attributes (ResponseTokenUnauthorized)
+
 ## Products [/cart/products/{productId}]
 
 + Parameters
@@ -259,13 +296,17 @@ Default fallback will be desktop-web if nothing is provided
 + Response 201 (application/json)
     + Attributes (CartTotals)
 
++ Response 400 (application/json)
+    + Attributes (ResponseCartAddProductBadRequest)
+
++ Response 401
+    + Attributes (ResponseTokenUnauthorized)
+
 + Response 409 (application/json)
-    + Headers
-        X-Description: Conflict (e.g. max possible quantity reached)
+    + Attributes (ResponseCartAddProductConflict)
 
 + Response 422 (application/json)
-    + Headers
-        X-Description: Validation error (e.g. quantity or comment)
+    + Attributes (ResponseCartAddProductValidation)
 
 ### Remove product [DELETE]
 
@@ -275,9 +316,13 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 204
 
-+ Response 409 (application/json)
-    + Headers
-        X-Description: conflict (unable to remove from cart)
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404 (application/json)
 
 
 ## Coupons / Vouchers [/cart/coupons/{code}]
@@ -297,9 +342,14 @@ Default fallback will be desktop-web if nothing is provided
 + Response 201 (application/json)
     + Attributes (CartTotals)
 
-+ Response 409
-    + Headers
-        X-Description: conflict (voucher could not be applied, unknown, expired, ...)
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 409 (application/json)
+    + Attributes (ResponseCartAddCouponConflict)
 
 ### Remove coupon [DELETE]
 
@@ -307,10 +357,16 @@ Default fallback will be desktop-web if nothing is provided
     + Headers
         Authorization: Bearer {token}
 
-+ Response 204 (application/json)
++ Response 200 (application/json)
+    + Attributes (CartTotals)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
 
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
 
++ Response 404
 
 
 
@@ -333,9 +389,9 @@ Default fallback will be desktop-web if nothing is provided
         Authorization: Bearer {token}
 
 + Parameters
-    + zipCode (required, string, `12312`) ... zipcode where you want to fetch the capacity for
-    + startDate (required, datetime, ``) ... start date for the matrix
-    + endDate (required, datetime, ``) ... end date for the matrix
+    + zipCode: 80333 (required, string) ... zipcode where you want to fetch the capacity for
+    + startDate: `2016-09-05` (required, string) ... start date for capacities
+    + endDate: `2016-09-07` (required, string) ... end date for capacities
 
 + Response 200 (application/json)
     + Body
@@ -365,8 +421,36 @@ Default fallback will be desktop-web if nothing is provided
                     "status": "available",
                     "price": 2
                 }]
+            },{
+                "startTime": "07:00:00+2000",
+                "endTime": "09:00:00+2000",
+                "slots": [{
+                    "day": "2016-09-05",
+                    "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                    "status": "full",
+                    "price": 2
+                }, {
+                    "day": "2016-09-06",
+                    "slotId": "bb420fce-66f7-4ea3-81f7-9ad8a4d4a142",
+                    "status": "full",
+                    "price": 2
+                }, {
+                    "day": "2016-09-07",
+                    "slotId": "54275b11-5430-41fa-b5ce-8b2b5485eecb",
+                    "status": "available",
+                    "price": 4
+                }]
             }]
         }
+
++ Response 400 (application/json)
+    + Attributes (ResponseCapacitiesBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 422 (application/json)
+    + Attributes (ResponseCapacitiesValidation)
 
 ### Reserve a capacity slot [POST /capacities/{capacityId}]
 
@@ -375,23 +459,42 @@ Default fallback will be desktop-web if nothing is provided
         Authorization: Bearer {token}
 
 + Parameters
-    + capacityId (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... capacityId
+    + capacityId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... capacityId
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
+    + Headers
+        Location: /capacity-reservations/1
     + Attributes (CapacityReservation)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
+
++ Response 409 (application/json)
+    + Attributes (ResponseCapacityReservationConflict)
 
 
 ## Reservations [/capacity-reservations/{id}]
 
 + Parameters
-    + id (required, string, `a38914b5-5988-436d-bd6c-8c0a7edaacd5`) ... reservation identifier
+    + id: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... reservation identifier
 
 ### Retrieve reservation info [GET]
 
 + Response 200 (application/json)
     + Attributes (CapacityReservation)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
 
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
 
 
 
@@ -422,17 +525,28 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (PaymentCollection)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 ### Create a new order [POST /user/orders]
 
 + Request (application/json)
     + Attributes (UserOrderCreate)
 
-+ Response 201 (application/json)
++ Response 202 (application/json)
     + Attributes (UserOrder)
 
-+ Response 409
++ Response 400 (application/json)
+    + Attributes (ResponseCreateOrderBadRequest)
 
-+ Response 422
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 422 (application/json)
+    + Attributes (ResponseCreateOrderValidation)
 
 
 
@@ -1065,3 +1179,47 @@ Default fallback will be desktop-web if nothing is provided
 + `newsletter`: false (required, boolean)
 + `company`: My Company GmbH (required, string)
 + `department`: IT Department (required, string)
+
+## ResponseTokenBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseTokenUnauthorized (object)
++ error: TOKEN_EXPIRED (required, enum[string])
++ errors (required, array)
+
+## ResponseCartAddProductBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID, QUANTITY_MISSING, UNIT_MISSING (required, enum[string])
++ errors (required, array)
+
+## ResponseCartAddProductConflict (object)
++ error: PRODUCT_MAX_QTY_REACHED (required, enum[string])
++ errors (required, array)
+
+## ResponseCartAddProductValidation (object)
++ error: PRODUCT_QTY_INVALID, PRODUCT_UNIT_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseCartAddCouponConflict (object)
++ error: COUPON_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseCapacitiesBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID, ZIPCODE_MISSING, STARTDATE_MISSING, STARTDATE_INVALID, ENDDATE_MISSING, ENDDATE_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseCapacitiesValidation (object)
++ error: ZIPCODE_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseCapacityReservationConflict (object)
++ error: CAPACITY_GONE (required, enum[string])
++ errors (required, array)
+
+## ResponseCreateOrderBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID, SHIPPING_MISSING, BILLING_MISSING, RESERVATION_MISSING, PAYMENT_MISSING (required, enum[string])
++ errors (required, array)
+
+## ResponseCreateOrderValidation (object)
++ error: SHIPPING_INVALID, BILLING_INVALID, RESERVATION_INVALID, PAYMENT_INVALID (required, enum[string])
++ errors (required, array)
