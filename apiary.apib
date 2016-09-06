@@ -642,7 +642,22 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (AddressRead)
 
 + Response 422 (application/json)
-    + Attributes (AddressRead)
+    + Headers
+        Location: /user/addresses/{id}
+    + Body 
+        {
+          "error": "ADDRESS_VALIDATION",
+          "errors": {
+            "street": {
+              "old": "Beusselstraieß",
+              "new": "Beusselstr."
+            },
+            "housenumber": {
+              "old": "44n-q",
+              "new": "44 n-q"
+            }
+          }
+        }
 
 ### Retrieve specific address [GET /user/addresses/{id}]
 
@@ -682,6 +697,22 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (ResponseTokenUnauthorized)
 
 + Response 404
+
++ Response 422 (application/json)
+    + Body 
+        {
+          "error": "ADDRESS_VALIDATION",
+          "errors": {
+            "street": {
+              "old": "Beusselstraieß",
+              "new": "Beusselstr."
+            },
+            "housenumber": {
+              "old": "44n-q",
+              "new": "44 n-q"
+            }
+          }
+        }
 
 ### Delete specific address [DELETE /user/addresses/{id}]
 
@@ -801,8 +832,6 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 401 (application/json)
     + Attributes (ResponseTokenUnauthorized)
-
-+ Response 409
 
 
 ### Add order items to shopping cart [POST /user/orders/{orderId}/cart]
