@@ -102,7 +102,7 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Attributes (UserToken)
-  
+
 + Response 400 (application/json)
   + Attributes (ResponseTokenBadRequest)
 
@@ -395,7 +395,7 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 200 (application/json)
     + Body
-    
+
         {
             "days": [
                 "2016-09-05",
@@ -577,6 +577,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (UserAccount)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 ### Update account [PUT /user]
 
 + Request
@@ -586,7 +592,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 204 (application/json)
 
-+ Response 409 (application/json)
++ Response 400 (application/json)
+    + Attributes (ResponseUpdateUserBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 
 
 
@@ -603,6 +614,12 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (AddressCollection)
 
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
 
 ### Create new address [POST /user/addresses]
 
@@ -614,6 +631,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 201 (application/json)
     + Attributes (AddressRead)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
 
 + Response 409 (application/json)
     + Attributes (AddressRead)
@@ -745,11 +768,8 @@ Default fallback will be desktop-web if nothing is provided
 # Data Structures
 
 ## Address (object)
-
-
-### Properties
 + `type`: billing, shipping (required, enum[string])
-+ `gender`: male|female|company (required, enum[string])
++ `gender`: male, female, company (required, enum[string])
 + `company`: My Company GmbH (required, string)
 + `department`: IT Department (required, string)
 + `firstname`: John (required, string)
@@ -763,16 +783,12 @@ Default fallback will be desktop-web if nothing is provided
 + `floor`: 1 (required, number)
 + `phonenumber`: 00493012345678 (required, string)
 
-
 ## AddressRead (object)
-
-
-### Properties
 + `addressId`: 1001241 (required, string)
 + `default`: true (required, boolean)
 + `name`: My custom address name (required, string)
 + `type`: billing, shipping (required, enum[string])
-+ `gender`: male|female|company (required, enum[string])
++ `gender`: male, female, company (required, enum[string])
 + `company`: My Company GmbH (required, string)
 + `department`: IT Department (required, string)
 + `firstname`: John (required, string)
@@ -786,77 +802,45 @@ Default fallback will be desktop-web if nothing is provided
 + `floor`: 1 (required, number)
 + `phonenumber`: 00493012345678 (required, string)
 
-
 ## AddressCollection (object)
-
-
-### Properties
 + `shipping` (required, array[AddressRead])
 + `billing` (required, array[AddressRead])
 
-
 ## CapacitySlotMeta (object)
-
-
-### Properties
 + `id` (optional, string)
 + `startTime` (optional, string)
 + `endTime` (optional, string)
 
-
 ## CapacityCollection (object)
-
-
-### Properties
 + `zipCode` (optional, string)
 + `startDate` (optional, string)
 + `endDate` (optional, string)
 + `slots` (array[CapacitySlotMeta], optional)
 + `days` (array[CapacityDayCollection], optional)
 
-
 ## CapacityDayCollection (object)
-
-
-### Properties
 + `date` (optional, string)
 + `slots` (array[CapacityDaySlot], optional)
 
-
 ## CapacityDaySlot (object)
-
-
-### Properties
 + `id` (optional, string)
 + `slot` (required, number)
 + `status` (optional, string)
 + `price` (required, number)
 
-
 ## CapacityReservation (object)
-
-
-### Properties
 + `id` (optional, string)
 + `startDateTime` (optional, string)
 + `endDateTime` (optional, string)
 + `expiryDateTime` (optional, string)
 + `price` (required, number)
 
-
 ## Cart (object)
-
-
-### Properties
 + `products` (array[Product], optional)
 + `vouchers` (array[Voucher], optional)
 + `totals` (CartTotals, optional)
 
-
 ## Product (object)
-
-
-### Properties
 + `id` (optional, string)
 + `sku` (optional, string)
 + `name` (optional, string)
@@ -872,28 +856,16 @@ Default fallback will be desktop-web if nothing is provided
 + `additional` (ProductAdditional, optional)
 + `attributes` (Attributes, optional)
 
-
 ## ProductImages (object)
-
-
-### Properties
 + `list` (object, optional)
 + `detail` (array[object], optional)
 
-
 ## ProductUnit (object)
-
-
-### Properties
 + `id` (required, number)
 + `name` (required, string)
 + `default` (boolean, optional)
 
-
 ## ProductPrice (object)
-
-
-### Properties
 + `_exampleFormula` (optional, string)
 + `_exampleValues` (optional, string)
 + `price` (required, number)
@@ -904,11 +876,7 @@ Default fallback will be desktop-web if nothing is provided
 + `basePriceCalcUnit` (optional, string)
 + `deposit` (required, number)
 
-
 ## ProductPacking (object)
-
-
-### Properties
 + `_exampleFormula1` (optional, string)
 + `_exampleFormula2` (optional, string)
 + `_exampleFormula3` (optional, string)
@@ -920,11 +888,7 @@ Default fallback will be desktop-web if nothing is provided
 + `innerPackingType` (optional, string)
 + `outerPackingType` (optional, string)
 
-
 ## ProductNutrition (object)
-
-
-### Properties
 + `reference_value` (optional, string)
 + `calories` (optional, string)
 + `cabohydrates` (optional, string)
@@ -937,11 +901,7 @@ Default fallback will be desktop-web if nothing is provided
 + `sugar` (optional, string)
 + `alcohol` (optional, string)
 
-
 ## ProductAdditional (object)
-
-
-### Properties
 + `legalText` (optional, string)
 + `tradingClass` (optional, string)
 + `ingredients` (optional, string)
@@ -952,37 +912,21 @@ Default fallback will be desktop-web if nothing is provided
 + `antioxidants` (optional, string)
 + `characteristic` (optional, string)
 
-
 ## Attributes (object)
-
-
-### Properties
 + `characteristics` (array[ProductAttribute], optional)
 + `additives` (array[ProductAttribute], optional)
 + `allergetics` (array[ProductAttribute], optional)
 
-
 ## ProductAttribute (object)
-
-
-### Properties
 + `id` (required, number)
 + `name` (optional, string)
 
-
 ## Voucher (object)
-
-
-### Properties
 + `type` (optional, string)
 + `name` (optional, string)
 + `code` (optional, string)
 
-
 ## CartTotals (object)
-
-
-### Properties
 + `minimumOrderValue`: 35.00 (required, number) ... mindest bestellwert
 + `subtotal`: 10.00 (required, number) ... subtotal without vouchers and deductions
 + `customerCreditBalance`: 1.50 (required, number) ... kunden guthaben
@@ -991,39 +935,24 @@ Default fallback will be desktop-web if nothing is provided
 + `beverages`: 1.00 (required, number) ... getränke lieferzuschlag
 + `grandtotal`: 17.50 (required, number) ... total including all additional costs
 
-
 ## CartProductUpdate (object)
-
-
-### Properties
 + `quantity`: 200 (required, number)
 + `unitId`: 17 (required, number)
 + `comment` (optional, string)
 
-
 ## Category (object)
-
-
-### Properties
 + `id` (required, number)
 + `level` (required, number)
 + `name` (required, string)
 + `children` (required, array[SubCategory])
 
-
 ## SubCategory (object)
-
-
-### Properties
 + `id` (required, number)
 + `level` (required, number)
 + `name` (required, string)
 + `children` (optional, array[SubCategory])
 
-
 ## CategoryCollection (object)
-
-### Properties
 + `categories` (required, array[Category])
 
 ## ContentBlock (object)
@@ -1082,7 +1011,6 @@ Default fallback will be desktop-web if nothing is provided
 ## UserOrderCollection (object)
 + `orders` (required, array[UserOrderShort])
 
-
 ## UserOrderShort (object)
 + `orderId` (required, string)
 + `createdAt` (required, string)
@@ -1095,7 +1023,6 @@ Default fallback will be desktop-web if nothing is provided
 + `reservation` (required, CapacityReservation)
 + `productsCount` (required, number)
 + `products` (required, array[Product])
-
 
 ## UserOrder (object)
 + `orderId` (required, string)
@@ -1112,10 +1039,8 @@ Default fallback will be desktop-web if nothing is provided
 + `billing` (required, Address)
 + `shipping` (required, Address)
 
-
 ## UserOrderCancelation (object)
 + `reason` (required, string)
-
 
 ## UserOrderCreate (object)
 + `shippingAddressId` (required, string)
@@ -1123,12 +1048,10 @@ Default fallback will be desktop-web if nothing is provided
 + `reservationId` (optional, string)
 + `payment` (required, Payment39)
 
-
 ## Payment39 (object)
 + `method`: paypal (required, string)
 + `default`: true (required, boolean)
 + `options` (required, object)
-
 
 ## UserOrderProductCollection (object)
 + `products` (required, array[Product])
@@ -1149,7 +1072,7 @@ Default fallback will be desktop-web if nothing is provided
 + `_example_incoming_url`: `/#/customer/account/resetpassword/?id=:id&token=:token`
 + `id`: `id-param-from-url` (required, string)
 + `token`: `token-param-from-url` (required, string)
-+ `password`: `my-new-password` (required, string) 
++ `password`: `my-new-password` (required, string)
 
 ## UserAuthentication (object)
 + email: `john.doe@example.com` (required, string)
@@ -1222,4 +1145,8 @@ Default fallback will be desktop-web if nothing is provided
 
 ## ResponseCreateOrderValidation (object)
 + error: SHIPPING_INVALID, BILLING_INVALID, RESERVATION_INVALID, PAYMENT_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseUpdateUserBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID, NEWSLETTER_INVALID (required, enum[string])
 + errors (required, array)
