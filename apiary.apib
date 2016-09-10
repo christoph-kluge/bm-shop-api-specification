@@ -216,7 +216,7 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Products [/products]
 
-### Search through catalog [GET /products{?q,catId,campaign,browserUrl,limit,offset,sort,sortDir,additives,allergetics,characteristics}]
+### Search through catalog [GET /products{?q,catId,campaign,browserUrl,limit,offset,sort,sortDir,filter[bmglob_additive_filter],filter[bmglob_allergenic_filter],filter[bmglob_characteristic_filter]}]
 
 + Parameters
     + q (optional, string, `Toma`) ... search term
@@ -227,9 +227,9 @@ Default fallback will be desktop-web if nothing is provided
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
     + sort (optional, string, `price`) ... sort mechanismn (one of: price, popularity)
     + sortDir (optional, string, `desc`) ... sort direction (one of: asc, desc)
-    + additives (optional, array[integer], `10,12`) ... array of additives filterIds
-    + allergetics (optional, array[integer], `10,12`) ... array of allergetic filterIds
-    + characteristics (optional, array[integer], `10,12`) ... array of characteristics filterIds
+    + filter[bmglob_additive_filter] (optional, array[integer], `10,12`) ... array of additives filterIds
+    + filter[bmglob_allergenic_filter] (optional, array[integer], `10,12`) ... array of allergetic filterIds
+    + filter[bmglob_characteristic_filter] (optional, array[integer], `10,12`) ... array of characteristics filterIds
 
 + Response 200 (application/json)
     + Attributes (ProductSearch)
@@ -921,6 +921,7 @@ Default fallback will be desktop-web if nothing is provided
 + browserUrl: `veuve-clicquot-brut-0-75l.html` (required, string)
 + weight: `ca. 390g Packung` (required, string)
 + available: `true` (required, boolean)
++ icons (required, array[ProductIcon])
 + images (required, ProductImages)
 + units (required, array[ProductUnit])
 + prices (required, ProductPrice)
@@ -952,18 +953,22 @@ Default fallback will be desktop-web if nothing is provided
 + list (required, ProductListImage)
 + detail (required, array[ProductDetailImage])
 
+## ProductIcon (object)
++ name: Tiefgekühlt (required, string)
++ imgUrl: `http://cdn.bringmister.de/images/1ist/43.png` (required, string)
+
 ## ProductListImage (object)
-+ 43: `http://cdn.bringmister.de/images/1ist/43.png`
-+ 90: `http://cdn.bringmister.de/images/1ist/90.png`
-+ 117: `http://cdn.bringmister.de/images/1ist/117.png`
-+ 120: `http://cdn.bringmister.de/images/1ist/120.png`
++ 43: `http://cdn.bringmister.de/images/1ist/43.png` (required, string)
++ 90: `http://cdn.bringmister.de/images/1ist/90.png` (required, string)
++ 117: `http://cdn.bringmister.de/images/1ist/117.png`(required, string)
++ 120: `http://cdn.bringmister.de/images/1ist/120.png`(required, string)
 
 ## ProductDetailImage (object)
-+ 58: `http://cdn.bringmister.de/images/detail/1/58.png`
-+ 90: `http://cdn.bringmister.de/images/detail/1/90.png`
-+ 268: `http://cdn.bringmister.de/images/detail/1/268.png`
-+ 495: `http://cdn.bringmister.de/images/detail/1/495.png`
-+ 1795: `http://cdn.bringmister.de/images/detail/1/1795.png`
++ 58: `http://cdn.bringmister.de/images/detail/1/58.png`(required, string)
++ 90: `http://cdn.bringmister.de/images/detail/1/90.png`(required, string)
++ 268: `http://cdn.bringmister.de/images/detail/1/268.png`(required, string)
++ 495: `http://cdn.bringmister.de/images/detail/1/495.png`(required, string)
++ 1795: `http://cdn.bringmister.de/images/detail/1/1795.png`(required, string)
 
 ## ProductNutrition (object)
 + reference: `100g` (required, string)
@@ -1063,25 +1068,39 @@ Default fallback will be desktop-web if nothing is provided
 ## PaymentCollection (object)
 + `payments` (required, array[Payment])
 
-## ProductSearchFilter (object)
-+ `id` (required, number)
-+ `name` (required, string)
-+ `total` (required, number)
-
-## ProductSearchFilterCategory (object)
-+ `level` (required, number)
-
 ## ProductSearch (object)
-+ `totalElements` (required, number)
-+ `type`: category, product (required, enum[string])
-+ `products` (required, array[Product])
-+ `categories` (required, array[ProductSearchFilterCategory])
-+ `filters` (required, Filters)
++ totalElements: 125 (required, number)
++ type: category, product (required, enum[string])
++ products (required, array[Product])
++ categories (required, ProductSearchCategory)
++ filters (required, array[ProductSearchCustomFilter])
 
-## Filters (object)
-+ `characteristics` (required, array[ProductSearchFilter])
-+ `allergetics` (required, array[ProductSearchFilter])
-+ `additives` (required, array[ProductSearchFilter])
+## ProductSearchCategory (object)
++ id: 1 (required, number)
++ level: 1 (required, number)
++ name: `Obst & Gemüse` (required, string)
++ browserUrl: `obst-und-gemuese.html` (required, string)
++ total: 17 (required, number)
++ children (required, array[ProductSearchCategorySub])
+
+## ProductSearchCategorySub (object)
++ id: 2 (required, number)
++ level: 2 (required, number)
++ name: `Äpfel` (required, string)
++ browserUrl: `obst-und-gemuese/aepfel.html` (required, string)
++ total: 5 (required, number)
++ children: null (required, string)
+
+## ProductSearchCustomFilter (object)
++ id: bmbrand (required, string)
++ name: Marken (required, string)
++ items: (required, array[ProductSearchCustomFilterItem])
+
+## ProductSearchCustomFilterItem (object)
++ id: 1012 (required, number)
++ name: Uncle Bens (required, string)
++ active: true (required, boolean)
++ total: 17 (required, number)
 
 ## UserOrderCollection (object)
 + `orders` (required, array[UserOrderShort])
