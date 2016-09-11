@@ -216,10 +216,10 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Products [/products]
 
-### Search through catalog [GET /products{?q,catId,campaign,browserUrl,limit,offset,sort,sortDir,filter[bmglob_additive_filter],filter[bmglob_allergenic_filter],filter[bmglob_characteristic_filter]}]
+### Search through catalog [GET /products]
 
 + Parameters
-    + q (optional, string, `Toma`) ... search term
+    + q (required, string, `Toma`) ... search term
     + campaign (optional, string, `zuckertuete`) ... campaign (i.e. from sliders)
     + catId (optional, integer, `2`) ... categoryId to filter for
     + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... browserUrl, can be category or product - see type in response
@@ -227,9 +227,7 @@ Default fallback will be desktop-web if nothing is provided
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
     + sort (optional, string, `price`) ... sort mechanismn (one of: price, popularity)
     + sortDir (optional, string, `desc`) ... sort direction (one of: asc, desc)
-    + filter[bmglob_additive_filter] (optional, array[integer], `10,12`) ... array of additives filterIds
-    + filter[bmglob_allergenic_filter] (optional, array[integer], `10,12`) ... array of allergetic filterIds
-    + filter[bmglob_characteristic_filter] (optional, array[integer], `10,12`) ... array of characteristics filterIds
+    + filter[customFilterId] (optional, array[integer], `10,12`) ... customFilterItemIds
 
 + Response 200 (application/json)
     + Attributes (ProductSearch)
@@ -1072,7 +1070,7 @@ Default fallback will be desktop-web if nothing is provided
 + totalElements: 125 (required, number)
 + type: category, product (required, enum[string])
 + products (required, array[Product])
-+ categories (required, ProductSearchCategory)
++ categories (required, array[ProductSearchCategory])
 + filters (required, array[ProductSearchCustomFilter])
 
 ## ProductSearchCategory (object)
