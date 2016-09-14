@@ -219,6 +219,7 @@ Default fallback will be desktop-web if nothing is provided
 ### Search through catalog [GET /products]
 
 + Parameters
+    + zipcode (required, string, 12312) ... zipcode for catalog selection
     + q (required, string, `Toma`) ... search term
     + campaign (optional, string, `zuckertuete`) ... campaign (i.e. from sliders)
     + catId (optional, integer, `2`) ... categoryId to filter for
@@ -232,10 +233,11 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (ProductSearch)
 
-### Retrieve product info [GET /products/{productId}]
+### Retrieve product info [GET /products/{productId}?zipcode=80333]
 
 + Parameters
     + productId: `1230012` (required, string)
+    + zipcode: `80333` (required, string)
 
 + Response 200 (application/json)
     + Attributes (Product)
@@ -917,8 +919,9 @@ Default fallback will be desktop-web if nothing is provided
 + sku: `1406271` (required, string)
 + name: `Veuve Clicquot Ponsardin Champagne Brut` (required, string)
 + browserUrl: `veuve-clicquot-brut-0-75l.html` (required, string)
-+ weight: `ca. 390g Packung` (required, string)
++ packing: `ca. 390g Packung` (required, string)
 + available: `true` (required, boolean)
++ isSpecialPrice: `true` (required, boolean)
 + icons (required, array[ProductIcon])
 + images (required, ProductImages)
 + units (required, array[ProductUnit])
