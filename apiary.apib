@@ -223,6 +223,7 @@ Default fallback will be desktop-web if nothing is provided
     + q (required, string, `Toma`) ... search term
     + campaign (optional, string, `zuckertuete`) ... campaign (i.e. from sliders)
     + catId (optional, integer, `2`) ... categoryId to filter for
+    + catLevel (optional, integer, `2`) ... categoryLevel to reduce category filter
     + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... browserUrl, can be category or product - see type in response
     + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
@@ -920,7 +921,7 @@ Default fallback will be desktop-web if nothing is provided
 + name: `Veuve Clicquot Ponsardin Champagne Brut` (required, string)
 + browserUrl: `veuve-clicquot-brut-0-75l.html` (required, string)
 + packing: `ca. 390g Packung` (required, string)
-+ available: `true` (required, boolean)
++ isAvailable: `true` (required, boolean)
 + isSpecialPrice: `true` (required, boolean)
 + icons (required, array[ProductIcon])
 + images (required, ProductImages)
