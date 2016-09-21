@@ -61,7 +61,7 @@ Default fallback will be desktop-web if nothing is provided
 + Request (application/json)
     + Attributes (UserAuthentication)
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
     + Attributes (UserToken)
 
 + Response 400 (application/json)
@@ -76,7 +76,7 @@ Default fallback will be desktop-web if nothing is provided
 + Request (application/json)
     + Attributes (UserAuthenticationGuest)
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
     + Attributes (UserTokenGuest)
 
 + Response 400 (application/json)
@@ -223,7 +223,7 @@ Default fallback will be desktop-web if nothing is provided
     + q (required, string, `Toma`) ... search term
     + campaign (optional, string, `zuckertuete`) ... campaign (i.e. from sliders)
     + catId (optional, integer, `2`) ... categoryId to filter for
-    + catLevel (optional, integer, `2`) ... categoryLevel to reduce category filter
+    + catLevel (optional, integer, `2`) ... categoryLevel to reduce category filter (mostly you choose catId and add +1 to the same level) 
     + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... browserUrl, can be category or product - see type in response
     + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
@@ -292,10 +292,10 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Headers
         Authorization: Bearer {token}
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 201 (application/json)
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseCartAddProductBadRequest)
@@ -338,10 +338,10 @@ Default fallback will be desktop-web if nothing is provided
         Authorization: Bearer {token}
 
 + Response 200 (application/json)
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 201 (application/json)
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
@@ -359,7 +359,7 @@ Default fallback will be desktop-web if nothing is provided
         Authorization: Bearer {token}
 
 + Response 200 (application/json)
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
@@ -826,7 +826,7 @@ Default fallback will be desktop-web if nothing is provided
     + orderId: 1019558370 (required, string)
 
 + Response 202 (application/json)
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
@@ -841,7 +841,7 @@ Default fallback will be desktop-web if nothing is provided
     + orderId: 1019558370 (required, integer)
 
 + Response 200 (application/json)
-    + Attributes (CartTotals)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
@@ -910,11 +910,6 @@ Default fallback will be desktop-web if nothing is provided
 + `expiryDateTime`: `2016-08-11T16:13:26+0200` (required, string)
 + `price`: 2.00 (required, number)
 
-## Cart (object)
-+ `products` (required, array[Product])
-+ `vouchers` (required, array[Voucher])
-+ `totals` (required, CartTotals)
-
 ## Product (object)
 + id: 62073 (required, string)
 + sku: `1406271` (required, string)
@@ -956,6 +951,7 @@ Default fallback will be desktop-web if nothing is provided
 + detail (required, array[ProductDetailImage])
 
 ## ProductIcon (object)
++ id: 63 (required, number)
 + name: Tiefgekühlt (required, string)
 + imgUrl: `http://cdn.bringmister.de/images/1ist/43.png` (required, string)
 
@@ -1001,19 +997,18 @@ Default fallback will be desktop-web if nothing is provided
 + `name`: AttributeName (required, string)
 
 ## Voucher (object)
-+ `type`: SYSTEM, USER (required, enum[string])
-+ `name`: Gutschein (required, string)
 + `code`: ZEIT13 (required, string)
-+ `value`: 13.00 (required, number)
 
-## CartTotals (object)
-+ `minimumOrderValue`: 35.00 (required, number) ... mindest bestellwert
-+ `subtotal`: 10.00 (required, number) ... subtotal without vouchers and deductions
-+ `customerCreditBalance`: 1.50 (required, number) ... kunden guthaben
-+ `deposit`: 3.50 (required, number) ... pfand
-+ `delivery`: 4.00 (required, number) ... delivery costs
-+ `beverages`: 1.00 (required, number) ... getränke lieferzuschlag
-+ `grandtotal`: 17.50 (required, number) ... total including all additional costs
+## Cart (object)
++ minimumOrderValue: 35.00 (required, number) ... mindestbestellwert
++ currentValue: 120.00 (required, number) ... current cart value´
++ voucher: ZEIT13 (required, string)
++ products (required, array[Product])
++ totals (required, array[CartTotal])
+
+## CartTotal (object)
++ label: Warenwert (required, string) ... label of total
++ value: 19.00 (required, number) ... value of total
 
 ## CartProductUpdate (object)
 + `quantity`: 200 (required, number)
@@ -1115,7 +1110,7 @@ Default fallback will be desktop-web if nothing is provided
 + `canChange` (required, boolean)
 + `canCancel` (required, boolean)
 + `payment` (required, string)
-+ `totals` (required, CartTotals)
++ `totals` (required, array[CartTotal])
 + `reservation` (required, CapacityReservation)
 + `productsCount` (required, number)
 + `products` (required, array[Product])
@@ -1128,7 +1123,7 @@ Default fallback will be desktop-web if nothing is provided
 + `canChange` (required, boolean)
 + `canCancel` (required, boolean)
 + `payment` (required, string)
-+ `totals` (required, CartTotals)
++ `totals` (required, array[CartTotal])
 + `reservation` (required, CapacityReservation)
 + `productsCount` (required, number)
 + `products` (required, array[Product])
