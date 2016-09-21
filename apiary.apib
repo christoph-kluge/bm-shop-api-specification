@@ -275,7 +275,7 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (ResponseTokenBadRequest)
 
 + Response 401
-    + Attributes (ResponseTokenUnauthorized)
+    + Attributes (ResponseCartUnauthorized)
 
 ## Products [/cart/products/{productId}]
 
@@ -290,18 +290,15 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
-    + Headers
-        Authorization: Bearer {token}
-    + Attributes (Cart)
-
-+ Response 201 (application/json)
     + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseCartAddProductBadRequest)
 
 + Response 401
-    + Attributes (ResponseTokenUnauthorized)
+    + Attributes (ResponseCartUnauthorized)
+    
++ Response 404 (application/json)
 
 + Response 409 (application/json)
     + Attributes (ResponseCartAddProductConflict)
@@ -315,13 +312,14 @@ Default fallback will be desktop-web if nothing is provided
     + Headers
         Authorization: Bearer {token}
 
-+ Response 204
++ Response 200 (application/json)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
 
-+ Response 401 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
++ Response 401
+    + Attributes (ResponseCartUnauthorized)
 
 + Response 404 (application/json)
 
@@ -346,11 +344,14 @@ Default fallback will be desktop-web if nothing is provided
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
 
-+ Response 401 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
++ Response 401
+    + Attributes (ResponseCartUnauthorized)
 
 + Response 409 (application/json)
     + Attributes (ResponseCartAddCouponConflict)
+
++ Response 422 (application/json)
+    + Attributes (ResponseCartAddCouponValidationFailed)
 
 ### Remove coupon [DELETE]
 
@@ -364,10 +365,13 @@ Default fallback will be desktop-web if nothing is provided
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
 
-+ Response 401 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
++ Response 401
+    + Attributes (ResponseCartUnauthorized)
 
 + Response 404
+
++ Response 422 (application/json)
+    + Attributes (ResponseCartRemoveCouponValidationFailed)
 
 
 
@@ -1206,16 +1210,28 @@ Default fallback will be desktop-web if nothing is provided
 + error: TOKEN_MISSING, TOKEN_INVALID, QUANTITY_MISSING, UNIT_MISSING (required, enum[string])
 + errors (required, array)
 
-## ResponseCartAddProductConflict (object)
-+ error: PRODUCT_MAX_QTY_REACHED (required, enum[string])
+## ResponseCartUnauthorized (object)
++ error: TOKEN_EXPIRED, CART_INVALID (required, enum[string])
 + errors (required, array)
 
+## ResponseCartAddProductConflict (object)
++ error: PRODUCT_UPDATED_WITH_ERRORS (required, enum[string])
++ errors (required, array[string])
+
 ## ResponseCartAddProductValidation (object)
-+ error: PRODUCT_QTY_INVALID, PRODUCT_UNIT_INVALID (required, enum[string])
++ error: PRODUCT_UNIT_INVALID (required, enum[string])
 + errors (required, array)
 
 ## ResponseCartAddCouponConflict (object)
-+ error: COUPON_INVALID (required, enum[string])
++ error: COUPON_CODE_INVALID, COUPON_CODE_ALREADY_APPLIED (required, enum[string])
++ errors (required, array)
+
+## ResponseCartAddCouponValidationFailed (object)
++ error: COUPON_CODE_TOO_SHORT (required, enum[string])
++ errors (required, array)
+
+## ResponseCartRemoveCouponValidationFailed (object)
++ error: COUPON_CODE_TOO_SHORT (required, enum[string])
 + errors (required, array)
 
 ## ResponseCapacitiesBadRequest (object)
