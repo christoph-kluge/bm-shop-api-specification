@@ -65,7 +65,7 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (UserToken)
 
 + Response 400 (application/json)
-    + Attributes (ResponseTokenBadRequest)
+    + Attributes (ResponseLoginBadRequest)
 
 + Response 401
     + Attributes (ResponseTokenUnauthorized)
@@ -1007,8 +1007,21 @@ Default fallback will be desktop-web if nothing is provided
 + minimumOrderValue: 35.00 (required, number) ... mindestbestellwert
 + currentValue: 120.00 (required, number) ... current cart value´
 + voucher: ZEIT13 (required, string)
-+ products (required, array[Product])
++ products (required, array[CartProduct])
 + totals (required, array[CartTotal])
+
+## CartProduct (object)
++ productId: 123 (required, number)
++ quantity: 2 (required, number) 
++ price: 12.99 (required, number)
++ rowPrice: 25.98 (required, number)
++ unitId: 64 (required, number)
++ unitTitle: Kg (required, string)
++ deposit: 2.38 (required, number)
++ name: Fleisch der besten klasse (required, string)
++ packing: 500 Packung (required, string)
++ units (required, array[ProductUnit])
++ images (required, ProductImages)
 
 ## CartTotal (object)
 + label: Warenwert (required, string) ... label of total
@@ -1170,7 +1183,7 @@ Default fallback will be desktop-web if nothing is provided
 + `password`: `my-new-password` (required, string)
 
 ## UserAuthentication (object)
-+ email: `john.doe@example.com` (required, string)
++ username: `john.doe@example.com` (required, string)
 + password: `my-secret-password` (required, string)
 
 ## UserAuthenticationGuest (object)
@@ -1204,6 +1217,10 @@ Default fallback will be desktop-web if nothing is provided
 
 ## ResponseTokenUnauthorized (object)
 + error: TOKEN_EXPIRED (required, enum[string])
++ errors (required, array)
+
+## ResponseLoginBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID, USERNAME_MISSING, PASSWORD_MISSING, USERNAME_INVALID (required, enum[string])
 + errors (required, array)
 
 ## ResponseCartAddProductBadRequest (object)
