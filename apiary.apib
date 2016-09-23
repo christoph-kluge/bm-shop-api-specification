@@ -104,10 +104,10 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (UserToken)
 
 + Response 400 (application/json)
-  + Attributes (ResponseTokenBadRequest)
+    + Attributes (ResponseTokenBadRequest)
 
 + Response 401
-  + Attributes (ResponseTokenUnauthorized)
+    + Attributes (ResponseTokenUnauthorized)
 
 
 ### Delete Token / Force Logout [DELETE /login]
@@ -133,6 +133,9 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (UserPasswordResetRequest)
 
 + Response 204 (application/json)
+    
++ Response 400 (application/json)
+    + Attributes (ResponseRequestResetPasswordBadRequest)
 
 ### Update password [POST /password]
 
@@ -141,6 +144,12 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 202 (application/json)
     + Attributes (UserToken)
+    
++ Response 400 (application/json)
+    + Attributes (ResponseResetPasswordBadRequest)
+    
++ Response 409 (application/json)
+    + Attributes (ResponseResetPasswordConflict)
 
 
 
@@ -1221,6 +1230,18 @@ Default fallback will be desktop-web if nothing is provided
 
 ## ResponseLoginBadRequest (object)
 + error: TOKEN_MISSING, TOKEN_INVALID, USERNAME_MISSING, PASSWORD_MISSING, USERNAME_INVALID (required, enum[string])
++ errors (required, array)
+
+## ResponseRequestResetPasswordBadRequest (object)
++ error: USERNAME_MISSING (required, enum[string])
++ errors (required, array)
+
+## ResponseResetPasswordBadRequest (object)
++ error: USER_ID_MISSING, RESET_TOKEN_MISSING, PASSWORD_MISSING (required, enum[string])
++ errors (required, array)
+
+## ResponseResetPasswordConflict (object)
++ error: RESET_TOKEN_EXPIRED, RESET_TOKEN_INVALID (required, enum[string])
 + errors (required, array)
 
 ## ResponseCartAddProductBadRequest (object)
