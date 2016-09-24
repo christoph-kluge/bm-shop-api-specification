@@ -1073,9 +1073,15 @@ Default fallback will be desktop-web if nothing is provided
 + sliders (required, array[ContentSlider])
 
 ## ContentSlider (object)
-+ imageUrl: `http://static.exmaple.com/image.png` (required, string)
++ name: `Verival` (required, string)
++ position: 2 (required, number)
++ images (required, ContentSliderImages)
 + linkType: search (required, enum[string])
 + linkData (required, ContentLinkData)
+
+## ContentSliderImages (object)
++ 320: `http://static.exmaple.com/mobile.png` (required, string)
++ 1233: `http://static.exmaple.com/desktop.png` (required, string)
 
 ## ContentLinkData (object)
 + catId: 2312 (optional, string)
