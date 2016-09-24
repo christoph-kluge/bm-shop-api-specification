@@ -1074,7 +1074,13 @@ Default fallback will be desktop-web if nothing is provided
 
 ## ContentSlider (object)
 + imageUrl: `http://static.exmaple.com/image.png` (required, string)
-+ campaign: zuckertuete (required, string)
++ linkType: search (required, enum[string])
++ linkData (required, ContentLinkData)
+
+## ContentLinkData (object)
++ catId: 2312 (optional, string)
++ browserUrl: `obst-gemuse.html` (optional, string)
++ campaign: angebote (optional, string)
 
 ## Favorites (object)
 + `categories` (required, array[FavoriteCategory])
