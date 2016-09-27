@@ -156,6 +156,39 @@ Default fallback will be desktop-web if nothing is provided
 
 
 
+# Group Newsletter
+
+## Newsletter [/newsletter]
+
+### Subscribe to newsletter [POST /newsletter/subscribe]
+
++ Request
+    + Attributes (UserNewsletter)
+
++ Response 204 (application/json)
+
++ Response 400 (application/json)
+    + Attributes (ResponseUserNewsletterBadRequest)
+
++ Response 409 (application/json)
+    + Attributes (ResponseUserNewsletterConflict)
+
+### Unsubscribe from newsletter [POST /newsletter/unsubscribe]
+
++ Request
+    + Attributes (UserNewsletter)
+
++ Response 204 (application/json)
+
++ Response 400 (application/json)
+    + Attributes (ResponseUserNewsletterBadRequest)
+
++ Response 409 (application/json)
+    + Attributes (ResponseUserNewsletterConflict)
+    
+
+
+
 
 
 
@@ -565,53 +598,6 @@ Default fallback will be desktop-web if nothing is provided
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Group Newsletter
-
-## Newsletter [/newsletter]
-
-### Subscribe to newsletter [POST /newsletter/subscribe]
-
-+ Request
-    + Attributes (UserNewsletter)
-
-+ Response 204 (application/json)
-
-+ Response 400 (application/json)
-    + Attributes (ResponseUserNewsletterBadRequest)
-
-+ Response 409 (application/json)
-    + Attributes (ResponseUserNewsletterConflict)
-
-### Unsubscribe from newsletter [POST /newsletter/unsubscribe]
-
-+ Request
-    + Attributes (UserNewsletter)
-
-+ Response 204 (application/json)
-
-+ Response 400 (application/json)
-    + Attributes (ResponseUserNewsletterBadRequest)
-
-+ Response 409 (application/json)
-    + Attributes (ResponseUserNewsletterConflict)
-    
 
 
 
