@@ -584,9 +584,22 @@ Default fallback will be desktop-web if nothing is provided
 
 # Group User account
 
-## Newsletter [/user]
+## Newsletter [/newsletter]
 
-### Confirm Newsletter [POST /user/newsletter]
+### Subscribe to newsletter [POST /newsletter/subscribe]
+
++ Request
+    + Attributes (UserNewsletter)
+
++ Response 204 (application/json)
+
++ Response 400 (application/json)
+    + Attributes (ResponseUserNewsletterBadRequest)
+
++ Response 409 (application/json)
+    + Attributes (ResponseUserNewsletterConflict)
+
+### Unsubscribe from newsletter [POST /newsletter/unsubscribe]
 
 + Request
     + Attributes (UserNewsletter)
@@ -1230,8 +1243,8 @@ Default fallback will be desktop-web if nothing is provided
 ## UserNewsletter (object)
 + `_example_subscribe_url`: `/#/newsletter/subscriber/confirm?id=:id&code=:code`
 + `_exmaple_unsubscribe_url`: `/#//newsletter/subscriber/unsubscribe?id=:id&code=:code`
-+ `id`: 14651 (required, boolean)
-+ `code`: qjlvx8peoyx7zl4nni5zaoz22anrw4cu (required, boolean)
++ `id`: 14651 (required, number)
++ `code`: qjlvx8peoyx7zl4nni5zaoz22anrw4cu (required, string)
 
 ## UserRegistration (object)
 + `email`: john.doe@example.com (required, string)
