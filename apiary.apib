@@ -584,6 +584,26 @@ Default fallback will be desktop-web if nothing is provided
 
 # Group User account
 
+## Newsletter [/user]
+
+### Confirm Newsletter [POST /user/newsletter]
+
++ Request
+    + Attributes (UserNewsletter)
+
++ Response 204 (application/json)
+
++ Response 400 (application/json)
+    + Attributes (ResponseUserNewsletterBadRequest)
+
++ Response 409 (application/json)
+    + Attributes (ResponseUserNewsletterConflict)
+    
+    
+    
+    
+    
+
 ## Account handling [/user]
 
 ### Retrieve account [GET /user]
@@ -593,21 +613,6 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
-
-+ Response 401 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
-
-### Update account [PUT /user]
-
-+ Request
-    + Headers
-        Authorization: Bearer {token}
-    + Attributes (UserAccountUpdate)
-
-+ Response 204 (application/json)
-
-+ Response 400 (application/json)
-    + Attributes (ResponseUpdateUserBadRequest)
 
 + Response 401 (application/json)
     + Attributes (ResponseTokenUnauthorized)
@@ -752,6 +757,8 @@ Default fallback will be desktop-web if nothing is provided
 
 
 
+
+
 ## Favorites handling [/user/favorites]
 
 ### List Favorites [GET /user/favorites]
@@ -780,6 +787,8 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (ResponseTokenUnauthorized)
 
 + Response 404
+
+
 
 
 
@@ -1218,8 +1227,11 @@ Default fallback will be desktop-web if nothing is provided
 + `email`: john.doe@example.com (required, string)
 + `shipping` (required, Address)
 
-## UserAccountUpdate (object)
-+ `newsletter`: true (required, boolean)
+## UserNewsletter (object)
++ `_example_subscribe_url`: `/#/newsletter/subscriber/confirm?id=:id&code=:code`
++ `_exmaple_unsubscribe_url`: `/#//newsletter/subscriber/unsubscribe?id=:id&code=:code`
++ `id`: 14651 (required, boolean)
++ `code`: qjlvx8peoyx7zl4nni5zaoz22anrw4cu (required, boolean)
 
 ## UserRegistration (object)
 + `email`: john.doe@example.com (required, string)
@@ -1304,6 +1316,10 @@ Default fallback will be desktop-web if nothing is provided
 + error: SHIPPING_INVALID, BILLING_INVALID, RESERVATION_INVALID, PAYMENT_INVALID (required, enum[string])
 + errors (required, array)
 
-## ResponseUpdateUserBadRequest (object)
-+ error: TOKEN_MISSING, TOKEN_INVALID, NEWSLETTER_INVALID (required, enum[string])
+## ResponseUserNewsletterBadRequest (object)
++ error: NEWSLETTER_ID_MISSING, NEWSLETTER_CODE_MISSING (required, enum[string])
++ errors (required, array)
+
+## ResponseUserNewsletterConflict (object)
++ error: NEWSLETTER_CODE_INVALID (required, enum[string])
 + errors (required, array)
