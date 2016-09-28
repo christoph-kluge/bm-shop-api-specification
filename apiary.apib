@@ -269,7 +269,7 @@ Default fallback will be desktop-web if nothing is provided
     + browserUrl (optional, integer, `kase-eier-milchprodukte.html`) ... browserUrl, can be category or product - see type in response
     + limit (optional, integer, `10`) ... amount of elements for the result set (default: 10)
     + offset (optional, integer, `0`) ... offset from where to start search (default: 0)
-    + sort (optional, string, `price`) ... sort mechanismn (one of: price, popularity)
+    + sort (optional, string, `price`) ... sort mechanismn (one of: relevance, price, popularity)
     + sortDir (optional, string, `desc`) ... sort direction (one of: asc, desc)
     + filter[customFilterId] (optional, array[integer], `10,12`) ... customFilterItemIds
 
@@ -887,6 +887,7 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Address (object)
 + `type`: billing, shipping (required, enum[string])
++ `title`: Dr., Prof., Prof. Dr. (required, enum[string])
 + `gender`: male, female, company (required, enum[string])
 + `company`: My Company GmbH (required, string)
 + `department`: IT Department (required, string)
@@ -1084,13 +1085,9 @@ Default fallback will be desktop-web if nothing is provided
 ## ContentSlider (object)
 + name: `Verival` (required, string)
 + position: 2 (required, number)
-+ images (required, ContentSliderImages)
++ image: `http://static.exmaple.com/mobile.png` (required, string)
 + target: search (required, enum[string])
 + targetData (required, ContentLinkData)
-
-## ContentSliderImages (object)
-+ 320: `http://static.exmaple.com/mobile.png` (required, string)
-+ 1233: `http://static.exmaple.com/desktop.png` (required, string)
 
 ## ContentLinkData (object)
 + catId: 2312 (optional, string)
