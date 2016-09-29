@@ -936,12 +936,14 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Product (object)
 + id: 62073 (required, string)
++ rootCategoryId: 1234 (required, number)
 + sku: `1406271` (required, string)
 + name: `Veuve Clicquot Ponsardin Champagne Brut` (required, string)
 + browserUrl: `veuve-clicquot-brut-0-75l.html` (required, string)
 + packing: `ca. 390g Packung` (required, string)
 + isAvailable: `true` (required, boolean)
 + isSpecialPrice: `true` (required, boolean)
++ isBasePrice: `true` (required, boolean)
 + icons (required, array[ProductIcon])
 + images (required, ProductImages)
 + units (required, array[ProductUnit])
@@ -1032,6 +1034,7 @@ Default fallback will be desktop-web if nothing is provided
 
 ## CartProduct (object)
 + productId: 123 (required, number)
++ rootCategoryId: 1234 (required, number)
 + quantity: 2 (required, number) 
 + price: 12.99 (required, number)
 + rowPrice: 25.98 (required, number)
@@ -1096,12 +1099,6 @@ Default fallback will be desktop-web if nothing is provided
 + campaign: angebote (optional, string)
 
 ## Favorites (object)
-+ `categories` (required, array[FavoriteCategory])
-
-## FavoriteCategory (object)
-+ `id` (required, number)
-+ `name` (required, string)
-+ `total` (required, number)
 + `products` (required, array[Product])
 
 ## Payment (object)
@@ -1267,7 +1264,7 @@ Default fallback will be desktop-web if nothing is provided
 + errors (required, array)
 
 ## ResponseCartAddProductBadRequest (object)
-+ error: TOKEN_MISSING, TOKEN_INVALID, QUANTITY_MISSING, UNIT_MISSING (required, enum[string])
++ error: TOKEN_MISSING, TOKEN_INVALID, QUANTITY_MISSING, QUANTITY_SHOULD_BE_POSITIVE, UNIT_MISSING (required, enum[string])
 + errors (required, array)
 
 ## ResponseCartUnauthorized (object)
