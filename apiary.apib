@@ -196,10 +196,11 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Retrieve content by types [/content]
 
-### Retrieve slider [GET /content-sliders/{id}]
+### Retrieve slider [GET /content-sliders/{id}?{zipcode}]
 
 + Parameters
     + id: `homepage` (required, string) ... sliderIdentifier
+    + zipcode: `10115` (required, string) ... zipcode
 
 + Response 200 (application/json)
     + Attributes (ContentSliderCollection)
