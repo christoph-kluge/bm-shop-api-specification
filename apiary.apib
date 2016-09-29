@@ -428,9 +428,9 @@ Default fallback will be desktop-web if nothing is provided
 
 # Group Capacity management
 
-## Capacities [/capacities{?zipCode,startDate,endDate}]
+## Capacities [/capacities{?zipcode,startDate,endDate}]
 
-### Retrieve capacity slots [GET /capacities{?zipCode,startDate,endDate}]
+### Retrieve capacity slots [GET /capacities{?zipcode,startDate,endDate}]
 
 + Request
     + Headers
@@ -1094,9 +1094,8 @@ Default fallback will be desktop-web if nothing is provided
 + targetData (required, ContentLinkData)
 
 ## ContentLinkData (object)
-+ catId: 2312 (optional, string)
-+ browserUrl: `obst-gemuse.html` (optional, string)
-+ campaign: angebote (optional, string)
++ categoryId: 2312 (required, string)
++ campaign: angebote (required, string)
 
 ## Favorites (object)
 + `products` (required, array[Product])
@@ -1155,7 +1154,6 @@ Default fallback will be desktop-web if nothing is provided
 + `totals` (required, array[CartTotal])
 + `reservation` (required, CapacityReservation)
 + `productsCount` (required, number)
-+ `products` (required, array[CartProduct])
 
 ## UserOrder (object)
 + `orderId` (required, string)
@@ -1212,7 +1210,7 @@ Default fallback will be desktop-web if nothing is provided
 + password: `my-secret-password` (required, string)
 
 ## UserAuthenticationGuest (object)
-+ zipCode: `80333` (required, number)
++ zipcode: `80333` (required, number)
 
 ## UserAccount (object)
 + `id`: 123123 (required, string)
