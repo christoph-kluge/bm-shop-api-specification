@@ -333,6 +333,13 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (CartProductUpdate)
 
 + Response 200 (application/json)
+    + Headers
+        X-Description: Product in cart was updated
+    + Attributes (Cart)
+    
++ Response 201 (application/json)
+    + Headers
+        X-Description: Product is new in cart
     + Attributes (Cart)
 
 + Response 400 (application/json)
