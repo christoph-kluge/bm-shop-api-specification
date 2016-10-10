@@ -1115,7 +1115,7 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 404
 
-### Cancel order [POST /user/orders/{orderId}/cancel]
+### Cancel order [PUT /user/orders/{orderId}]
 
 + Parameters
     + orderId: 1019558370 (required, string) ... orderId to cancel
@@ -1123,7 +1123,7 @@ Default fallback will be desktop-web if nothing is provided
 + Request (application/json)
     + Attributes (UserOrderCancelation)
 
-+ Response 202 (application/json)
++ Response 204 (application/json)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
@@ -1131,7 +1131,10 @@ Default fallback will be desktop-web if nothing is provided
 + Response 401 (application/json)
     + Attributes (ResponseTokenUnauthorized)
 
-+ Response 409
++ Response 404 (application/json)
+
++ Response 409 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
 
 
 ### Update order [POST /user/orders/{orderId}/reorder]
@@ -1180,6 +1183,7 @@ Default fallback will be desktop-web if nothing is provided
 
 ## Address (object)
 + `type`: billing, shipping (required, enum[string])
++ `name`: `My Office Address` (required, string)
 + `title`: Dr., Prof., Prof. Dr. (required, enum[string])
 + `gender`: male, female, company (required, enum[string])
 + `company`: My Company GmbH (required, string)
@@ -1198,9 +1202,7 @@ Default fallback will be desktop-web if nothing is provided
 
 ## AddressRead (object)
 + `addressId`: 1001241 (required, string)
-+ `default`: true (required, boolean)
-+ `name`: My custom address name (required, string)
-+ `type`: billing, shipping (required, enum[string])
++ `name`: `My Office Address` (required, string)
 + `gender`: male, female, company (required, enum[string])
 + `company`: My Company GmbH (required, string)
 + `department`: IT Department (required, string)
@@ -1215,9 +1217,27 @@ Default fallback will be desktop-web if nothing is provided
 + `floor`: 1 (required, number)
 + `phonenumber`: 00493012345678 (required, string)
 
+## AddressRead2 (object)
++ `addressId`: 1001242 (required, string)
++ `name`: `My Private Address` (required, string)
++ `gender`: male, female, company (required, enum[string])
++ `company`: `` (required, string)
++ `department`: `` (required, string)
++ `firstname`: John (required, string)
++ `lastname`: Doe (required, string)
++ `street`: Friedrichstraße (required, string)
++ `housenumber`: 2010 (required, string)
++ `zipcode`: 10551 (required, string)
++ `email`: john.doe@example.com (required, string)
++ `hint`: 1st Floor, Last Door (required, string)
++ `elevator`: true (required, boolean)
++ `floor`: 1 (required, number)
++ `phonenumber`: 00493012345678 (required, string)
+
 ## AddressCollection (object)
-+ `shipping` (required, array[AddressRead])
-+ `billing` (required, array[AddressRead])
++ defaultShippingId: 1001241 (required, string)
++ defaultBillingId: null (required, string)
++ addresses (required, array[AddressRead, AddressRead2])
 
 ## CapacityReservation (object)
 + `id`: `4575e652-4461-462a-98c2-a3aa451bf448` (required, string)
@@ -1410,9 +1430,10 @@ Default fallback will be desktop-web if nothing is provided
 + `products` (required, array[FavoriteProduct])
 
 ## Payment (object)
-+ `method` (required, string)
++ `method`: paypal (required, string)
 
 ## PaymentCollection (object)
++ `default`: `paypal`, `some-other-payment`, `need-to-check` (required, enum[string])
 + `payments` (required, array[Payment])
 
 ## ProductSearch (object)
@@ -1474,7 +1495,8 @@ Default fallback will be desktop-web if nothing is provided
 + products (required, array[CartProduct])
 
 ## UserOrderCancelation (object)
-+ `reason` (required, string)
++ status: canceled (required, enum[string])
++ reason: `not-present-at-delivery`, `order-double`, `not-interessted`, `found-cheaper`, `order-change`, `other` (required, enum[string])
 
 ## UserOrderCreate (object)
 + `shippingAddressId` (required, string)
