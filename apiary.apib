@@ -444,7 +444,7 @@ Default fallback will be desktop-web if nothing is provided
         Authorization: Bearer {token}
 
 + Parameters
-    + zipCode: 80333 (required, string) ... zipcode where you want to fetch the capacity for
+    + zipcode: 80333 (required, string) ... zipcode where you want to fetch the capacity for
     + startDate: `2016-09-05` (required, string) ... start date for capacities
     + endDate: `2016-09-07` (required, string) ... end date for capacities
 
@@ -870,6 +870,26 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 401 (application/json)
     + Attributes (ResponseTokenUnauthorized)
+    
+### Create paypal token [POST /user/payments/paypal/token]
+
++ Request (application/json)
+    + Attributes (UserOrderPaymentPaypalRequest)
+
++ Response 201 (application/json)
+    + Attributes (ResponsePaymentPaypalTokenCreated)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+    
++ Response 409 (application/json)
+    + Attributes (ResponsePaymentPaypalTokenConflict)
+    
++ Response 504 (application/json)
+    + Attributes (ResponsePaymentPaypalTokenGatwayTimeout)
 
 ### Create a new order [POST /user/orders]
 
@@ -999,6 +1019,8 @@ Default fallback will be desktop-web if nothing is provided
     + Headers
         Authorization: Bearer {token}
 
+    + Attributes (Address)
+
 + Response 204 (application/json)
 
 + Response 400 (application/json)
@@ -1126,7 +1148,7 @@ Default fallback will be desktop-web if nothing is provided
 + Response 204 (application/json)
 
 + Response 400 (application/json)
-    + Attributes (ResponseTokenBadRequest)
+    + Attributes (ResponseUserOrderCancellationBadRequest)
 
 + Response 401 (application/json)
     + Attributes (ResponseTokenUnauthorized)
@@ -1134,22 +1156,7 @@ Default fallback will be desktop-web if nothing is provided
 + Response 404 (application/json)
 
 + Response 409 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
-
-
-### Update order [POST /user/orders/{orderId}/reorder]
-
-+ Parameters
-    + orderId: 1019558370 (required, string)
-
-+ Response 202 (application/json)
-    + Attributes (Cart)
-
-+ Response 400 (application/json)
-    + Attributes (ResponseTokenBadRequest)
-
-+ Response 401 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
+    + Attributes (ResponseUserOrderCancellationConflict)
 
 
 ### Add order items to shopping cart [POST /user/orders/{orderId}/cart]
@@ -1498,16 +1505,52 @@ Default fallback will be desktop-web if nothing is provided
 + status: canceled (required, enum[string])
 + reason: `not-present-at-delivery`, `order-double`, `not-interessted`, `found-cheaper`, `order-change`, `other` (required, enum[string])
 
+## UserOrderPaymentPaypalRequest (object)
++ returnUrl: `https://any.domain.com/#/return-url-which-api-does-not-care` (required, string)
++ cancelUrl: `https://any.domain.com/#/cancel-url-which-api-does-not-care` (required, string)
+
 ## UserOrderCreate (object)
 + `shippingAddressId` (required, string)
 + `billingAddressId` (required, string)
-+ `reservationId` (optional, string)
-+ `payment` (required, Payment39)
++ `payment` (required, array[PaymentPaypal, PaymentEcKarte, PaymentCashOnDelivery, PaymentRatePayDebit, PaymentRatePayRechnung])
 
-## Payment39 (object)
-+ `method`: paypal (required, string)
-+ `default`: true (required, boolean)
+## PaymentEcKarte (object)
++ `method`: ec_karte (required, string)
++ `default`: false (required, boolean)
 + `options` (required, object)
+
+## PaymentCashOnDelivery (object)
++ `method`: cashondelivery (required, string)
++ `default`: false (required, boolean)
++ `options` (required, object)
+
+## PaymentPaypal (object)
++ `method`: paypal_express (required, string)
++ `default`: false (required, boolean)
++ `options` (required, PaymentOptionsPaypal)
+
+## PaymentRatePayDebit (object)
++ `method`: ratepay_directdebit (required, string)
++ `default`: true (required, boolean)
++ `options` (required, PaymentOptionsRatePayDebit)
+
+## PaymentRatePayRechnung (object)
++ `method`: ratepay_rechnung (required, string)
++ `default`: true (required, boolean)
++ `options` (required, PaymentOptionsRatePayRechnung)
+
+## PaymentOptionsPaypal (object)
++ token: `EC-1235125125` (required, string)
+
+## PaymentOptionsRatePayDebit (object)
++ accountHolder: Kartenbesitzer (required, string)
++ accountIban: DE46111122222333300 (required, string)
++ accountNumber: 123456789 (required, string)
++ accountBank: 20010000 (required, string)
++ taxNumber: DE123123123 (required, string)
+
+## PaymentOptionsRatePayRechnung (object)
++ taxNumber: DE123123123 (required, string)
 
 ## UserOrderProductCollection (object)
 + `products` (required, array[Product])
@@ -1634,6 +1677,23 @@ Default fallback will be desktop-web if nothing is provided
 ## ResponseCreateOrderValidation (object)
 + error: SHIPPING_INVALID, BILLING_INVALID, RESERVATION_INVALID, PAYMENT_INVALID (required, enum[string])
 + errors (required, array)
+
+## ResponsePaymentPaypalTokenCreated (object)
++ redirectUrl: `https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=EC-247632764G583315C&useraction=continue` (required, string)
+
+## ResponsePaymentPaypalTokenConflict (object)
++ error: CART_INVALID (required, enum[string])
+
+## ResponsePaymentPaypalTokenGatwayTimeout (object)
++ error: TIMEOUT_TRY_AGAIN (required, enum[string])
+
+## ResponseUserOrderCancellationBadRequest (object)
++ error: TOKEN_MISSING, TOKEN_INVALID, ORDER_STATUS_INVALID (required, enum[string])
++ errors: (required, array)
+
+## ResponseUserOrderCancellationConflict (object)
++ error: ORDER_CANCEL_INVALID (required, enum[string])
++ errors: (required, array)
 
 ## ResponseUserNewsletterBadRequest (object)
 + error: NEWSLETTER_ID_MISSING, NEWSLETTER_CODE_MISSING (required, enum[string])
