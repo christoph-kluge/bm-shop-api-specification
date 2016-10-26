@@ -435,16 +435,16 @@ Default fallback will be desktop-web if nothing is provided
 
 # Group Capacity management
 
-## Capacities [/capacities{?zipcode,startDate,endDate}]
+## Capacities [/cart/capacityslots]
 
-### Retrieve capacity slots [GET /capacities{?zipcode,startDate,endDate}]
+### Retrieve slots [GET /cart/capacities{?addressId,startDate,endDate}]
 
 + Request
     + Headers
         Authorization: Bearer {token}
 
 + Parameters
-    + zipcode: 80333 (required, string) ... zipcode where you want to fetch the capacity for
+    + addressId: 12312241 (required, string) ... addressId which should be used for shipping
     + startDate: `2016-09-05` (required, string) ... start date for capacities
     + endDate: `2016-09-07` (required, string) ... end date for capacities
 
@@ -792,19 +792,13 @@ Default fallback will be desktop-web if nothing is provided
 + Response 422 (application/json)
     + Attributes (ResponseCapacitiesValidation)
 
-### Reserve a capacity slot [POST /capacities/{capacityId}]
+### Reserve a capacity slot [POST]
 
-+ Request
-    + Headers
-        Authorization: Bearer {token}
++ Request (application/json)
+    + Attributes (CapacityReservationRequest)
 
-+ Parameters
-    + capacityId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... capacityId
-
-+ Response 201 (application/json)
-    + Headers
-        Location: /capacity-reservations/1
-    + Attributes (CapacityReservation)
++ Response 200 (application/json)
+    + Attributes (Cart)
 
 + Response 400 (application/json)
     + Attributes (ResponseTokenBadRequest)
@@ -818,12 +812,7 @@ Default fallback will be desktop-web if nothing is provided
     + Attributes (ResponseCapacityReservationConflict)
 
 
-## Reservations [/capacity-reservations/{id}]
-
-+ Parameters
-    + id: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... reservation identifier
-
-### Retrieve reservation info [GET]
+### Get current reserved slot [GET]
 
 + Response 200 (application/json)
     + Attributes (CapacityReservation)
@@ -1245,6 +1234,10 @@ Default fallback will be desktop-web if nothing is provided
 + defaultShippingId: 1001241 (required, string)
 + defaultBillingId: null (required, string)
 + addresses (required, array[AddressRead, AddressRead2])
+
+## CapacityReservationRequest (object)
++ slotId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... slot to reserve
++ addressId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... address id to map to
 
 ## CapacityReservation (object)
 + `id`: `4575e652-4461-462a-98c2-a3aa451bf448` (required, string)
