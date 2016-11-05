@@ -1341,6 +1341,7 @@ Default fallback will be desktop-web if nothing is provided
 + minimumValue: 35.00 (required, number) ... mindestbestellwert
 + currentValue: 120.00 (required, number) ... current cart value´
 + voucher: ZEIT13 (required, string)
++ reservation (required, CapacityReservation)
 + products (required, array[CartProduct])
 + totals (required, array[CartTotal])
 
@@ -1478,6 +1479,7 @@ Default fallback will be desktop-web if nothing is provided
 + createdAt: `2016-08-15T07:00:00+0200` (required, string)
 + status: processing, complete (required, enum[string])
 + canCancel: true (required, boolean)
++ payment: paypal (required, string)
 + productsCount: 7 (required, number)
 + reservation (required, CapacityReservation)
 
