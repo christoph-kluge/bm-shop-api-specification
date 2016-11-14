@@ -325,7 +325,7 @@ Default fallback will be desktop-web if nothing is provided
 + Parameters
     + productId: 1231231 (required, string) ... productId
 
-### Add product [PUT]
+### Add/Update product inside cart [POST]
 
 + Request (application/json)
     + Headers
@@ -356,7 +356,38 @@ Default fallback will be desktop-web if nothing is provided
 + Response 422 (application/json)
     + Attributes (ResponseCartAddProductValidation)
 
-### Remove product [DELETE]
+### Add/Replace product inside cart [PUT]
+
++ Request (application/json)
+    + Headers
+        Authorization: Bearer {token}
+    + Attributes (CartProductUpdate)
+
++ Response 200 (application/json)
+    + Headers
+        X-Description: Product in cart was updated
+    + Attributes (Cart)
+    
++ Response 201 (application/json)
+    + Headers
+        X-Description: Product is new in cart
+    + Attributes (Cart)
+
++ Response 400 (application/json)
+    + Attributes (ResponseCartAddProductBadRequest)
+
++ Response 401
+    + Attributes (ResponseCartUnauthorized)
+    
++ Response 404 (application/json)
+
++ Response 409 (application/json)
+    + Attributes (ResponseCartAddProductConflict)
+
++ Response 422 (application/json)
+    + Attributes (ResponseCartAddProductValidation)
+
+### Remove product from cart [DELETE]
 
 + Request
     + Headers
@@ -893,6 +924,9 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 401 (application/json)
     + Attributes (ResponseTokenUnauthorized)
+
++ Response 409 (application/json)
+    + Attributes (ResponseCreateOrderConflict)
 
 + Response 422 (application/json)
     + Attributes (ResponseCreateOrderValidation)
@@ -1507,6 +1541,7 @@ Default fallback will be desktop-web if nothing is provided
 ## UserOrderCreate (object)
 + `shippingAddressId` (required, string)
 + `billingAddressId` (required, string)
++ `reservationId` (required, string)
 + `payment` (required, array[PaymentPaypal, PaymentEcKarte, PaymentCashOnDelivery, PaymentRatePayDebit, PaymentRatePayRechnung])
 
 ## PaymentEcKarte (object)
@@ -1669,8 +1704,12 @@ Default fallback will be desktop-web if nothing is provided
 + error: TOKEN_MISSING, TOKEN_INVALID, SHIPPING_MISSING, BILLING_MISSING, RESERVATION_MISSING, PAYMENT_MISSING (required, enum[string])
 + errors (required, array)
 
+## ResponseCreateOrderConflict (object)
++ error: BILLING_ADDRESS_NOT_FOUND, SHIPPING_ADDRESS_NOT_FOUND, RESERVATION_NOT_FOUND, BILLING_ERROR, SHIPPING_ERROR, CAPACITY_ERROR, PAYMENT_ERROR, PAYMENT_DECLINED, PAYMENT_UNAVAILABLE (required, enum[string])
++ errors (required, array)
+
 ## ResponseCreateOrderValidation (object)
-+ error: SHIPPING_INVALID, BILLING_INVALID, RESERVATION_INVALID, PAYMENT_INVALID (required, enum[string])
++ error: PAYMENT_VALIDATION_ERROR (required, enum[string])
 + errors (required, array)
 
 ## ResponsePaymentPaypalTokenCreated (object)
