@@ -822,6 +822,167 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 422 (application/json)
     + Attributes (ResponseCapacitiesValidation)
+    
+### Retrieve slots (v2) [GET /cart/capacities{?zipcode,startDate,endDate}]
+
++ Request
+    + Headers
+        Accept: application/vnd.api.v2+json
+
++ Parameters
+    + zipcode: 80333 (required, string) ... zipCode which should be used retrieving timeslots
+    + startDate: `2016-09-05` (required, string) ... start date for capacities
+    + endDate: `2016-09-07` (required, string) ... end date for capacities
+
++ Response 200 (application/json)
+    + Body
+int
+        {
+            "days": [{
+                "dateTime": "2017-03-10T00:00:00+02:00",
+                "status": "available"
+            }, {
+                "dateTime": "2017-03-11T00:00:00+02:00",
+                "status": "available"
+            }, {
+                "dateTime": "2017-03-12T00:00:00+02:00",
+                "status": "closed"
+            }, {
+                "dateTime": "2017-03-13T00:00:00+02:00",
+                "status": "available"
+            }],
+            "startingHours": [
+                "06:00",
+                "07:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "12:00",
+                "13:00",
+                "14:00",
+                "15:00",
+                "16:00",
+                "17:00",
+                "18:00",
+                "19:00",
+                "20:00",
+                "21:00",
+                "22:00",
+                "23:00"
+            ],
+            "capacities": {
+                "2017-03-10": {
+                    "06:00": null,
+                    "07:00": null,
+                    "08:00": null,
+                    "09:00": null,
+                    "10:00": null,
+                    "11:00": null,
+                    "12:00": null,
+                    "13:00": {
+                        "startTime": "2017-03-10T13:00:00+02:00",
+                        "startPrice": 2,
+                        "endTime": "2017-03-10T15:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2017-03-10T13:00:00+02:00",
+                            "endTime": "2017-03-10T15:00:00+02:00",
+                            "status": "available",
+                            "price": 2
+                        }]
+                    },
+                    "14:00": {
+                        "startTime": "2017-03-10T14:00:00+02:00",
+                        "startPrice": 4,
+                        "endTime": "2017-03-10T15:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2017-03-10T14:00:00+02:00",
+                            "endTime": "2017-03-10T15:00:00+02:00",
+                            "status": "available",
+                            "price": 4
+                        }]
+                    },
+                    "15:00": {
+                        "startTime": "2017-03-10T15:00:00+02:00",
+                        "startPrice": 2.9,
+                        "endTime": "2017-03-10T16:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2017-03-10T15:00:00+02:00",
+                            "endTime": "2017-03-10T16:00:00+02:00",
+                            "status": "available",
+                            "price": 2.9
+                        }]
+                    },
+                    "16:00": {
+                        "startTime": "2016-09-06T07:00:00+02:00",
+                        "startPrice": 2,
+                        "endTime": "2016-09-06T09:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2016-09-06T07:00:00+02:00",
+                            "endTime": "2016-09-06T09:00:00+02:00",
+                            "status": "full",
+                            "price": 2
+                        }]
+                    },
+                    "17:00": null,
+                    "18:00": null,
+                    "19:00": null,
+                    "20:00": {
+                        "startTime": "2016-09-06T20:00:00+02:00",
+                        "startPrice": 2.9,
+                        "endTime": "2016-09-06T21:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2016-09-06T20:00:00+02:00",
+                            "endTime": "2016-09-06T21:00:00+02:00",
+                            "status": "available",
+                            "price": 2.9
+                        }]
+                    },
+                    "21:00": {
+                        "startTime": "2016-09-06T21:00:00+02:00",
+                        "startPrice": 2.9,
+                        "endTime": "2016-09-06T22:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2016-09-06T21:00:00+02:00",
+                            "endTime": "2016-09-06T22:00:00+02:00",
+                            "status": "available",
+                            "price": 2.9
+                        }]
+                    },
+                    "22:00": null,
+                    "23:00": {
+                        "startTime": "2016-09-06T23:00:00+02:00",
+                        "startPrice": 2.9,
+                        "endTime": "2016-09-07T00:00:00+02:00",
+                        "slots": [{
+                            "slotId": "0d47f84a-5efb-45a0-b088-e86a37bfb50b",
+                            "startTime": "2016-09-06T23:00:00+02:00",
+                            "endTime": "2016-09-07T00:00:00+02:00",
+                            "status": "available",
+                            "price": 2.9
+                        }]
+                    }
+                },
+                "2017-03-11": {},
+                "2017-03-12": null,
+                "2017-03-13": {}
+            }
+        }
+
++ Response 400 (application/json)
+    + Attributes (ResponseCapacitiesBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 422 (application/json)
+    + Attributes (ResponseCapacitiesValidation)
 
 ### Reserve a capacity slot [POST]
 
