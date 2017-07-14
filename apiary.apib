@@ -466,7 +466,7 @@ Default fallback will be desktop-web if nothing is provided
 
 # Group Capacity management
 
-## Capacities [/cart/capacityslots]
+## Capacities [/cart/capacityslot]
 
 ### Retrieve slots [GET /cart/capacities{?addressId,startDate,endDate}]
 
@@ -823,11 +823,57 @@ Default fallback will be desktop-web if nothing is provided
 + Response 422 (application/json)
     + Attributes (ResponseCapacitiesValidation)
     
-### Retrieve slots (v2) [GET /cart/capacities{?zipcode,startDate,endDate}]
+
+
+### Reserve a capacity slot [POST]
+
++ Request (application/json)
+    + Attributes (CapacityReservationRequest)
+    + Headers
+        Authorization: Bearer {token}
+        Content-Type: application/json
+
++ Response 200 (application/json)
+    + Attributes (Cart)
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
+
++ Response 409 (application/json)
+    + Attributes (ResponseCapacityReservationConflict)
+    
+### Get current reserved slot [GET]
+
++ Response 200 (application/json)
+    + Attributes (CapacityReservation)
+    + Headers
+        Authorization: Bearer {token}
+
++ Response 400 (application/json)
+    + Attributes (ResponseTokenBadRequest)
+
++ Response 401 (application/json)
+    + Attributes (ResponseTokenUnauthorized)
+
++ Response 404
+
+
+
+
+
+## Capacities (v2) [/cart/capacityslot]
+
+### Retrieve slots (v2) with zipcode [GET /cart/capacities{?zipcode,startDate,endDate}]
 
 + Request
     + Headers
         Accept: application/vnd.api.v2+json
+        Authorization: Bearer {token}
 
 + Parameters
     + zipcode: 80333 (required, string) ... zipCode which should be used retrieving timeslots
@@ -984,10 +1030,14 @@ Default fallback will be desktop-web if nothing is provided
 + Response 422 (application/json)
     + Attributes (ResponseCapacitiesValidation)
 
-### Reserve a capacity slot [POST]
+### Reserve a capacity slot (v2) w/o addressId [POST]
 
 + Request (application/json)
-    + Attributes (CapacityReservationRequest)
+    + Attributes (CapacityReservationRequestV2)
+    + Headers
+        Accept: application/vnd.api.v2+json
+        Authorization: Bearer {token}
+        Content-Type: application/json
 
 + Response 200 (application/json)
     + Attributes (Cart)
@@ -1002,31 +1052,6 @@ Default fallback will be desktop-web if nothing is provided
 
 + Response 409 (application/json)
     + Attributes (ResponseCapacityReservationConflict)
-
-
-### Get current reserved slot [GET]
-
-+ Response 200 (application/json)
-    + Attributes (CapacityReservation)
-
-+ Response 400 (application/json)
-    + Attributes (ResponseTokenBadRequest)
-
-+ Response 401 (application/json)
-    + Attributes (ResponseTokenUnauthorized)
-
-+ Response 404
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1433,6 +1458,9 @@ Default fallback will be desktop-web if nothing is provided
 ## CapacityReservationRequest (object)
 + slotId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... slot to reserve
 + addressId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... address id to map to
+
+## CapacityReservationRequestV2 (object)
++ slotId: `a38914b5-5988-436d-bd6c-8c0a7edaacd5` (required, string) ... slot to reserve
 
 ## CapacityReservation (object)
 + `id`: `4575e652-4461-462a-98c2-a3aa451bf448` (required, string)
