@@ -1571,10 +1571,10 @@ Default fallback will be desktop-web if nothing is provided
 + totals (required, array[CartTotal])
 
 ## CartShipping (object)
-+ currentValue: 40.00 (required, number) .. current value before we get shipping price
-+ missingValue: 60.00 (required, number) .. missing value to get to get shipping price
-+ totalValue: 100.00 (required, number) .. total value to get shipping adjustment
-+ nextPrice: 0.00 (required, number) .. shipping price when reached
++ current: 40.00 (required, number) .. current value for shipping price calculation
++ missing: 60.00 (required, number) .. missing value to threshold to get new shipping price
++ threshold: 100.00 (required, number) .. threshold value to get shipping price adjustment
++ price: 0.00 (required, number) .. new shipping price after threshold reached
 
 ## CartProduct (object)
 + productId: 123 (required, number)
