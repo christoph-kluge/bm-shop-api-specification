@@ -277,11 +277,20 @@ Default fallback will be desktop-web if nothing is provided
 + Response 200 (application/json)
     + Attributes (ProductSearch)
 
-### Retrieve product info [GET /products/{productId}?zipcode=80333]
+### Retrieve product info [GET /products/{productId}{?zipcode}]
 
 + Parameters
     + productId: `1230012` (required, string)
     + zipcode: `80333` (required, string)
+
++ Response 200 (application/json)
+    + Attributes (Product)
+
+### Retrieve product info by SKU [GET /products-sku/{sku}{?zipcode}]
+
++ Parameters
+    + sku: `1230012` (required, number) - SKU of a product
+    + zipcode: `80333` (required, string) - ZIP code
 
 + Response 200 (application/json)
     + Attributes (Product)
